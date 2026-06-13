@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Korea Psychology Workflow Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans min-h-screen">
+
+    <div class="max-w-6xl mx-auto p-6">
+        <header class="mb-8 border-b border-gray-800 pb-4">
+            <h1 class="text-3xl font-bold text-indigo-400">🧠 YouTube Korea Psychology Workflow Tool</h1>
+            <p class="text-gray-400 text-sm mt-1">Hệ thống chuẩn hóa quy trình sản xuất Video tự động</p>
+        </header>
+
+        <!-- CẤU HÌNH API KEYS -->
+        <div class="bg-gray-800 p-4 rounded-lg mb-6 border border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-200 mb-3">🔑 Cấu hình API Keys</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">OpenAI API Key (GPT-5.5)</label>
+                    <input type="password" id="openai-key" class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" placeholder="sk-...">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1">Anthropic API Key (Claude 4.8)</label>
+                    <input type="password" id="anthropic-key" class="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-sm focus:outline-none focus:border-indigo-500" placeholder="sk-ant-...">
+                </div>
+            </div>
+        </div>
+
+        <!-- TABS NAV -->
+        <div class="flex border-b border-gray-800 mb-6">
+            <button onclick="switchTab('tab1')" id="btn-tab1" class="py-2 px-4 font-medium text-sm border-b-2 border-indigo-500 text-indigo-400 focus:outline-none">Bước 1: Ý tưởng & SEO (GPT)</button>
+            <button onclick="switchTab('tab2')" id="btn-tab2" class="py-2 px-4 font-medium text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none">Bước 2: Kịch bản (Claude)</button>
+            <button onclick="switchTab('tab3')" id="btn-tab3" class="py-2 px-4 font-medium text-sm border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none">Bước 3: Chuẩn hóa SRT (GPT)</button>
+        </div>
+
+        <!-- CONTENT TAB 1 -->
+        <div id="tab1" class="tab-content active space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Nhập từ khóa / Chủ đề muốn làm:</label>
+                <input type="text" id="t1-input" class="w-full bg-gray-800 border border-gray-700 rounded p-3 focus:outline-none focus:border-indigo-500 text-white" placeholder="Ví dụ: Áp lực thi cử Suneung, Hội chứng cô đơn tại Seoul...">
+            </div>
+            <button onclick="runStep1()" id="t1-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded font-medium text-sm transition">Brainstorm Tiêu đề & SEO</button>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Kết quả đầu ra:</label>
+                <textarea id="t1-output" readonly class="w-full h-80 bg-gray-900 border border-gray-800 rounded p-3 font-mono text-sm text-green-400 focus:outline-none" placeholder="Kết quả từ GPT-5.5 sẽ hiển thị ở đây..."></textarea>
+            </div>
+        </div>
+
+        <!-- CONTENT TAB 2 -->
+        <div id="tab2" class="tab-content space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Nhập Tiêu đề đã chọn từ Bước 1:</label>
+                <input type="text" id="t2-input" class="w-full bg-gray-800 border border-gray-700 rounded p-3 focus:outline-none focus:border-indigo-500 text-white" placeholder="Dán tiêu đề tâm lý học bạn ưng ý nhất vào đây...">
+            </div>
+            <button onclick="runStep2()" id="t2-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded font-medium text-sm transition">Viết Kịch bản sâu lắng & Gợi ý bối cảnh ảnh</button>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Kịch bản chi tiết từ Claude:</label>
+                <textarea id="t2-output" readonly class="w-full h-96 bg-gray-900 border border-gray-800 rounded p-3 text-sm text-gray-200 focus:outline-none" placeholder="Kịch bản đậm chất điện ảnh sẽ hiển thị ở đây..."></textarea>
+            </div>
+        </div>
+
+        <!-- CONTENT TAB 3 -->
+        <div id="tab3" class="tab-content space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Dán file SRT thô (Từ CapCut/Premiere):</label>
+                <textarea id="t3-input" class="w-full h-48 bg-gray-800 border border-gray-700 rounded p-3 font-mono text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="1&#10;00:00:01,000 --> 00:00:04,000&#10;xin chao cac ban đã đen voi kenh..."></textarea>
+            </div>
+            <button onclick="runStep3()" id="t3-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded font-medium text-sm transition">Xử lý & Làm sạch SRT</button>
+            <div>
+                <label class="block text-sm font-medium text-gray-300 mb-1">Kết quả SRT chuẩn hóa:</label>
+                <textarea id="t3-output" readonly class="w-full h-64 bg-gray-900 border border-gray-800 rounded p-3 font-mono text-sm text-yellow-400 focus:outline-none" placeholder="SRT đã được sửa lỗi chính tả và ngắt dòng đẹp mắt..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT XỬ LÝ LOGIC -->
+    <script>
+        // Chuyển đổi qua lại giữa các Tab hiển thị
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('button[id^="btn-tab"]').forEach(btn => {
+                btn.classList.remove('border-indigo-500', 'text-indigo-400');
+                btn.classList.add('border-transparent', 'text-gray-400');
+            });
+            document.getElementById('btn-' + tabId).classList.remove('border-transparent', 'text-gray-400');
+            document.getElementById('btn-' + tabId).classList.add('border-indigo-500', 'text-indigo-400');
+        }
+
+        // Hàm gọi API OpenAI (Dành cho GPT-5.5)
+        async class callOpenAI(promptText, apiKey, outputElementId, btnId) {
+            const btn = document.getElementById(btnId);
+            const output = document.getElementById(outputElementId);
+            if (!apiKey) return alert("Vui lòng nhập OpenAI API Key!");
+            
+            btn.disabled = true; btn.innerText = "Đang xử lý..."; output.value = "AI đang tính toán, vui lòng đợi...";
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o", // Thay đổi model endpoint tương ứng theo gói tài khoản của bạn (ví dụ gpt-4o/gpt-5)
+                        messages: [{ role: "user", content: promptText }],
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                output.value = data.choices[0].message.content;
+            } catch (error) {
+                output.value = "Lỗi kết nối API: " + error.message;
+            } finally {
+                btn.disabled = false; btn.innerText = btnId === 't1-btn' ? "Brainstorm Tiêu đề & SEO" : "Xử lý & Làm sạch SRT";
+            }
+        }
+
+        // Hàm gọi API Anthropic (Dành cho Claude 4.8) - Cần CORS proxy để chạy trực tiếp từ trình duyệt Client
+        async class callAnthropic(promptText, apiKey, outputElementId, btnId) {
+            const btn = document.getElementById(btnId);
+            const output = document.getElementById(outputElementId);
+            if (!apiKey) return alert("Vui lòng nhập Anthropic API Key!");
+
+            btn.disabled = true; btn.innerText = "Đang viết kịch bản..."; output.value = "Claude đang biên kịch, quá trình này cần chiều sâu nên mất chút thời gian...";
+
+            try {
+                // Sử dụng một proxy CORS miễn phí hoặc backend nhỏ vì Anthropic chặn gọi trực tiếp từ client-side browser
+                const response = await fetch("https://api.anthropic.com/v1/messages", {
+                    method: "POST",
+                    headers: {
+                        "x-api-key": apiKey,
+                        "anthropic-version": "2023-06-01",
+                        "content-type": "application/json",
+                        "dangerously-allow-browser": "true" // Thuộc tính cho phép gọi trực tiếp nếu thư viện hỗ trợ
+                    },
+                    body: JSON.stringify({
+                        model: "claude-3-opus-20240229", // Thay thế mã model Claude Opus tương ứng trong hệ thống của bạn
+                        max_tokens: 4000,
+                        messages: [{ role: "user", content: promptText }]
+                    })
+                });
+                const data = await response.json();
+                output.value = data.content[0].text;
+            } catch (error) {
+                output.value = "Lỗi kết nối API Claude (Nếu lỗi CORS, hãy sử dụng Extension CORS unblock trên Chrome để test hoặc cấu hình proxy): " + error.message;
+            } finally {
+                btn.disabled = false; btn.innerText = "Viết Kịch bản sâu lắng & Gợi ý bối cảnh ảnh";
+            }
+        }
+
+        // Logic Bước 1: Ý tưởng & SEO
+        function runStep1() {
+            const keyword = document.getElementById('t1-input').value;
+            const key = document.getElementById('openai-key').value;
+            if(!keyword) return alert("Vui lòng nhập chủ đề!");
+            
+            const prompt = `Bạn là một chuyên gia YouTube Marketing tối ưu thuật toán. Dựa vào chủ đề về tâm lý học/xã hội Hàn Quốc này: "${keyword}", hãy thực hiện 2 nhiệm vụ:
+            1. Tạo ra 10 tiêu đề video gây tò mò, kích thích click mạnh mẽ phù hợp với người Việt.
+            2. Viết một đoạn mô tả video (Description) chuẩn SEO tối ưu chứa từ khóa chính, từ khóa phụ, các hashtag phù hợp và đề xuất vị trí đặt các khung mốc thời gian (timestamps).`;
+            
+            callOpenAI(prompt, key, 't1-output', 't1-btn');
+        }
+
+        // Logic Bước 2: Viết Kịch Bản
+        function runStep2() {
+            const title = document.getElementById('t2-input').value;
+            const key = document.getElementById('anthropic-key').value;
+            if(!title) return alert("Vui lòng nhập tiêu đề!");
+
+            const prompt = `Với vai trò là một chuyên gia tâm lý học hành vi và là biên kịch phim điện ảnh, hãy viết một kịch bản chi tiết cho video YouTube có tiêu đề: "${title}".
+            - Yêu cầu văn phong: Sâu lắng, đồng cảm, có tính tự sự cao, bóc tách sâu sắc khía cạnh tâm lý của con người và xã hội Hàn Quốc. Tránh hoàn toàn các từ ngữ sáo rỗng thường thấy của AI (như "nhìn chung", "bước vào kỷ nguyên", "tóm lại").
+            - Hãy chia kịch bản thành các phân đoạn rõ ràng, mỗi phân đoạn hãy đính kèm một câu mô tả ngắn gọn về bối cảnh hình ảnh (mang phong cách điện ảnh Cinematic Hàn Quốc) để tôi có thể dùng làm tư liệu sinh ảnh minh họa.`;
+
+            callAnthropic(prompt, key, 't2-output', 't2-btn');
+        }
+
+        // Logic Bước 3: Chuẩn hóa SRT
+        function runStep3() {
+            const srtRaw = document.getElementById('t3-input').value;
+            const key = document.getElementById('openai-key').value;
+            if(!srtRaw) return alert("Vui lòng dán nội dung SRT thô!");
+
+            const prompt = `Bạn là một biên tập viên hậu kỳ video chuyên nghiệp. Đây là nội dung file phụ đề SRT thô được tạo tự động từ giọng đọc (voice-over) của video tâm lý học Hàn Quốc:
+            
+            ${srtRaw}
+            
+            Hãy xử lý file này theo đúng các nguyên tắc nghiêm ngặt sau:
+            1. Sửa toàn bộ lỗi chính tả, từ viết sai, tối ưu câu từ cho mượt mà, đúng văn phong tiếng Việt trôi chảy.
+            2. Ngắt dòng (tách câu) sao cho cân đối, ngắn gọn, đẹp mắt khi hiển thị trên màn hình (mỗi đoạn text phụ đề chỉ nên dài từ 1 đến tối đa 2 dòng ngắn).
+            3. QUAN TRỌNG NHẤT: Giữ nguyên 100% tất cả các mốc thời gian (timestamps) và số thứ tự đoạn, không làm lệch dù chỉ một ký tự cấu trúc file .srt.`;
+
+            callOpenAI(prompt, key, 't3-output', 't3-btn');
+        }
+    </script>
+</body>
+</html>
