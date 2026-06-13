@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Korea Psychology Video Workspace</title>
+    <title>Korea Psychology Prompt Copier</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -17,100 +17,125 @@
     <aside class="w-64 bg-[#111827] border-r border-gray-800 flex flex-col justify-between select-none">
         <div>
             <div class="p-5 border-b border-gray-800 flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg">🧠</div>
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-indigo-600 flex items-center justify-center font-bold text-white shadow-lg">🚀</div>
                 <div>
                     <h1 class="text-sm font-bold text-white tracking-wide uppercase">K-Psychology</h1>
-                    <span class="text-xs text-indigo-400 font-medium">Studio Workspace v2.0</span>
+                    <span class="text-xs text-emerald-400 font-medium">Prompt Workspace v3.0</span>
                 </div>
             </div>
 
             <nav class="p-4 space-y-1.5">
-                <p class="px-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Quy trình sản xuất</p>
-                <button onclick="switchPanel('panel-step1')" id="nav-step1" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-indigo-600 text-white shadow-md shadow-indigo-900/30">
-                    <span>🎯</span> <span>Bước 1: Ý tưởng & SEO</span>
+                <p class="px-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Quy trình copy nhanh</p>
+                
+                <button onclick="switchPanel('panel-step1')" id="nav-step1" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-indigo-600 text-white shadow-lg shadow-indigo-900/30">
+                    <span>🟢 Dán sang GPT</span> <span class="text-xs font-bold bg-black/30 px-1.5 py-0.5 rounded text-green-400">BƯỚC 1</span>
                 </button>
+                
                 <button onclick="switchPanel('panel-step2')" id="nav-step2" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-gray-400 hover:bg-gray-800/60 hover:text-gray-200">
-                    <span>🎬</span> <span>Bước 2: Kịch bản phim</span>
+                    <span>🟠 Dán sang Claude</span> <span class="text-xs font-bold bg-black/30 px-1.5 py-0.5 rounded text-orange-400">BƯỚC 2</span>
                 </button>
+
                 <button onclick="switchPanel('panel-step3')" id="nav-step3" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-gray-400 hover:bg-gray-800/60 hover:text-gray-200">
-                    <span>📝</span> <span>Bước 3: Chuẩn hóa SRT</span>
+                    <span>🎨 Prompt Ảnh GPT</span> <span class="text-xs font-bold bg-black/30 px-1.5 py-0.5 rounded text-indigo-400">BƯỚC 3</span>
+                </button>
+
+                <button onclick="switchPanel('panel-step4')" id="nav-step4" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-gray-400 hover:bg-gray-800/60 hover:text-gray-200">
+                    <span>🎬 Prompt Video Veo3</span> <span class="text-xs font-bold bg-black/30 px-1.5 py-0.5 rounded text-purple-400">BƯỚC 4</span>
+                </button>
+                
+                <button onclick="switchPanel('panel-step5')" id="nav-step5" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-gray-400 hover:bg-gray-800/60 hover:text-gray-200">
+                    <span>🟢 Dán sang GPT</span> <span class="text-xs font-bold bg-black/30 px-1.5 py-0.5 rounded text-green-400">BƯỚC 5</span>
                 </button>
             </nav>
         </div>
-
-        <div class="p-4 border-t border-gray-800 bg-[#0d131f]">
-            <div class="flex items-center justify-between mb-3 px-1">
-                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Cấu hình hệ thống</span>
-                <span id="login-status" class="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span>
-            </div>
-            <div class="space-y-2">
-                <input type="password" id="sys-openai" oninput="saveCredentials()" class="w-full bg-gray-900 border border-gray-700/60 rounded-md px-2.5 py-1.5 text-xs font-mono text-gray-300 focus:outline-none focus:border-indigo-500" placeholder="OpenAI Key (GPT)">
-                <input type="password" id="sys-anthropic" oninput="saveCredentials()" class="w-full bg-gray-900 border border-gray-700/60 rounded-md px-2.5 py-1.5 text-xs font-mono text-gray-300 focus:outline-none focus:border-indigo-500" placeholder="Claude Key (Opus)">
-                <p class="text-[10px] text-gray-500 px-1 text-center">🔑 Dữ liệu được mã hóa và nhớ bảo mật trên trình duyệt của bạn.</p>
-            </div>
+        <div class="p-4 border-t border-gray-800 bg-[#0d131f] text-center">
+            <p class="text-xs text-gray-400 font-medium">💡 Chế độ: Tận dụng tài khoản web trả phí</p>
         </div>
     </aside>
 
     <main class="flex-1 flex flex-col bg-[#0f172a] overflow-y-auto">
         
-        <div id="panel-step1" class="app-panel p-8 flex-col space-y-6 active">
-            <div class="border-b border-gray-800 pb-4">
-                <h2 class="text-2xl font-bold text-white">🎯 Giai đoạn 1: Lên ý tưởng & Tối ưu hóa Tiêu đề</h2>
-                <p class="text-gray-400 text-sm mt-1">Sử dụng sức mạnh tư duy Marketing đột phá của GPT-5.5 để tạo dòng tiêu đề thu hút CTR.</p>
+        <div id="panel-step1" class="app-panel p-8 flex-col space-y-5 active">
+            <div>
+                <h2 class="text-xl font-bold text-white">🎯 Bước 1: Tạo ý tưởng & Tiêu đề thu hút (Dán vào GPT Plus)</h2>
+                <p class="text-gray-400 text-xs mt-0.5">Trộn chủ đề của bạn vào Prompt tối ưu cấu thuật toán YouTube.</p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                <div class="lg:col-span-2 space-y-4">
-                    <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 shadow-xl">
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">Chủ đề gốc / Hiện tượng xã hội tâm lý:</label>
-                        <textarea id="t1-topic" class="w-full h-32 bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500 text-white resize-none" placeholder="Ví dụ: Áp lực từ các gia tộc Chaebol tác động thế nào đến tâm lý thế hệ trẻ Hàn Quốc..."></textarea>
-                        <button onclick="executeStep1()" id="t1-btn" class="w-full mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium text-sm py-2.5 px-4 rounded-lg shadow-lg shadow-indigo-500/20 transition duration-150">Phân tích xu hướng & Viết tiêu đề</button>
-                    </div>
-                </div>
-                <div class="lg:col-span-3 flex flex-col">
-                    <div class="bg-[#111827] border border-gray-800 rounded-xl flex-1 p-5 flex flex-col shadow-inner">
-                        <span class="text-xs font-bold text-indigo-400 tracking-wider uppercase mb-2 block">Dữ liệu đầu ra từ GPT-5.5:</span>
-                        <textarea id="t1-out" readonly class="w-full flex-1 min-h-[350px] bg-transparent font-mono text-sm text-green-400 border-none p-0 focus:outline-none resize-none" placeholder="Đang chờ lệnh từ bạn..."></textarea>
-                    </div>
+            <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 space-y-4">
+                <label class="block text-sm font-medium text-gray-300">Nhập Chủ đề gốc / Hiện tượng xã hội tâm lý Hàn Quốc:</label>
+                <input type="text" id="t1-topic" oninput="generatePrompt1()" class="w-full bg-gray-950 border border-gray-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="Ví dụ: Áp lực thi cử Suneung, Hội chứng Hikikomori tại Seoul...">
+                
+                <div class="relative">
+                    <span class="text-xs font-semibold text-indigo-400 block mb-1">Cấu trúc Prompt tự động tạo ra:</span>
+                    <textarea id="t1-prompt" readonly class="w-full h-44 bg-gray-900 border border-gray-800 rounded-lg p-3 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copyToClipboard('t1-prompt', 'btn-cp1')" id="btn-cp1" class="absolute bottom-3 right-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs py-1.5 px-3 rounded shadow transition">Bấm Copy Prompt này</button>
                 </div>
             </div>
         </div>
 
-        <div id="panel-step2" class="app-panel p-8 flex-col space-y-6">
-            <div class="border-b border-gray-800 pb-4">
-                <h2 class="text-2xl font-bold text-white">🎬 Giai đoạn 2: Xây dựng Kịch bản Điện ảnh</h2>
-                <p class="text-gray-400 text-sm mt-1">Khai phá văn phong mượt mà, sâu lắng của Claude Opus 4.8 để giữ chân khán giả ở lại video.</p>
+        <div id="panel-step2" class="app-panel p-8 flex-col space-y-5">
+            <div>
+                <h2 class="text-xl font-bold text-white">🎬 Bước 2: Viết kịch bản chiều sâu cảm xúc (Dán vào Claude Team)</h2>
+                <p class="text-gray-400 text-xs mt-0.5">Sử dụng văn phong mượt mà của Claude để bóc tách tâm lý học sâu sắc.</p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                <div class="lg:col-span-2 space-y-4">
-                    <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 shadow-xl">
-                        <label class="block text-sm font-semibold text-gray-300 mb-2">Dán Tiêu đề bạn ưng ý nhất:</label>
-                        <input type="text" id="t2-title" class="w-full bg-gray-900 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-indigo-500 text-white" placeholder="Dán dòng tiêu đề tâm lý học tại đây...">
-                        <button onclick="executeStep2()" id="t2-btn" class="w-full mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium text-sm py-2.5 px-4 rounded-lg shadow-lg shadow-indigo-500/20 transition duration-150">Biên soạn kịch bản văn học</button>
-                    </div>
-                </div>
-                <div class="lg:col-span-3 flex flex-col">
-                    <div class="bg-[#111827] border border-gray-800 rounded-xl flex-1 p-5 flex flex-col shadow-inner">
-                        <span class="text-xs font-bold text-indigo-400 tracking-wider uppercase mb-2 block">Kịch bản văn học & Mô tả bối cảnh sinh ảnh:</span>
-                        <textarea id="t2-out" readonly class="w-full flex-1 min-h-[400px] bg-transparent text-sm text-gray-200 border-none p-0 focus:outline-none resize-none" placeholder="Đang chờ tiêu đề để phân tích chiều sâu..."></textarea>
-                    </div>
+            <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 space-y-4">
+                <label class="block text-sm font-medium text-gray-300">Nhập Tiêu đề bạn đã chọn từ GPT Plus:</label>
+                <input type="text" id="t2-title" oninput="generatePrompt2()" class="w-full bg-gray-950 border border-gray-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="Dán dòng tiêu đề hay nhất vào đây...">
+                
+                <div class="relative">
+                    <span class="text-xs font-semibold text-orange-400 block mb-1">Cấu trúc Prompt tự động tạo ra:</span>
+                    <textarea id="t2-prompt" readonly class="w-full h-44 bg-gray-900 border border-gray-800 rounded-lg p-3 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copyToClipboard('t2-prompt', 'btn-cp2')" id="btn-cp2" class="absolute bottom-3 right-3 bg-orange-600 hover:bg-orange-700 text-white font-medium text-xs py-1.5 px-3 rounded shadow transition">Bấm Copy Prompt này</button>
                 </div>
             </div>
         </div>
 
-        <div id="panel-step3" class="app-panel p-8 flex-col space-y-6">
-            <div class="border-b border-gray-800 pb-4">
-                <h2 class="text-2xl font-bold text-white">📝 Giai đoạn 3: Chuẩn hóa & Làm sạch Phụ đề (SRT)</h2>
-                <p class="text-gray-400 text-sm mt-1">Hệ thống lọc dữ liệu của GPT-5.5 sửa lỗi chính tả, ngắt dòng nghệ thuật tuyệt đối giữ nguyên timecode.</p>
+        <div id="panel-step3" class="app-panel p-8 flex-col space-y-5">
+            <div>
+                <h2 class="text-xl font-bold text-white">🎨 Bước 3: Ép cấu trúc ảnh Cinematic Hàn Quốc (Dán vào GPT Tạo ảnh)</h2>
+                <p class="text-gray-400 text-xs mt-0.5">Giúp DALL-E 3 hiểu sâu bối cảnh nghệ thuật phim buồn, đổ bóng sâu.</p>
             </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div class="flex flex-col bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 shadow-xl">
-                    <label class="block text-sm font-semibold text-gray-300 mb-2">Dán nội dung file .SRT thô (từ CapCut/Premiere):</label>
-                    <textarea id="t3-srt-raw" class="w-full flex-1 min-h-[350px] bg-gray-900 border border-gray-700 rounded-lg p-3 font-mono text-xs focus:outline-none focus:border-indigo-500 text-white" placeholder="1&#10;00:00:01,200 --> 00:00:04,500&#10;han quoc la mot quoc gia rat ap luc..."></textarea>
-                    <button onclick="executeStep3()" id="t3-btn" class="w-full mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium text-sm py-2.5 px-4 rounded-lg shadow-lg shadow-indigo-500/20 transition duration-150">Bắt đầu chuẩn hóa dữ liệu</button>
+            <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 space-y-4">
+                <label class="block text-sm font-medium text-gray-300">Dán mô tả phân cảnh/bối cảnh từ kịch bản của Claude:</label>
+                <textarea id="t3-scene" oninput="generatePrompt3()" class="w-full h-24 bg-gray-950 border border-gray-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500 resize-none" placeholder="Ví dụ: Cảnh một chàng trai cô đơn nhìn qua cửa sổ quán cafe trong đêm mưa tại Seoul..."></textarea>
+                
+                <div class="relative">
+                    <span class="text-xs font-semibold text-indigo-400 block mb-1">Cấu trúc Prompt tự động tạo ra:</span>
+                    <textarea id="t3-prompt" readonly class="w-full h-36 bg-gray-900 border border-gray-800 rounded-lg p-3 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copyToClipboard('t3-prompt', 'btn-cp3')" id="btn-cp3" class="absolute bottom-3 right-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-xs py-1.5 px-3 rounded shadow transition">Bấm Copy Prompt này</button>
                 </div>
-                <div class="bg-[#111827] border border-gray-800 rounded-xl p-5 flex flex-col shadow-inner">
-                    <span class="text-xs font-bold text-indigo-400 tracking-wider uppercase mb-2 block">Tệp phụ đề SRT hoàn chỉnh (Sẵn sàng Đăng tải):</span>
-                    <textarea id="t3-out" readonly class="w-full flex-1 min-h-[350px] bg-transparent font-mono text-xs text-yellow-400 border-none p-0 focus:outline-none" placeholder="File SRT sạch sẽ xuất hiện tại đây..."></textarea>
+            </div>
+        </div>
+
+        <div id="panel-step4" class="app-panel p-8 flex-col space-y-5">
+            <div>
+                <h2 class="text-xl font-bold text-white">🎬 Bước 4: Tạo Prompt chuyển động camera (Dán vào Veo 3 Omni 8s)</h2>
+                <p class="text-gray-400 text-xs mt-0.5">Tạo prompt tiếng Anh ép góc máy điện ảnh chuyển động chậm để làm mượt video 8 giây.</p>
+            </div>
+            <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 space-y-4">
+                <label class="block text-sm font-medium text-gray-300">Nhập hành động cốt lõi muốn nhân vật thực hiện (tiếng Việt hoặc Anh):</label>
+                <input type="text" id="t4-action" oninput="generatePrompt4()" class="w-full bg-gray-950 border border-gray-700 rounded-lg p-3 text-sm text-white focus:outline-none focus:border-indigo-500" placeholder="Ví dụ: Nhân vật khẽ thở dài, nhân vật quay đầu nhìn camera bước đi chậm dưới phố...">
+                
+                <div class="relative">
+                    <span class="text-xs font-semibold text-purple-400 block mb-1">Cấu trúc Prompt tự động tạo ra (Chuẩn tiếng Anh điện ảnh):</span>
+                    <textarea id="t4-prompt" readonly class="w-full h-36 bg-gray-900 border border-gray-800 rounded-lg p-3 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copyToClipboard('t4-prompt', 'btn-cp4')" id="btn-cp4" class="absolute bottom-3 right-3 bg-purple-600 hover:bg-purple-700 text-white font-medium text-xs py-1.5 px-3 rounded shadow transition">Bấm Copy Prompt này</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="panel-step5" class="app-panel p-8 flex-col space-y-5">
+            <div>
+                <h2 class="text-xl font-bold text-white">🟢 Bước 5: Chuẩn hóa tệp phụ đề SRT & SEO (Dán vào GPT Plus)</h2>
+                <p class="text-gray-400 text-xs mt-0.5">Lọc toàn bộ lỗi chính tả từ CapCut/Premiere nhưng bám khít cấu trúc mili-giây.</p>
+            </div>
+            <div class="bg-[#1e293b] p-5 rounded-xl border border-gray-700/40 space-y-4">
+                <label class="block text-sm font-medium text-gray-300">Dán đoạn nội dung phụ đề SRT thô cần lọc lỗi:</label>
+                <textarea id="t5-srt" oninput="generatePrompt5()" class="w-full h-32 bg-gray-950 border border-gray-700 rounded-lg p-3 font-mono text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Dán các dòng timecode thô vào đây..."></textarea>
+                
+                <div class="relative">
+                    <span class="text-xs font-semibold text-emerald-400 block mb-1">Cấu trúc lệnh Prompt xử lý SRT thô tự động tạo ra:</span>
+                    <textarea id="t5-prompt" readonly class="w-full h-40 bg-gray-900 border border-gray-800 rounded-lg p-3 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copyToClipboard('t5-prompt', 'btn-cp5')" id="btn-cp5" class="absolute bottom-3 right-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs py-1.5 px-3 rounded shadow transition">Bấm Copy Prompt này</button>
                 </div>
             </div>
         </div>
@@ -118,131 +143,69 @@
     </main>
 
     <script>
-        // Tự động load API Keys từ LocalStorage khi người dùng mở ứng dụng lên
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedOpenAI = localStorage.getItem('app_openai_key');
-            const savedAnthropic = localStorage.getItem('app_anthropic_key');
-            
-            if(savedOpenAI) document.getElementById('sys-openai').value = savedOpenAI;
-            if(savedAnthropic) document.getElementById('sys-anthropic').value = savedAnthropic;
-            
-            checkStatus();
-        });
-
-        // Lưu thông tin đăng nhập tự động ngay khi gõ kí tự
-        function saveCredentials() {
-            const openAIKey = document.getElementById('sys-openai').value;
-            const anthropicKey = document.getElementById('sys-anthropic').value;
-            
-            localStorage.setItem('app_openai_key', openAIKey);
-            localStorage.setItem('app_anthropic_key', anthropicKey);
-            checkStatus();
-        }
-
-        // Đèn báo hiệu trạng thái đăng nhập hệ thống
-        function checkStatus() {
-            const openAIKey = document.getElementById('sys-openai').value;
-            const anthropicKey = document.getElementById('sys-anthropic').value;
-            const indicator = document.getElementById('login-status');
-            
-            if(openAIKey && anthropicKey) {
-                indicator.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50";
-            } else {
-                indicator.className = "w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500/50";
-            }
-        }
-
-        // Chuyển đổi mượt mà giữa các không gian làm việc chuyên nghiệp
+        // Chuyển panel menu trái mượt mà
         function switchPanel(panelId) {
-            document.querySelectorAll('.app-panel').forEach(panel => panel.classList.remove('active'));
+            document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
             document.getElementById(panelId).classList.add('active');
-            
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-gray-400 hover:bg-gray-800/60 hover:text-gray-200";
+            document.querySelectorAll('nav button').forEach(b => {
+                b.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-gray-400 hover:bg-gray-800/60 hover:text-gray-200";
             });
+            const activeNav = panelId.replace('panel-', 'nav-');
+            const colorClass = panelId === 'panel-step1' || panelId === 'panel-step5' ? 'bg-indigo-600' : (panelId === 'panel-step2' ? 'bg-orange-600' : (panelId === 'panel-step3' ? 'bg-indigo-600' : 'bg-purple-600'));
+            document.getElementById(activeNav).className = `w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${colorClass} text-white shadow-lg`;
+        }
+
+        // Tự động trộn văn bản vào hệ thống Prompt mẫu
+        function generatePrompt1() {
+            const val = document.getElementById('t1-topic').value || '[Chủ đề tâm lý học của bạn]';
+            document.getElementById('t1-prompt').value = `Bạn là một chuyên gia YouTube Marketing tối ưu thuật toán. Dựa vào chủ đề về tâm lý học/xã hội Hàn Quốc này: "${val}", hãy thực hiện 2 nhiệm vụ:\n1. Tạo ra 10 tiêu đề video gây tò mò, kích thích click mạnh mẽ phù hợp với tâm lý người Việt.\n2. Viết một đoạn mô tả video (Description) chuẩn SEO tối ưu chứa từ khóa chính, từ khóa phụ, các hashtag phù hợp và đề xuất vị trí đặt các khung mốc thời gian (timestamps).`;
+        }
+
+        function generatePrompt2() {
+            const val = document.getElementById('t2-title').value || '[Tiêu đề bạn chọn]';
+            document.getElementById('t2-prompt').value = `Với vai trò là một chuyên gia tâm lý học hành vi và là biên kịch phim điện ảnh, hãy viết một kịch bản chi tiết cho video YouTube có tiêu đề: "${val}".\n- Yêu cầu văn phong: Sâu lắng, đồng cảm, có tính tự sự cao, bóc tách sâu sắc khía cạnh tâm lý của con người và xã hội Hàn Quốc. Tránh hoàn toàn các từ ngữ sáo rỗng thường thấy của AI (như "nhìn chung", "bước vào kỷ nguyên", "tóm lại").\n- Hãy chia kịch bản thành các phân đoạn rõ ràng, mỗi phân đoạn hãy đính kèm một câu mô tả ngắn gọn về bối cảnh hình ảnh (mang phong cách điện ảnh Cinematic Hàn Quốc) để tôi có thể dùng làm tư liệu sinh ảnh minh họa.`;
+        }
+
+        function generatePrompt3() {
+            const val = document.getElementById('t3-scene').value || '[Bối cảnh từ Claude]';
+            document.getElementById('t3-prompt').value = `Dựa vào mô tả phân cảnh sau: "${val}". Hãy tạo một bức ảnh tỉ lệ 16:9 theo phong cách phim điện ảnh buồn Hàn Quốc (Cinematic Sad Korean Movie Style). Tập trung mạnh vào tone màu trầm tối lạnh, ánh sáng đổ bóng tương phản cao nghệ thuật để lột tả rõ nét sự cô đơn, cô lập của nhân vật trong xã hội đô thị hiện đại. Không chèn chữ vào ảnh.`;
+        }
+
+        function generatePrompt4() {
+            const val = document.getElementById('t4-action').value || '[Hành động nhân vật]';
+            document.getElementById('t4-prompt').value = `Slow cinematic pacing shot. Image to video animation. The character is performing this action: "${val}". Set in a realistic moody Korean environment, micro-expressions, soft neon-lit ambient shadows, shallow depth of field, ultra-realistic 4k resolution, 24fps film grain motion blur.`;
+        }
+
+        function generatePrompt5() {
+            const val = document.getElementById('t5-srt').value || '[Dữ liệu tệp SRT thô từ phần mềm]';
+            document.getElementById('t5-prompt').value = `Bạn là một biên tập viên hậu kỳ video chuyên nghiệp. Đây là nội dung file phụ đề SRT thô:\n\n${val}\n\nHãy xử lý file này theo đúng các nguyên tắc nghiêm ngặt sau:\n1. Sửa toàn bộ lỗi chính tả, từ viết sai, tối ưu câu từ cho mượt mà, đúng văn phong tiếng Việt trôi chảy.\n2. Ngắt dòng (tách câu) sao cho cân đối, ngắn gọn, đẹp mắt khi hiển thị trên màn hình (mỗi đoạn text phụ đề chỉ nên dài từ 1 đến tối đa 2 dòng ngắn).\n3. QUAN TRỌNG NHẤT: Giữ nguyên 100% tất cả các mốc thời gian (timestamps) và số thứ tự đoạn, không làm lệch dù chỉ một ký tự cấu trúc file .srt.`;
+        }
+
+        // Hàm copy dữ liệu vào khay nhớ tạm của máy tính nhanh
+        function copyToClipboard(id, btnId) {
+            const txt = document.getElementById(id);
+            txt.select();
+            txt.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(txt.value);
             
-            const activeNavId = panelId.replace('panel-', 'nav-');
-            document.getElementById(activeNavId).className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition bg-indigo-600 text-white shadow-md shadow-indigo-900/30";
-        }
-
-        // Lõi Core kết nối API hệ thống OpenAI
-        async function fetchOpenAI(promptText, apiKey, targetId, btnId, btnRawText) {
             const btn = document.getElementById(btnId);
-            const target = document.getElementById(targetId);
-            if (!apiKey) return alert("Hệ thống chưa cấu hình OpenAI API Key tại góc trái!");
+            const originalText = btn.innerText;
+            btn.innerText = "✓ Đã Copy Xong!";
+            btn.classList.remove('bg-indigo-600', 'bg-orange-600', 'bg-purple-600', 'bg-emerald-600');
+            btn.classList.add('bg-gray-700');
             
-            btn.disabled = true; btn.innerText = "Processing..."; target.value = "Hệ thống AI đang phân tích dữ liệu...";
-
-            try {
-                const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                    body: JSON.stringify({
-                        model: "gpt-4o", // Điều chỉnh endpoint sang mã GPT-5 tùy theo tài khoản dev được cấp quyền
-                        messages: [{ role: "user", content: promptText }],
-                        temperature: 0.7
-                    })
-                });
-                const data = await response.json();
-                target.value = data.choices[0].message.content;
-            } catch (err) {
-                target.value = "Lỗi vận hành hệ thống API: " + err.message;
-            } finally {
-                btn.disabled = false; btn.innerText = btnRawText;
-            }
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-gray-700');
+                if (btnId === 'btn-cp1' || btnId === 'btn-cp3') btn.classList.add('bg-indigo-600');
+                if (btnId === 'btn-cp2') btn.classList.add('bg-orange-600');
+                if (btnId === 'btn-cp4') btn.classList.add('bg-purple-600');
+                if (btnId === 'btn-cp5') btn.classList.add('bg-emerald-600');
+            }, 1500);
         }
 
-        // Lõi Core kết nối API hệ thống Anthropic Claude
-        async function fetchAnthropic(promptText, apiKey, targetId, btnId, btnRawText) {
-            const btn = document.getElementById(btnId);
-            const target = document.getElementById(targetId);
-            if (!apiKey) return alert("Hệ thống chưa cấu hình Anthropic API Key tại góc trái!");
-
-            btn.disabled = true; btn.innerText = "Analyzing..."; target.value = "Claude đang thực hiện bóc tách tâm lý học chuyên sâu...";
-
-            try {
-                const response = await fetch("https://api.anthropic.com/v1/messages", {
-                    method: "POST",
-                    headers: { "x-api-key": apiKey, "anthropic-version": "2023-06-01", "content-type": "application/json", "dangerously-allow-browser": "true" },
-                    body: JSON.stringify({
-                        model: "claude-3-opus-20240229", // Cấu hình model Claude Opus 4.8
-                        max_tokens: 4000,
-                        messages: [{ role: "user", content: promptText }]
-                    })
-                });
-                const data = await response.json();
-                target.value = data.content[0].text;
-            } catch (err) {
-                target.value = "Hệ thống lỗi kết nối Claude (Đảm bảo trình duyệt đã bật Extension CORS Unblock hoặc chạy qua Proxy cục bộ): " + err.message;
-            } finally {
-                btn.disabled = false; btn.innerText = btnRawText;
-            }
-        }
-
-        // Thực thi các bước xử lý dữ liệu tự động hóa
-        function executeStep1() {
-            const topic = document.getElementById('t1-topic').value;
-            const key = document.getElementById('sys-openai').value;
-            if(!topic) return alert("Vui lòng nhập chủ đề!");
-            const prompt = `Bạn là một chuyên gia YouTube Marketing tối ưu thuật toán. Dựa vào chủ đề về tâm lý học/xã hội Hàn Quốc này: "${topic}", hãy thực hiện 2 nhiệm vụ:\n1. Tạo ra 10 tiêu đề video gây tò mò, kích thích click mạnh mẽ phù hợp với tư duy nghe nhìn người Việt.\n2. Viết một đoạn mô tả video (Description) chuẩn SEO tối ưu chứa từ khóa chính, từ khóa phụ, các hashtag phù hợp và đề xuất vị trí đặt các khung mốc thời gian (timestamps).`;
-            fetchOpenAI(prompt, key, 't1-out', 't1-btn', 'Phân tích xu hướng & Viết tiêu đề');
-        }
-
-        function executeStep2() {
-            const title = document.getElementById('t2-title').value;
-            const key = document.getElementById('sys-anthropic').value;
-            if(!title) return alert("Vui lòng nhập tiêu đề bài viết!");
-            const prompt = `Với vai trò là một chuyên gia tâm lý học hành vi và là biên kịch phim điện ảnh, hãy viết một kịch bản chi tiết cho video YouTube có tiêu đề: "${title}".\n- Yêu cầu văn phong: Sâu lắng, đồng cảm, có tính tự sự cao, bóc tách sâu sắc khía cạnh tâm lý của con người và xã hội Hàn Quốc. Tránh hoàn toàn các từ ngữ sáo rỗng thường thấy của AI (như "nhìn chung", "bước vào kỷ nguyên", "tóm lại").\n- Hãy chia kịch bản thành các phân đoạn rõ ràng, mỗi phân đoạn hãy đính kèm một câu mô tả ngắn gọn về bối cảnh hình ảnh (mang phong cách điện ảnh Cinematic Hàn Quốc) để tôi có thể dùng làm tư liệu sinh ảnh minh họa.`;
-            fetchAnthropic(prompt, key, 't2-out', 't2-btn', 'Biên soạn kịch bản văn học');
-        }
-
-        function executeStep3() {
-            const srt = document.getElementById('t3-srt-raw').value;
-            const key = document.getElementById('sys-openai').value;
-            if(!srt) return alert("Vui lòng dán tệp dữ liệu phụ đề thô!");
-            const prompt = `Bạn là một biên tập viên hậu kỳ video chuyên nghiệp. Đây là nội dung file phụ đề SRT thô được tạo tự động từ giọng đọc video tâm lý học Hàn Quốc:\n\n${srt}\n\nHãy xử lý file này theo đúng các nguyên tắc nghiêm ngặt sau:\n1. Sửa toàn bộ lỗi chính tả, từ viết sai, tối ưu câu từ cho mượt mà, đúng văn phong tiếng Việt trôi chảy.\n2. Ngắt dòng (tách câu) sao cho cân đối, ngắn gọn, đẹp mắt khi hiển thị trên màn hình (mỗi đoạn text phụ đề chỉ nên dài từ 1 đến tối đa 2 dòng ngắn).\n3. QUAN TRỌNG NHẤT: Giữ nguyên 100% tất cả các mốc thời gian (timestamps) và số thứ tự đoạn, không làm lệch dù chỉ một ký tự cấu trúc file .srt.`;
-            fetchOpenAI(prompt, key, 't3-out', 't3-btn', 'Bắt đầu chuẩn hóa dữ liệu');
-        }
+        // Khởi tạo text hiển thị mặc định ban đầu
+        generatePrompt1(); generatePrompt2(); generatePrompt3(); generatePrompt4(); generatePrompt5();
     </script>
 </body>
 </html>
