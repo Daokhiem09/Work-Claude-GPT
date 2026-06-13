@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사연심리 AI Analyst & Audit Hub v6.0</title>
+    <title>사연심리 AI Analyst & Audit Hub v6.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Nhúng Chart.js để vẽ biểu đồ phân tích chuyên nghiệp như GPT -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -32,7 +32,7 @@
                     <span class="text-2xl">🧠</span>
                     <div>
                         <h1 class="text-base font-extrabold text-white tracking-wide uppercase">사연심리 AI Hub</h1>
-                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Premium Analyst v6.0</p>
+                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Premium Analyst v6.1</p>
                     </div>
                 </div>
                 <div class="mt-3 bg-indigo-950/40 border border-indigo-800/40 rounded-xl p-2.5 flex items-center space-x-2">
@@ -105,6 +105,15 @@
                 </div>
             </div>
 
+            <!-- VÙNG KÉO THẢ TỆP CSV TRỰC QUAN -->
+            <div id="dropzone" class="border-2 border-dashed border-gray-700/60 hover:border-indigo-500 hover:bg-indigo-950/15 transition-all rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer glass">
+                <i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-400 mb-3 animate-bounce"></i>
+                <h3 class="text-base font-bold text-white mb-1">Kéo và thả tệp CSV xuất từ vidIQ vào đây</h3>
+                <p class="text-xs text-gray-400 max-w-md">Công cụ sẽ tự động phân tích toàn diện dữ liệu, vẽ biểu đồ tương quan và chẩn đoán kịch bản tối ưu hóa.</p>
+                <input type="file" id="csv-input" accept=".csv" class="hidden">
+                <button onclick="document.getElementById('csv-input').click()" class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-4 rounded-xl transition-all">Chọn File Thủ Công</button>
+            </div>
+
             <!-- CHỈ SỐ SỨC KHỎE KÊNH -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div class="glass p-6 rounded-2xl border border-gray-800">
@@ -154,7 +163,6 @@
                     <h3 class="text-lg font-bold text-white">Báo Cáo Chẩn Đoán Xu Hướng Kênh (AI GPT-Style Insight Report)</h3>
                 </div>
                 <div id="ai-report-box" class="text-sm text-gray-300 leading-relaxed space-y-4 font-normal">
-                    <!-- Báo cáo chi tiết sẽ tự động sinh bằng Javascript ở đây dựa vào tệp CSV bạn nạp -->
                     Đang tính toán và chẩn đoán dữ liệu từ tệp CSV của bạn...
                 </div>
             </div>
@@ -412,7 +420,7 @@
     <!-- HỆ THỐNG XỬ LÝ SỐ LIỆU & RENDER CHUYÊN SÂU -->
     <script>
         let videoData = [
-            { id: "eaWX9nVJOh4", title: "비교를 멈출 수 없는 진짜 이유 (심리학) #비교 #shorts", duration: "00:21", views: 182, likes: 14, comments: 2, descWordCount: 52, vidiq: 55, status: "Tốt", desc: "자꾸 남과 비교하는 건 의지가 약해서가 아닙니다. 1954년 심리학자 레온 페스팅거의 사회비교이론 — 인간은 자신을 평가하기 위해 남과 비교하도록 태어났습니다. 본능을 이기는 방법은 따로 있습니다.  👆 비교 본능에서 벗어나는 법, 전체 영상은 프로필에서  #비교 #사회비교이론 #심리학 #열등감 #자존감 #뇌과학 #사연심리 #shorts #힐링" },
+            { id: "eaWX9nVJOh4", title: "비교를 멈출 수 없는 진짜 이유 (심리학) #비교 #shorts", duration: "00:21", views: 182, likes: 14, comments: 2, descWordCount: 52, vidiq: 55, status: "Tốt", desc: "자꾸 남과 비교하는 건 의지가 약해서가 아닙니다. 1954년 심리학자 레온 페스팅거 của 사회비교이론 — 인간은 자신을 평가하기 위해 남과 비교하도록 태어났습니다. 본능을 이기는 방법은 따로 있습니다.  👆 비교 본능에서 벗어나는 법, 전체 영상은 프로필에서  #비교 #사회비교이론 #심리학 #열등감 #자존감 #뇌과학 #사연심리 #shorts #힐링" },
             { id: "0f-q-xP9rgI", title: "시어머니가 음식을 자꾸 권하는 진짜 이유 #shorts", duration: "00:07", views: 110, likes: 8, comments: 1, descWordCount: 15, vidiq: 48, status: "Cần tối ưu", desc: "간섭이 아니라, 인정받고 싶은 마음이었습니다. 시어머니의 인정 욕구.  👆 전체 영상은 프로필에서  #시어머니 #며느리 #인정욕구 #고부관계 #심리학 #사연심리 #shorts #힐링" },
             { id: "long-sample", title: "시어머니가 절대 말 안 하는 속마음 5가지 (가족 심리학 분석)", duration: "08:36", views: 2450, likes: 195, comments: 24, descWordCount: 65, vidiq: 68, status: "Cần tối ưu", desc: "며느리가 알지 못했던 시어머니의 진짜 속사정은 무엇일까요? 가족 심리학 보웬의 이론을 바탕으로 bóc tách sâu sắc mối quan hệ 고부갈등. 구독과 알림 설정으로 사연심리와 함께하세요. #시어머니 #며느리 #고부갈등 #가족심리 #사연심리" }
         ];
@@ -512,6 +520,10 @@
             selectVideoForRepair(videoData[0].id);
             selectTopic("01");
 
+            // Cập nhật giá trị ban đầu cho các khối prompt để tránh ô trống
+            updateScriptPrompt();
+            updateSrtPrompt();
+
             // Mẫu prompt hàng loạt có sẵn
             document.getElementById('bulk-input').value = `87: grown child warmly expressing love through a gentle embrace and shared time, warm closing glow motion, 8 second clip, horizontal 16:9, minimalist flat 2D vector animated illustration style, Korean healing aesthetic\n\n88: parent and grown child together in warm complete light, peaceful and full, gentle closing fade, 8 second clip, horizontal 16:9, minimalist flat 2D vector animated illustration style, Korean healing aesthetic`;
             parseBulkPrompts();
@@ -526,7 +538,7 @@
             nav.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-xl shadow-indigo-950/50";
         }
 
-        // THIẾT LẬP KÉO THẢ VÀ INPUT FILE CSV
+        // THIẾT LẬP KÉO THẢ VÀ INPUT FILE CSV (AN TOÀN TUYỆT ĐỐI)
         function setupCSVInputs() {
             // Drag and drop zone ở tab CSV
             const dropzone = document.getElementById('dropzone');
@@ -541,25 +553,33 @@
                 reader.readAsText(file, "UTF-8");
             };
 
-            dropzone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropzone.classList.add('border-indigo-500', 'bg-indigo-950/20');
-            });
-            dropzone.addEventListener('dragleave', () => {
-                dropzone.classList.remove('border-indigo-500', 'bg-indigo-950/20');
-            });
-            dropzone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropzone.classList.remove('border-indigo-500', 'bg-indigo-950/20');
-                if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-            });
+            // Phòng vệ chống lỗi Null khi không tìm thấy phần tử HTML
+            if (dropzone) {
+                dropzone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropzone.classList.add('border-indigo-500', 'bg-indigo-950/20');
+                });
+                dropzone.addEventListener('dragleave', () => {
+                    dropzone.classList.remove('border-indigo-500', 'bg-indigo-950/20');
+                });
+                dropzone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropzone.classList.remove('border-indigo-500', 'bg-indigo-950/20');
+                    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+                });
+            }
 
-            csvInput.addEventListener('change', (e) => {
-                if (e.target.files[0]) handleFile(e.target.files[0]);
-            });
-            dbCsvInput.addEventListener('change', (e) => {
-                if (e.target.files[0]) handleFile(e.target.files[0]);
-            });
+            if (csvInput) {
+                csvInput.addEventListener('change', (e) => {
+                    if (e.target.files[0]) handleFile(e.target.files[0]);
+                });
+            }
+
+            if (dbCsvInput) {
+                dbCsvInput.addEventListener('change', (e) => {
+                    if (e.target.files[0]) handleFile(e.target.files[0]);
+                });
+            }
         }
 
         // TRÌNH XỬ LÝ ĐỌC FILE CSV CHUYÊN SÂU
@@ -709,8 +729,13 @@
             if (charts.seoViews) charts.seoViews.destroy();
             if (charts.format) charts.format.destroy();
 
-            const ctxSeo = document.getElementById('seoViewsChart').getContext('2d');
-            const ctxFormat = document.getElementById('formatChart').getContext('2d');
+            const canvasSeo = document.getElementById('seoViewsChart');
+            const canvasFormat = document.getElementById('formatChart');
+
+            if (!canvasSeo || !canvasFormat) return;
+
+            const ctxSeo = canvasSeo.getContext('2d');
+            const ctxFormat = canvasFormat.getContext('2d');
 
             // Chuẩn bị dữ liệu cho biểu đồ SEO vs Views
             const labels = videoData.map(v => v.title.substring(0, 15) + '...');
@@ -801,7 +826,7 @@
         }
 
         // ==========================================
-        // CÁC CHỨC NĂNG CÒN LẠI CỦA STUDIO HUB
+        // CÁC CHỨC NĂNG KHẮC PHỤC LỖI & SỬA LỖI ĐỎ
         // ==========================================
 
         function selectVideoForRepair(id) {
@@ -862,12 +887,15 @@
 
             // Tạo bản vá lỗi SEO
             const promptBox = document.getElementById('repair-prompt-box');
-            promptBox.value = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n- Title: "${v.title}"\n- Current Description: "${v.desc}"\n- Duration: ${v.duration}\n\nPlease generate a fully optimized "Metadata Patch Kit" in native South Korean language (한국어) with the following elements:\n1. 3 new clickbait titles targeting local Korean psychology viewers (Max CTR).\n2. A comprehensive, detailed, SEO-friendly video description containing: \n   - A gripping introduction summarizing the story.\n   - Natural call to action links (프로필 링크) encouraging subscribers.\n   - Designated structural tags for timestamps.\n3. An optimized, high-density tags and hashtags block based on Korean domestic search traffic. Please output everything strictly in Korean language.`;
+            if (promptBox) {
+                promptBox.value = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n- Title: "${v.title}"\n- Current Description: "${v.desc}"\n- Duration: ${v.duration}\n\nPlease generate a fully optimized "Metadata Patch Kit" in native South Korean language (한국어) with the following elements:\n1. 3 new clickbait titles targeting local Korean psychology viewers (Max CTR).\n2. A comprehensive, detailed, SEO-friendly video description containing: \n   - A gripping introduction summarizing the story.\n   - Natural call to action links (프로필 링크) encouraging subscribers.\n   - Designated structural tags for timestamps.\n3. An optimized, high-density tags and hashtags block based on Korean domestic search traffic. Please output everything strictly in Korean language.`;
+            }
         }
 
         // Render ma trận chủ đề mới
         function renderTopicList() {
             const container = document.getElementById('topic-list-container');
+            if (!container) return;
             container.innerHTML = '';
 
             koreanTopics.forEach(t => {
@@ -923,12 +951,18 @@
         function updateScriptPrompt() {
             const t = document.getElementById('script-title').value || '[Dán tiêu đề tiếng Hàn]';
             const s = document.getElementById('script-struct').value || '[Cấu trúc kịch bản phá template]';
-            document.getElementById('script-prompt-output').value = `Act as an elite native South Korean behavioral psychologist and a professional cinematic screenwriter. Write a deep, analytical, and emotionally gripping YouTube video script based on the title: "${t}".\n- Structural requirements: Follow this template/format: "${s}". Incorporate the psychological theories naturally into a storytelling narrative.\n- Tone and language: Must be written entirely in fluent, sophisticated, and empathetic native South Korean language (한국어). Avoid typical generic AI-generated expressions or patterns. Make it touch the hearts of local Korean viewers.\n- Visual guidance: For every major segment, include a brief scene composition description in English inside brackets [like this] describing the lighting, noir/cinematic atmosphere, and background elements so I can use it to generate visuals. The text content must remain strictly in Korean.`;
+            const outputBox = document.getElementById('script-prompt-output');
+            if (outputBox) {
+                outputBox.value = `Act as an elite native South Korean behavioral psychologist and a professional cinematic screenwriter. Write a deep, analytical, and emotionally gripping YouTube video script based on the title: "${t}".\n- Structural requirements: Follow this template/format: "${s}". Incorporate the psychological theories naturally into a storytelling narrative.\n- Tone and language: Must be written entirely in fluent, sophisticated, and empathetic native South Korean language (한국어). Avoid typical generic AI-generated expressions or patterns. Make it touch the hearts of local Korean viewers.\n- Visual guidance: For every major segment, include a brief scene composition description in English inside brackets [like this] describing the lighting, noir/cinematic atmosphere, and background elements so I can use it to generate visuals. The text content must remain strictly in Korean.`;
+            }
         }
 
         function updateSrtPrompt() {
             const s = document.getElementById('srt-raw').value || '[Dán tệp phụ đề SRT thô vào đây]';
-            document.getElementById('srt-prompt-output').value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
+            const outputBox = document.getElementById('srt-prompt-output');
+            if (outputBox) {
+                outputBox.value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
+            }
         }
 
         // ==========================================
@@ -950,9 +984,12 @@
             const rawText = document.getElementById('bulk-input').value;
             const container = document.getElementById('bulk-cards-container');
             
-            if (!rawText.trim()) {
-                container.innerHTML = `<div class="text-center py-20 text-gray-500 text-sm"><p>Chưa có dữ liệu để bóc tách.</p></div>`;
-                document.getElementById('bulk-counter').innerText = `Đã phân tách thành công: 0 thẻ`;
+            if (!rawText.trim() || !container) {
+                if (container) {
+                    container.innerHTML = `<div class="text-center py-20 text-gray-500 text-sm"><p>Chưa có dữ liệu để bóc tách.</p></div>`;
+                }
+                const counterEl = document.getElementById('bulk-counter');
+                if (counterEl) counterEl.innerText = `Đã phân tách thành công: 0 thẻ`;
                 return;
             }
 
@@ -1022,7 +1059,8 @@
                 container.appendChild(card);
             });
 
-            document.getElementById('bulk-counter').innerText = `Đã phân tách thành công: ${counter} thẻ prompt`;
+            const counterEl = document.getElementById('bulk-counter');
+            if (counterEl) counterEl.innerText = `Đã phân tách thành công: ${counter} thẻ prompt`;
         }
 
         function exportAllPrompts() {
