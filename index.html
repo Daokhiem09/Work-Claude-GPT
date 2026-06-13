@@ -461,8 +461,28 @@
                 </div>
             </div>
 
-            <!-- DANH SÁCH LỊCH TRÌNH 7 NGÀY -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4" id="daily-scheduler-container">
+            <!-- THANH CÔNG CỤ: NGÀY BẮT ĐẦU TUẦN + TIẾN ĐỘ -->
+            <div class="glass border border-gray-800 rounded-2xl p-5 flex flex-col md:flex-row md:items-center gap-5">
+                <div class="flex items-center gap-3 shrink-0">
+                    <i class="fa-solid fa-calendar-day text-indigo-400 text-lg"></i>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Ngày bắt đầu tuần (Thứ Hai)</label>
+                        <input type="date" id="schedule-start-date" onchange="setScheduleStart(this.value)" class="bg-[#05070f] border border-gray-700 rounded-lg px-3 py-1.5 text-xs text-white outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+                <div class="flex-1 w-full">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Tiến độ tuần sản xuất</span>
+                        <span id="schedule-progress-label" class="text-xs font-extrabold text-indigo-400">0/7 ngày hoàn thành (0%)</span>
+                    </div>
+                    <div class="w-full h-2.5 bg-[#05070f] rounded-full overflow-hidden border border-gray-800">
+                        <div id="schedule-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DANH SÁCH LỊCH TRÌNH 7 NGÀY (DẠNG DÒNG THỜI GIAN DỄ ĐỌC) -->
+            <div class="space-y-3" id="daily-scheduler-container">
                 <!-- JS tự động dựng 7 ngày làm việc tương thích ngách kênh và gán mốc tích hoàn thành -->
             </div>
 
@@ -773,6 +793,11 @@
             loadRoadmapChecks();
             handleNicheChange(); // Render kịch bản theo ngách mặc định ban đầu
 
+            // Gán ngày bắt đầu tuần cho ô chọn ngày rồi vẽ lại lịch trình
+            const startInput = document.getElementById('schedule-start-date');
+            if (startInput) startInput.value = localYMD(getScheduleStart());
+            renderDailyScheduler();
+
             // Khởi chạy đồng bộ hóa prompt mẫu thô tại đây sau khi tất cả các hàm liên quan được tải
             updateScriptPrompt();
             updateSrtPrompt();
@@ -827,6 +852,75 @@
         
         function getStorageKey(niche, idx, type) {
             return `completed-${niche}-${idx}-${type}`;
+        }
+
+        // ====== CẤU HÌNH & TIỆN ÍCH LỊCH TRÌNH 7 NGÀY (NGUỒN DỮ LIỆU DUY NHẤT) ======
+        // Mỗi ngày đồng bộ với 1 ô trạng thái: slot t1/t2 (chủ đề lớn 1 & 2) + loại (main/shorts1/shorts2/analysis)
+        const PRODUCTION_PLAN = [
+            { day: 1, weekday: "Thứ Hai",  phase: "Kịch Bản 15P+",    icon: "📝", tools: "Claude Opus",   sync: { slot: 't1', type: 'main' },
+              task: (t1) => `Soạn kịch bản dài 15 phút+ cho “${truncTitle(t1.title)}” và dựng bối cảnh cho 2 video Shorts đi kèm.` },
+            { day: 2, weekday: "Thứ Ba",   phase: "Đồ Họa & Nhạc",    icon: "🎨", tools: "GPT · Suno",     sync: { slot: 't1', type: 'shorts1' },
+              task: () => `Dựng toàn bộ ảnh Thumbnail & bối cảnh (GPT). Render nhạc nền lofi/sáo trúc (Suno) cho video dài & Shorts.` },
+            { day: 3, weekday: "Thứ Tư",   phase: "Diễn Hoạt Flow",   icon: "🎬", tools: "Flow · TTS",     sync: { slot: 't1', type: 'shorts2' },
+              task: () => `Dựng chuyển động câm 8s (Flow) cho video dài. Thu âm giọng đọc AI tiếng Hàn (TTS).` },
+            { day: 4, weekday: "Thứ Năm",  phase: "Dựng Phim",        icon: "✂️", tools: "Flow · CapCut",  sync: { slot: 't2', type: 'main' },
+              task: (t1, t2) => `Dựng chuyển động 8–10s cho 2 Shorts (Flow). Ghép nối & edit thô video dài + Shorts (CapCut). Mở chủ đề mới “${truncTitle(t2.title)}”.` },
+            { day: 5, weekday: "Thứ Sáu",  phase: "Phụ Đề & SEO",     icon: "🔤", tools: "Gemini Pro",     sync: { slot: 't2', type: 'shorts1' },
+              task: () => `Lọc chính tả Hàn (띄어쓰기) cho SRT video dài & Shorts. Soạn bộ thẻ SEO + mô tả dắt link.` },
+            { day: 6, weekday: "Thứ Bảy",  phase: "Xuất Bản",         icon: "🚀", tools: "YouTube Studio", sync: { slot: 't2', type: 'shorts2' },
+              publish: [ { label: "Video Dài 🎞️", kst: "18:00", ict: "16:00" }, { label: "Shorts #1 📱", kst: "12:15", ict: "10:15" } ],
+              task: () => `Lên lịch xuất bản Video dài & Shorts #1 theo khung giờ vàng Hàn Quốc.` },
+            { day: 7, weekday: "Chủ Nhật", phase: "Đo Lường & Trend", icon: "📊", tools: "vidIQ · Naver",  sync: { slot: 't2', type: 'analysis' },
+              publish: [ { label: "Shorts #2 📱", kst: "20:00", ict: "18:00" } ],
+              task: () => `Lên lịch Shorts #2. Phân tích CSV vidIQ, đo điểm sụt giảm & tìm trend Naver mới.` }
+        ];
+
+        function truncTitle(s, n = 28) {
+            if (!s) return '';
+            return s.length > n ? s.slice(0, n).trim() + '…' : s;
+        }
+
+        // Trả về ngày Thứ Hai của tuần hiện tại
+        function getDefaultWeekStart() {
+            const d = new Date();
+            const day = d.getDay(); // 0 = CN ... 6 = T7
+            const diff = (day === 0 ? -6 : 1 - day);
+            d.setDate(d.getDate() + diff);
+            d.setHours(0, 0, 0, 0);
+            return d;
+        }
+
+        function localYMD(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${dd}`;
+        }
+
+        function fmtDM(d) {
+            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        function getScheduleStart() {
+            const saved = localStorage.getItem('schedule-start-date');
+            if (saved) {
+                const d = new Date(saved + 'T00:00:00');
+                if (!isNaN(d.getTime())) return d;
+            }
+            return getDefaultWeekStart();
+        }
+
+        function setScheduleStart(val) {
+            if (val) localStorage.setItem('schedule-start-date', val);
+            renderDailyScheduler();
+        }
+
+        // Lấy 2 chủ đề lớn (t1/t2) tương ứng với ngách kênh hiện tại
+        function getPlanTopics(niche) {
+            const topics = nicheRoadmaps[niche] || [];
+            const t1 = topics[0] || { idx: "01", title: "Chủ đề trống", shorts: ["Trống 1", "Trống 2"] };
+            const t2 = topics[1] || t1;
+            return { t1, t2 };
         }
 
         function loadRoadmapChecks() {
@@ -884,6 +978,7 @@
                     localStorage.removeItem(getStorageKey(niche, t.idx, 'main'));
                     localStorage.removeItem(getStorageKey(niche, t.idx, 'shorts1'));
                     localStorage.removeItem(getStorageKey(niche, t.idx, 'shorts2'));
+                    localStorage.removeItem(getStorageKey(niche, t.idx, 'analysis'));
                 });
                 loadRoadmapChecks();
                 renderDailyScheduler();
@@ -894,27 +989,16 @@
         // ĐỒNG BỘ LỊCH TRÌNH TỪ CHECKBOX LỊCH TRÌNH HẰNG NGÀY
         function toggleScheduleFromCalendar(dayIndex) {
             const niche = document.getElementById('channel-niche-select').value;
-            const topics = nicheRoadmaps[niche] || [];
-            
-            // Xác định dòng công việc tương ứng
-            const targetTopic = topics[0]; // Day 1-3: Topic #01
-            const secondTopic = topics[1] || topics[0]; // Day 4-6: Topic #02
-            
-            let targetIdx = "01";
-            let storageType = 'main';
+            const { t1, t2 } = getPlanTopics(niche);
+            const cfg = PRODUCTION_PLAN[dayIndex - 1];
+            if (!cfg) return;
 
-            if (dayIndex <= 3) {
-                targetIdx = targetTopic.idx;
-                storageType = (dayIndex === 1) ? 'main' : (dayIndex === 2 ? 'shorts1' : 'shorts2');
-            } else {
-                targetIdx = secondTopic.idx;
-                storageType = (dayIndex === 4) ? 'main' : (dayIndex === 5 ? 'shorts1' : 'shorts2');
-            }
-
+            const topic = cfg.sync.slot === 't1' ? t1 : t2;
             const chk = document.getElementById(`schedule-chk-${dayIndex}`);
             if (chk) {
-                localStorage.setItem(getStorageKey(niche, targetIdx, storageType), chk.checked ? 'true' : 'false');
-                loadRoadmapChecks(); // Cập nhật lại Checkbox tại Lộ trình
+                localStorage.setItem(getStorageKey(niche, topic.idx, cfg.sync.type), chk.checked ? 'true' : 'false');
+                loadRoadmapChecks();      // Cập nhật lại Checkbox tại Lộ trình
+                renderDailyScheduler();   // Vẽ lại để cập nhật thanh tiến độ + trạng thái
             }
         }
 
@@ -966,62 +1050,70 @@
             if (t) updateTopicMetadataPrompts(t);
         }
 
-        // DỰNG LỊCH TRÌNH SẢN XUẤT 7 NGÀY THEO NGÁCH KÊNH ĐA DẠNG (Bổ sung ngày giờ cụ thể cho cả 2 múi giờ Việt và Hàn - Yêu cầu 3 & 4)
+        // DỰNG LỊCH TRÌNH SẢN XUẤT 7 NGÀY: ngày tháng thật + tô sáng HÔM NAY + thanh tiến độ tuần
         function renderDailyScheduler() {
             const container = document.getElementById('daily-scheduler-container');
             if (!container) return;
-            container.innerHTML = '';
 
             const niche = document.getElementById('channel-niche-select').value;
-            const topics = nicheRoadmaps[niche] || [];
-            
-            // Lấy 2 chủ đề lớn để tạo lịch trình cho 7 ngày quay cuốn chiếu
-            const t1 = topics[0] || { title: "Chủ đề trống", shorts: ["Trống 1", "Trống 2"] };
-            const t2 = topics[1] || t1;
+            const { t1, t2 } = getPlanTopics(niche);
 
-            // Đọc trạng thái đồng bộ
-            const day1Done = localStorage.getItem(getStorageKey(niche, t1.idx, 'main')) === 'true';
-            const day2Done = localStorage.getItem(getStorageKey(niche, t1.idx, 'shorts1')) === 'true';
-            const day3Done = localStorage.getItem(getStorageKey(niche, t1.idx, 'shorts2')) === 'true';
+            const start = getScheduleStart();
+            const todayStr = localYMD(new Date());
 
-            const day4Done = localStorage.getItem(getStorageKey(niche, t2.idx, 'main')) === 'true';
-            const day5Done = localStorage.getItem(getStorageKey(niche, t2.idx, 'shorts1')) === 'true';
-            const day6Done = localStorage.getItem(getStorageKey(niche, t2.idx, 'shorts2')) === 'true';
-            
-            // LỊCH TRÌNH PHÂN CÔNG ĐA NHIỆM MẬT ĐỘ CAO (Cập nhật chi tiết giờ giấc chuẩn theo yêu cầu số 3)
-            const daysConfig = [
-                { day: 1, title: "Thứ Hai: Kịch Bản 15p+", task: `Claude: Soạn kịch bản dài 15p+ cho "${t1.title.substring(0, 15)}..." & dọn bối cảnh cho 2 Video Shorts.`, done: day1Done },
-                { day: 2, title: "Thứ Ba: Đồ Họa & Suno", task: `GPT: Dựng toàn bộ ảnh Thumbnail & bối cảnh. Suno: Render nhạc nền lofi sáo trúc cho video dài & shorts.`, done: day2Done },
-                { day: 3, title: "Thứ Tư: Diễn Hoạt Flow 8s", task: `Flow: Dựng chuyển động câm (Silent micro-expression) 8s cho Video dài. TTS: Thu âm giọng đọc trí tuệ nhân tạo Hàn Quốc.`, done: day3Done },
-                { day: 4, title: "Thứ Năm: Dựng Phim CapCut", task: `Flow: Dựng chuyển động 8s-10s cho 2 Video Shorts. CapCut: Ghép nối, edit thô video dài & shorts hoàn chỉnh.`, done: day4Done },
-                { day: 5, title: "Thứ Sáu: Phụ Đề & SEO", task: `Gemini: Lọc chính tả Hàn (띄어쓰기) cho SRT video dài & Shorts. Thiết kế bộ thẻ SEO dắt mô tả.`, done: day5Done },
-                { day: 6, title: "Thứ Bảy: Xuất Bản Kênh", task: `ĐĂNG VIDEO DÀI 🎞️: Lên lịch lúc 18:00 KST (tức 16:00 Việt Nam ICT). ĐĂNG SHORTS 1 📱: Lúc 12:15 KST (tức 10:15 Việt ICT).`, done: day6Done },
-                { day: 7, title: "Chủ Nhật: Tối Ưu & Đo", task: `ĐĂNG SHORTS 2 📱: Lúc 20:00 KST (tức 18:00 Việt ICT). Phân tích file CSV vidIQ, đo lường điểm sụt giảm và tìm trend Naver mới.`, done: false }
-            ];
+            let doneCount = 0;
+            let html = '';
 
-            daysConfig.forEach(d => {
-                const isChecked = d.done ? 'checked' : '';
-                const activeCardBg = d.done ? 'bg-indigo-950/40 border-indigo-500/50 opacity-60' : 'bg-gray-900 border-gray-800';
+            PRODUCTION_PLAN.forEach((d, i) => {
+                const topic = d.sync.slot === 't1' ? t1 : t2;
+                const done = localStorage.getItem(getStorageKey(niche, topic.idx, d.sync.type)) === 'true';
+                if (done) doneCount++;
 
-                const card = document.createElement('div');
-                card.className = `p-4 rounded-2xl border flex flex-col justify-between space-y-4 shadow-lg transition-all ${activeCardBg}`;
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <span class="text-[11px] font-black text-indigo-400 uppercase tracking-wider">${d.title}</span>
-                        ${d.day < 7 ? `
-                            <input type="checkbox" id="schedule-chk-${d.day}" ${isChecked} onchange="toggleScheduleFromCalendar(${d.day})" class="w-4 h-4 rounded text-indigo-600 bg-gray-950 border-gray-700 focus:ring-indigo-500 cursor-pointer">
-                        ` : `
-                            <span class="text-xs">⚙️</span>
-                        `}
-                    </div>
-                    <p class="text-xs text-gray-200 font-semibold leading-snug">${d.task}</p>
-                    <div class="pt-2 border-t border-gray-800/40 flex items-center justify-between">
-                        <span class="text-[10px] text-gray-500 font-bold">CapCut / Suno / Flow</span>
-                        <span class="text-[10px] font-extrabold ${d.done ? 'text-indigo-400' : 'text-gray-500'}">${d.done ? 'ĐÃ HOÀN TẤT' : 'CHƯA XONG'}</span>
+                const date = new Date(start);
+                date.setDate(start.getDate() + i);
+                const isToday = localYMD(date) === todayStr;
+
+                const publishBadges = (d.publish || []).map(p =>
+                    `<span class="text-[10px] font-bold text-amber-300 bg-amber-950/40 border border-amber-800/40 px-2 py-1 rounded-lg whitespace-nowrap">⏰ ${p.label}: ${p.kst} KST <span class="text-amber-500/70">(${p.ict} VN)</span></span>`
+                ).join('');
+
+                const rowBg = done ? 'bg-indigo-950/25 border-indigo-500/40' : 'bg-gray-900/60 border-gray-800';
+                const todayRing = isToday ? ' ring-2 ring-indigo-500/70 shadow-lg shadow-indigo-950/40' : '';
+
+                html += `
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-2xl border transition-all ${rowBg}${todayRing}">
+                        <div class="sm:w-36 shrink-0 flex sm:flex-col items-center sm:items-start gap-2 sm:gap-0">
+                            <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Ngày ${d.day}</span>
+                            <span class="text-sm font-bold text-white">${d.weekday}</span>
+                            <span class="text-[11px] text-gray-500 font-mono">${fmtDM(date)}</span>
+                            ${isToday ? '<span class="text-[9px] font-extrabold bg-indigo-500 text-white px-1.5 py-0.5 rounded-md sm:mt-1">HÔM NAY</span>' : ''}
+                        </div>
+                        <div class="flex-1 min-w-0 space-y-2">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="text-xs font-extrabold text-white bg-[#05070f] border border-gray-700 px-2.5 py-1 rounded-lg">${d.icon} ${d.phase}</span>
+                                ${publishBadges}
+                            </div>
+                            <p class="text-xs text-gray-300 leading-snug">${d.task(t1, t2)}</p>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-wider"><i class="fa-solid fa-toolbox mr-1"></i>${d.tools}</span>
+                        </div>
+                        <div class="flex sm:flex-col items-center justify-between sm:justify-center gap-2 sm:w-24 shrink-0 sm:border-l sm:border-gray-800/60 sm:pl-4">
+                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                                <input type="checkbox" id="schedule-chk-${d.day}" ${done ? 'checked' : ''} onchange="toggleScheduleFromCalendar(${d.day})" class="w-5 h-5 rounded text-indigo-600 bg-gray-950 border-gray-700 focus:ring-indigo-500 cursor-pointer">
+                                <span class="text-[10px] font-extrabold ${done ? 'text-indigo-400' : 'text-gray-400'}">${done ? 'XONG' : 'CHƯA'}</span>
+                            </label>
+                        </div>
                     </div>
                 `;
-                container.appendChild(card);
             });
+
+            container.innerHTML = html;
+
+            const total = PRODUCTION_PLAN.length;
+            const pct = Math.round((doneCount / total) * 100);
+            const bar = document.getElementById('schedule-progress-bar');
+            const label = document.getElementById('schedule-progress-label');
+            if (bar) bar.style.width = pct + '%';
+            if (label) label.innerText = `${doneCount}/${total} ngày hoàn thành (${pct}%)`;
         }
 
         // XỬ LÝ KHI NGƯỜI DÙNG THAY ĐỔI NGÁCH KÊNH (ROADMAP CHUYỂN ĐỔI CHỦ ĐỀ)
@@ -1179,35 +1271,33 @@ Perform these tasks strictly in South Korean language (한국어):
             const fixTag = document.getElementById('fix-tag-chk').checked;
             const customNotes = document.getElementById('repair-custom-notes').value;
 
-            let prompt = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n`;
-            prompt += `- Title: "${selectedVideo.title}"\n`;
-            prompt += `- Current Description: "${selectedVideo.desc}"\n`;
-            prompt += `- Duration: ${selectedVideo.duration}\n\n`;
-            prompt += `Please generate a custom "Metadata Repair Patch Kit" written in native South Korean language (한국어) with the following strictly requested updates:\n\n`;
+            const isShortVid = (selectedVideo.duration || '').startsWith('00:');
+            const ratioImg = isShortVid ? '9:16 vertical ratio' : '16:9 ratio';
+            const ratioVid = isShortVid ? 'vertical 9:16 framing' : 'horizontal 16:9 framing';
 
-            if (fixTitle) {
-                prompt += `🎯 1. TITLE REPAIR (CTR): Create 3 highly clickable, viral, and curiosity-gap alternative titles in fluent, native Korean targeting domestic search habits. Maximize CTR.\n`;
-            }
-            if (fixDesc) {
-                prompt += `📝 2. DESCRIPTION REPAIR (LENGTH): Write a highly engaging, long description (>150 words) outlining the core narrative of the video in fluent Korean. Naturally distribute search keywords related to the niche.\n`;
-            }
-            if (fixLink) {
-                prompt += `🔗 3. CALL TO ACTION LINKS: Bổ sung các cụm từ dắt người xem click đăng ký kênh (구독하기) hoặc liên kết quay trở lại xem các video chính trên kênh (전체 영상 프로필 링크).\n`;
-            }
-            if (fixTime) {
-                prompt += `⏳ 4. TIMESTAMPS: Bổ sung khung mốc thời gian (timestamps) tượng trưng cho cấu trúc phân cảnh để tăng điểm giữ chân khán giả.\n`;
-            }
-            if (fixTag) {
-                prompt += `🏷️ 5. HIGH-DENSITY SEO TAGS: Cung cấp danh sách thẻ từ khóa tags và 7-10 hashtag có lượt tìm kiếm cao nhất ở Hàn Quốc cho ngách này.\n`;
-            }
-            if (customNotes.trim() !== '') {
-                prompt += `💡 ADDITIONAL CUSTOM INSTRUCTIONS: "${customNotes}"\n`;
-            }
+            // === Ô 1: PROMPT TẠO ẢNH THUMBNAIL + BẢN VÁ SEO (dán sang GPT Plus) ===
+            let gpt = `Act as an elite YouTube Thumbnail designer AND a native South Korean SEO engineer at Google Seoul.\n\n`;
+            gpt += `OLD VIDEO needing a fix:\n- Title: "${selectedVideo.title}"\n- Duration: ${selectedVideo.duration}\n- Current description: "${selectedVideo.desc}"\n\n`;
+            gpt += `PART A — THUMBNAIL IMAGE PROMPT (for DALL-E 3 / GPT image):\nDesign a high-CTR thumbnail composed using the rule of thirds: the main emotional subject sits on the RIGHT third while the LEFT side stays clean and empty for Korean text overlay later. Soft pastel palette or moody cinematic noir, flat 2D vector illustration. Negative: [NO text, NO Hangul, NO alphabets, NO borders, NO badges]. ${ratioImg}.\n\n`;
+            gpt += `PART B — METADATA REPAIR KIT (write the final output strictly in native Korean 한국어):\n`;
+            if (fixTitle) gpt += `🎯 Create 3 viral, curiosity-gap titles that maximize CTR for domestic Korean search.\n`;
+            if (fixDesc)  gpt += `📝 Rewrite a long, engaging SEO description (>150 words) with naturally distributed niche keywords.\n`;
+            if (fixLink)  gpt += `🔗 Add call-to-action links (구독하기 / 전체 영상 프로필 링크).\n`;
+            if (fixTime)  gpt += `⏳ Add chapter timestamps representing the scene structure to boost retention.\n`;
+            if (fixTag)   gpt += `🏷️ Provide a high-density tag list + 7–10 trending Korean hashtags for this niche.\n`;
+            if (customNotes.trim() !== '') gpt += `💡 Extra request: "${customNotes}".\n`;
+            gpt += `\nKeep everything copy-paste ready for YouTube Studio.`;
 
-            prompt += `\nOutput all final metadata solutions strictly in South Korean language (한국어). Keep the instructions clear so I can copy-paste them directly into YouTube Studio.`;
+            // === Ô 2: PROMPT TẠO VIDEO CHUYỂN ĐỘNG CÂM 8s (dán sang Veo 3 Omni / Flow) ===
+            let flow = `Slow motion cinematic video clip, 8-second pacing, illustrating the theme of "${selectedVideo.title}". `;
+            flow += `A single emotional Korean character communicates purely through micro-expressions (watery eyes, quivering lip, deep pensive sigh, slow gaze shift) — silent, NO talking, NO mouth moving, NO voiceover overlays. `;
+            flow += `Soft cinematic lighting, slow dolly zoom, 24fps smooth motion blur, ${ratioVid}. Negative: [NO text, NO Hangul, NO subtitles].`;
+            if (customNotes.trim() !== '') flow += ` Extra art direction: ${customNotes}.`;
 
-            const promptBox = document.getElementById('repair-prompt-box');
-            if (promptBox) promptBox.value = prompt;
+            const gptBox = document.getElementById('repair-gpt-prompt-box');
+            const flowBox = document.getElementById('repair-flow-prompt-box');
+            if (gptBox) gptBox.value = gpt;
+            if (flowBox) flowBox.value = flow;
         }
 
         // CHỌN VIDEO TỪ BẢNG ĐỂ NẠP SIÊU DỮ LIỆU SỬA LỖI
@@ -1714,16 +1804,21 @@ Perform these tasks strictly in South Korean language (한국어):
         }
 
         function exportAllPrompts() {
-            if (parsedPromptsData.length === 0) return alert("Không có dữ liệu để xuất!");
-            let outputText = "";
-            parsedPromptsData.forEach(item => {
-                outputText += item.finalPrompt + "\n\n";
-            });
+            if (parsedPromptsData.length === 0) {
+                showToast("Không có dữ liệu để xuất!", "error");
+                return;
+            }
+            let outputText = "===== PROMPT ẢNH (GPT) =====\n\n";
+            parsedPromptsData.forEach(item => { outputText += item.finalGptPrompt + "\n\n"; });
+            outputText += "\n===== PROMPT VIDEO (FLOW) =====\n\n";
+            parsedPromptsData.forEach(item => { outputText += item.finalFlowPrompt + "\n\n"; });
+
             const blob = new Blob([outputText], { type: "text/plain;charset=utf-8" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = `optimized_prompts_${globalRatio.replace(':', '_')}.txt`;
             link.click();
+            showToast("Đã xuất file prompt thành công!", "success");
         }
 
         // ĐỒNG BỘ PROMPT ĐƠN
