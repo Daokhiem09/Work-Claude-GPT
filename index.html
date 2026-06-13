@@ -3,242 +3,758 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사연심리 Studio Workspace v4.3</title>
+    <title>사연심리 YouTube Strategy & Audit Hub v5.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #020617; }
+        body { font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif; background-color: #030712; }
         .app-panel { display: none; }
         .app-panel.active { display: flex; }
-        .ratio-btn.active { border-color: #6366f1; background-color: #1e1b4b; color: #818cf8; }
+        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .active-tab { border-color: #6366f1; background-color: #1e1b4b; color: #818cf8; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #374151; }
     </style>
 </head>
-<body class="text-gray-200 min-h-screen flex overflow-hidden">
+<body class="text-gray-100 min-h-screen flex overflow-hidden">
 
-    <!-- THANH MENU BÊN TRÁI (SIDEBAR) -->
-    <aside class="w-72 bg-[#0b0f19] border-r border-gray-800 flex flex-col justify-between select-none">
+    <!-- SIDEBAR MENU -->
+    <aside class="w-80 bg-[#090d16] border-r border-gray-800/80 flex flex-col justify-between select-none">
         <div>
-            <!-- LOGO KÊNH -->
-            <div class="p-6 border-b border-gray-800 flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-700 flex items-center justify-center font-bold text-white shadow-lg">사</div>
-                <div>
-                    <h1 class="text-sm font-bold text-white tracking-wider uppercase">사연심리 Studio</h1>
-                    <span class="text-[10px] text-indigo-400 font-bold uppercase">Quy trình chuyên nghiệp v4.3</span>
+            <!-- Header Brand -->
+            <div class="p-6 border-b border-gray-800/80">
+                <div class="flex items-center space-x-3 mb-2">
+                    <span class="text-2xl">🧠</span>
+                    <div>
+                        <h1 class="text-base font-extrabold text-white tracking-wide uppercase">사연심리 Hub</h1>
+                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Workspace v5.0</p>
+                    </div>
+                </div>
+                <div class="mt-3 bg-indigo-950/40 border border-indigo-800/40 rounded-xl p-2.5 flex items-center space-x-2">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[10px] text-gray-300 font-medium">Bản quyền sở hữu: Gemini Pro 1-Year Active</span>
                 </div>
             </div>
 
-            <!-- DANH SÁCH BƯỚC LÀM VIỆC -->
-            <nav class="p-4 space-y-2">
-                <p class="px-3 text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">QUY TRÌNH SẢN XUẤT</p>
+            <!-- Menu Navigation -->
+            <nav class="p-4 space-y-1.5">
+                <p class="px-3 text-[10px] font-extrabold text-gray-500 uppercase tracking-widest mb-3">TÍNH NĂNG CHUYÊN SÂU</p>
                 
-                <button onclick="switchPanel('p1')" id="n-p1" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-xl shadow-indigo-900/20">
-                    <span class="w-5 text-center">🎯</span> <span>Bước 1: Nghiên cứu (Gemini)</span>
+                <button onclick="switchPanel('audit')" id="n-audit" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-xl shadow-indigo-950/50">
+                    <i class="fa-solid fa-chart-line w-5 text-center text-base"></i> <span>Phân Tích File CSV vidIQ</span>
                 </button>
                 
-                <button onclick="switchPanel('p2')" id="n-p2" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/40">
-                    <span class="w-5 text-center">🎬</span> <span>Bước 2: Kịch bản (Claude)</span>
+                <button onclick="switchPanel('repair')" id="n-repair" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30">
+                    <i class="fa-solid fa-screwdriver-wrench w-5 text-center text-base"></i> <span>Phòng Lab Sửa Lỗi Video Cũ</span>
                 </button>
                 
-                <button onclick="switchPanel('p3')" id="n-p3" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/40">
-                    <span class="w-5 text-center">🖼️</span> <span>Bước 3: Tạo ảnh (GPT Plus)</span>
+                <button onclick="switchPanel('roadmap')" id="n-roadmap" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30">
+                    <i class="fa-solid fa-compass w-5 text-center text-base"></i> <span>Định Hướng 10 Video Mới</span>
+                </button>
+
+                <p class="px-3 text-[10px] font-extrabold text-gray-500 uppercase tracking-widest pt-4 pb-2">LÕI TRỘN PROMPT AI</p>
+
+                <button onclick="switchPanel('p-script')" id="n-p-script" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30">
+                    <i class="fa-solid fa-file-signature w-5 text-center text-base"></i> <span>Kịch Bản (Claude Opus)</span>
+                </button>
+
+                <button onclick="switchPanel('p-visual')" id="n-p-visual" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30">
+                    <i class="fa-solid fa-images w-5 text-center text-base"></i> <span>Ảnh & Video (GPT/Gemini)</span>
                 </button>
                 
-                <button onclick="switchPanel('p4')" id="n-p4" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/40">
-                    <span class="w-5 text-center">🎥</span> <span>Bước 4: Tạo video (Gemini)</span>
-                </button>
-                
-                <button onclick="switchPanel('p5')" id="n-p5" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/40">
-                    <span class="w-5 text-center">📜</span> <span>Bước 5: Sửa phụ đề (Gemini)</span>
+                <button onclick="switchPanel('p-srt')" id="n-p-srt" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30">
+                    <i class="fa-solid fa-language w-5 text-center text-base"></i> <span>Chuẩn Hóa SRT (Gemini)</span>
                 </button>
             </nav>
         </div>
         
-        <!-- TRẠNG THÁI HOẠT ĐỘNG -->
-        <div class="p-6 bg-[#0d131f] border-t border-gray-800 text-center">
-            <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest mb-1">Mục tiêu thị trường</p>
-            <p class="text-[10px] text-emerald-500 font-bold uppercase">Hàn Quốc (Target Korean Audience)</p>
+        <!-- Target Footer -->
+        <div class="p-4 bg-[#05080f] border-t border-gray-800/80 m-4 rounded-2xl flex items-center space-x-3">
+            <span class="text-2xl">🇰🇷</span>
+            <div>
+                <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Thị Trường Mục Tiêu</p>
+                <p class="text-xs text-rose-400 font-extrabold">Hàn Quốc (한국 국내 타겟)</p>
+            </div>
         </div>
     </aside>
 
-    <!-- KHU VỰC HIỂN THỊ NỘI DUNG CHÍNH -->
-    <main class="flex-1 flex flex-col bg-[#020617] overflow-y-auto relative">
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 flex flex-col bg-[#05070f] overflow-y-auto relative">
         
-        <!-- BƯỚC 1: NGHIÊN CỨU THỊ TRƯỜNG & TIÊU ĐỀ (GEMINI PRO) -->
-        <div id="p1" class="app-panel p-10 flex-col space-y-8 active">
+        <!-- 1. PANEL: PHÂN TÍCH CSV -->
+        <div id="audit" class="app-panel p-10 flex-col space-y-8 active">
             <div class="border-l-4 border-indigo-500 pl-6">
-                <h2 class="text-3xl font-bold text-white tracking-tight">Bước 1: Nghiên cứu Xu hướng & Tiêu đề <span class="text-indigo-400 text-lg block font-medium">Sử dụng tài khoản Gemini Pro Advanced</span></h2>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Hệ Thống Phân Tích & Chẩn Đoán File CSV vidIQ</h2>
+                <p class="text-gray-400 text-sm mt-1">Kéo thả file CSV của bạn vào đây để hệ thống tự động bóc tách lỗi vận hành của kênh.</p>
             </div>
-            
-            <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- DRAG & DROP ZONE -->
+            <div id="dropzone" class="border-2 border-dashed border-gray-700/60 hover:border-indigo-500 hover:bg-indigo-950/10 transition-all rounded-3xl p-10 flex flex-col items-center justify-center text-center cursor-pointer glass">
+                <i class="fa-solid fa-cloud-arrow-up text-5xl text-indigo-400 mb-4 animate-bounce"></i>
+                <h3 class="text-lg font-bold text-white mb-1">Kéo và thả tệp CSV xuất từ vidIQ vào đây</h3>
+                <p class="text-sm text-gray-400 max-w-md">Công cụ sẽ tự động phân tích dữ liệu, chấm điểm chuẩn SEO, độ dài mô tả và đề xuất cải tiến nội dung.</p>
+                <input type="file" id="csv-input" accept=".csv" class="hidden">
+                <button onclick="document.getElementById('csv-input').click()" class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-6 rounded-xl transition-all">Chọn File Thủ Công</button>
+            </div>
+
+            <!-- SỐ LIỆU ĐO LƯỜNG TỔNG QUAN -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="glass p-6 rounded-2xl flex items-center justify-between">
                     <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Chủ đề cần làm (Nhập tiếng Việt hoặc Hàn):</label>
-                        <input type="text" id="t1-topic" oninput="genStep1()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Ví dụ: Áp lực từ mẹ chồng, Tại sao bạn thân xa lánh...">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tổng số Video</p>
+                        <h4 id="stat-total" class="text-3xl font-extrabold text-white mt-1">--</h4>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Học thuyết/Nguồn tâm lý học chứng minh:</label>
-                        <input type="text" id="t1-src" oninput="genStep1()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Ví dụ: Murray Bowen, Leon Festinger...">
-                    </div>
+                    <span class="text-3xl p-3 bg-indigo-950/50 rounded-xl text-indigo-400"><i class="fa-solid fa-video"></i></span>
                 </div>
-                
-                <div class="relative">
-                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tự động sinh ra (Hãy Copy và dán vào cửa bạt Chat của Gemini Pro):</span>
-                    <textarea id="t1-pr" readonly class="w-full h-48 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
-                    <button onclick="copy('t1-pr', 'c1')" id="c1" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
+                <div class="glass p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Điểm vidIQ Trung Bình</p>
+                        <h4 id="stat-vidiq" class="text-3xl font-extrabold text-white mt-1">--</h4>
+                    </div>
+                    <span class="text-3xl p-3 bg-emerald-950/50 rounded-xl text-emerald-400"><i class="fa-solid fa-bolt"></i></span>
+                </div>
+                <div class="glass p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Lỗi Cảnh Báo Đỏ</p>
+                        <h4 id="stat-errors" class="text-3xl font-extrabold text-red-500 mt-1">--</h4>
+                    </div>
+                    <span class="text-3xl p-3 bg-red-950/50 rounded-xl text-red-400"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                </div>
+                <div class="glass p-6 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Hiệu Suất Video Ngắn</p>
+                        <h4 id="stat-shorts-ratio" class="text-3xl font-extrabold text-indigo-400 mt-1">--</h4>
+                    </div>
+                    <span class="text-3xl p-3 bg-purple-950/50 rounded-xl text-purple-400"><i class="fa-solid fa-mobile-screen"></i></span>
+                </div>
+            </div>
+
+            <!-- BẢNG CHI TIẾT VIDEO ĐÃ AUDIT -->
+            <div class="glass rounded-2xl overflow-hidden border border-gray-800">
+                <div class="p-6 border-b border-gray-800 flex justify-between items-center bg-[#090d16]/50">
+                    <h3 class="text-base font-bold text-white">Danh sách Video được quét từ dữ liệu kênh</h3>
+                    <span class="text-xs bg-indigo-950 text-indigo-400 px-3 py-1.5 rounded-lg font-bold">Hãy click vào từng dòng để nạp sang phòng sửa lỗi</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-950/40 text-gray-400 text-[10px] font-bold uppercase tracking-widest border-b border-gray-800">
+                                <th class="p-4">Tên Video</th>
+                                <th class="p-4">Thời Lượng</th>
+                                <th class="p-4">Lượt Xem</th>
+                                <th class="p-4">Điểm vidIQ</th>
+                                <th class="p-4">Từ trong Mô tả</th>
+                                <th class="p-4">Trạng Thái SEO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="video-table-body">
+                            <!-- JS tự động rải dữ liệu thật của người dùng vào đây -->
+                            <tr class="border-b border-gray-800/50">
+                                <td colspan="6" class="p-10 text-center text-gray-500 text-sm">Chưa có tệp CSV nào được nạp. Hãy kéo thả tệp CSV của bạn vào khung phía trên!</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- BƯỚC 2: KỊCH BẢN CHI TIẾT (CLAUDE OPUS) -->
-        <div id="p2" class="app-panel p-10 flex-col space-y-8">
+        <!-- 2. PANEL: SỬA LỖI VIDEO CŨ -->
+        <div id="repair" class="app-panel p-10 flex-col space-y-8">
             <div class="border-l-4 border-orange-500 pl-6">
-                <h2 class="text-3xl font-bold text-white tracking-tight">Bước 2: Viết Kịch Bản Chiều Sâu <span class="text-orange-400 text-lg block font-medium">Sử dụng tài khoản Claude Team (Opus)</span></h2>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Phòng Lab Sửa Lỗi Siêu Dữ Liệu Video Cũ</h2>
+                <p class="text-gray-400 text-sm mt-1">Chọn một video có điểm SEO thấp, hệ thống sẽ tự động chỉ ra lỗi và viết lại Mô tả, Hashtag và Tag tối ưu.</p>
             </div>
-            
-            <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Dán tiêu đề tiếng Hàn bạn đã chọn ở Bước 1:</label>
-                        <input type="text" id="t2-title" oninput="genStep2()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Ví dụ: 친했던 친구와 멀어지는 진짜 이유...">
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Chẩn đoán lỗi -->
+                <div class="lg:col-span-5 bg-[#111827] border border-gray-800 p-6 rounded-2xl space-y-6">
+                    <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3"><i class="fa-solid fa- stethoscope text-orange-400 mr-2"></i>Chẩn Đoán Lỗi Chí Mạng</h3>
+                    
+                    <div id="repair-active-info" class="p-4 bg-[#05070f] rounded-xl border border-gray-800">
+                        <p class="text-xs text-gray-400 uppercase font-bold">Video đang chọn sửa lỗi:</p>
+                        <h4 id="repair-vid-title" class="text-sm font-bold text-white mt-1">Chưa chọn video nào từ danh sách</h4>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cấu trúc kịch bản (Ví dụ: Liệt kê 5 điều, ngôi kể...):</label>
-                        <input type="text" id="t2-struct" oninput="genStep2()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Ví dụ: Kể chuyện độc thoại ngôi thứ 2 당신, 3 giai đoạn không đánh số...">
+
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span id="err-icon-desc" class="text-red-500 text-lg mt-0.5"><i class="fa-solid fa-circle-xmark"></i></span>
+                            <div>
+                                <h5 class="text-xs font-bold text-gray-200">Độ dài phần mô tả video:</h5>
+                                <p id="err-text-desc" class="text-[11px] text-gray-400 mt-0.5">Mô tả quá ngắn sẽ làm giảm điểm xếp hạng của thuật toán YouTube Hàn Quốc.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <span id="err-icon-link" class="text-red-500 text-lg mt-0.5"><i class="fa-solid fa-circle-xmark"></i></span>
+                            <div>
+                                <h5 class="text-xs font-bold text-gray-200">Liên kết điều hướng (Call to action):</h5>
+                                <p id="err-text-link" class="text-[11px] text-gray-400 mt-0.5">Không tìm thấy link kêu gọi chuyển đổi từ Shorts sang Long hoặc đăng ký kênh.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3">
+                            <span id="err-icon-time" class="text-yellow-500 text-lg mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                            <div>
+                                <h5 class="text-xs font-bold text-gray-200">Hệ thống Mốc Thời Gian (Timestamps):</h5>
+                                <p id="err-text-time" class="text-[11px] text-gray-400 mt-0.5">Chưa có mốc thời gian. Đối với video dài hơn 5 phút, timestamps giúp giữ chân người dùng cực tốt.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="relative">
-                    <span class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tự động sinh ra (Hãy Copy và dán vào cửa bạt Chat của Claude):</span>
-                    <textarea id="t2-pr" readonly class="w-full h-52 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
-                    <button onclick="copy('t2-pr', 'c2')" id="c2" class="absolute bottom-4 right-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
+
+                <!-- Lập tức sửa lỗi bằng prompt -->
+                <div class="lg:col-span-7 bg-[#111827] border border-gray-800 p-6 rounded-2xl flex flex-col justify-between space-y-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3"><i class="fa-solid fa-magic text-emerald-400 mr-2"></i>Bản Vá Siêu Dữ Liệu Tự Động (Metadata Repair)</h3>
+                        <p class="text-xs text-gray-400 mt-2">Dưới đây là câu lệnh đã được thiết lập để bắt Gemini Pro sửa toàn bộ mô tả, giật tít lại tiêu đề mới cuốn hút bằng tiếng Hàn và bổ sung SEO Tag chuẩn xác.</p>
+                    </div>
+
+                    <div class="relative">
+                        <textarea id="repair-prompt-box" readonly class="w-full h-80 bg-[#05070f] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                        <button onclick="copy('repair-prompt-box', 'btn-c-rep')" id="btn-c-rep" class="absolute bottom-4 right-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2 px-4 rounded-lg shadow-lg transition-all">COPY BẢN VÁ</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- BƯỚC 3: TẠO ẢNH PHÂN CẢNH (GPT PLUS / DALL-E 3) -->
-        <div id="p3" class="app-panel p-10 flex-col space-y-8">
+        <!-- 3. PANEL: ĐỊNH HƯỚNG 10 VIDEO MỚI -->
+        <div id="roadmap" class="app-panel p-10 flex-col space-y-8">
+            <div class="border-l-4 border-emerald-500 pl-6">
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Ma Trận 10 Chủ Đề Video Thắng Đậm Tại Hàn Quốc</h2>
+                <p class="text-gray-400 text-sm mt-1">Dựa trên nghiên cứu hành vi tâm lý học lâm sàng của người Hàn bản địa (Áp lực cạnh tranh, cô đơn, gia đình truyền thống).</p>
+            </div>
+
+            <!-- CHỌN CHỦ ĐỀ -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-4">
+                    <h3 class="text-sm font-extrabold text-gray-400 uppercase tracking-widest">Chọn một chủ đề nghiên cứu sâu:</h3>
+                    <div class="space-y-2 max-h-[500px] overflow-y-auto pr-2" id="topic-list-container">
+                        <!-- JS tự rải danh sách 10 chủ đề tối tân nhất -->
+                    </div>
+                </div>
+
+                <!-- CHI TIẾT CHỦ ĐỀ ĐƯỢC CHỌN -->
+                <div class="bg-[#111827] border border-gray-800 rounded-3xl p-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <span id="topic-active-idx" class="bg-indigo-950 text-indigo-400 font-extrabold text-xs px-2.5 py-1 rounded-lg">#01</span>
+                            <h3 id="topic-active-title" class="text-lg font-bold text-white">시어머니가 절대 말 안 하는 속마음 5가지</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 text-xs bg-[#05070f] p-4 rounded-xl border border-gray-800/50">
+                            <div>
+                                <p class="text-gray-500 font-bold">Học thuyết tâm lý:</p>
+                                <p id="topic-active-theory" class="text-gray-300 font-semibold mt-0.5">Murray Bowen Thuyết Hệ Thống</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 font-bold">Cấu trúc kể chuyện:</p>
+                                <p id="topic-active-struct" class="text-gray-300 font-semibold mt-0.5">Liệt kê 5 điều, ngôi thứ 3</p>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Mô tả định hướng nội dung kịch bản:</p>
+                            <p id="topic-active-desc" class="text-sm text-gray-300 leading-relaxed bg-[#05070f] p-4 rounded-xl border border-gray-800/50">
+                                Tập trung bóc tách sự dồn nén cảm xúc từ thế hệ trước, mong muốn được thừa nhận giá trị lao động trong nhà nhưng thể hiện bằng sự cay nghiệt, can thiệp đời sống vợ chồng trẻ...
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-gray-800 flex space-x-4">
+                        <button onclick="sendToPromptEngine('script')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-3 rounded-xl shadow-lg transition-all text-center">NẠP SANG VIẾT KỊCH BẢN (CLAUDE)</button>
+                        <button onclick="sendToPromptEngine('visual')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 rounded-xl shadow-lg transition-all text-center">NẠP SANG SINH ẢNH & VIDEO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. LÕI TRỘN: KỊCH BẢN (CLAUDE) -->
+        <div id="p-script" class="app-panel p-10 flex-col space-y-8">
+            <div class="border-l-4 border-orange-500 pl-6">
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Bộ Sinh Lệnh Viết Kịch Bản <span class="text-orange-400 text-lg block font-medium">Sử dụng Claude Team (Opus 4.8)</span></h2>
+            </div>
+            <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Tiêu đề video tiếng Hàn cần viết:</label>
+                        <input type="text" id="script-title" oninput="updateScriptPrompt()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Ví dụ: 시어머니가 절대 말 안 하는 속마음 5가지...">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Cấu trúc & Kỹ thuật viết kịch bản:</label>
+                        <input type="text" id="script-struct" oninput="updateScriptPrompt()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Ví dụ: Thuyết Murray Bowen, Kể chuyện nhập vai độc thoại ngôi thứ 2 당신...">
+                    </div>
+                </div>
+                <div class="relative">
+                    <span class="text-xs font-bold text-orange-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tiếng Anh tối ưu hóa sâu (Hãy Copy dán vào Claude):</span>
+                    <textarea id="script-prompt-output" readonly class="w-full h-56 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copy('script-prompt-output', 'btn-cp-sc')" id="btn-cp-sc" class="absolute bottom-4 right-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. LÕI TRỘN: ẢNH & VIDEO (GPT PLUS & GEMINI PRO) -->
+        <div id="p-visual" class="app-panel p-10 flex-col space-y-8">
             <div class="border-l-4 border-emerald-500 pl-6 flex justify-between items-end">
                 <div>
-                    <h2 class="text-3xl font-bold text-white tracking-tight">Bước 3: Tạo Ảnh Phân Cảnh Cinematic</h2>
-                    <p class="text-emerald-400 text-sm mt-1">Dán mô tả bối cảnh từ Claude vào GPT Plus để xuất ảnh nghệ thuật chuẩn kích thước.</p>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Mô Phỏng Phân Cảnh Bối Cảnh Cinematic</h2>
+                    <p class="text-gray-400 text-sm mt-1">Điều hướng DALL-E 3 (GPT) tạo ảnh theo tỷ lệ và điều hướng Veo 3 Omni (Gemini) dựng chuyển động vật lý.</p>
                 </div>
                 <!-- NÚT CHỌN KÍCH THƯỚC -->
                 <div class="flex bg-[#111827] rounded-xl p-1 border border-gray-800 shadow-xl">
-                    <button id="r169" onclick="setRatio('16:9')" class="ratio-btn px-4 py-2.5 text-xs font-bold uppercase rounded-lg transition-all active">🎞️ Video Dài (16:9)</button>
-                    <button id="r916" onclick="setRatio('9:16')" class="ratio-btn px-4 py-2.5 text-xs font-bold uppercase rounded-lg transition-all">📱 Shorts/Tiktok (9:16)</button>
+                    <button id="r169-v" onclick="setVisualRatio('16:9')" class="ratio-btn px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all active">🎞️ Video Dài (16:9)</button>
+                    <button id="r916-v" onclick="setVisualRatio('9:16')" class="ratio-btn px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all">📱 Shorts (9:16)</button>
                 </div>
             </div>
-            
-            <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6">
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nhập đoạn mô tả phân cảnh hình ảnh (Trích xuất từ kịch bản của Claude):</label>
-                <textarea id="t3-scene" oninput="genStep3()" class="w-full h-28 bg-[#020617] border border-gray-700 rounded-xl p-5 text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none resize-none" placeholder="Ví dụ: Một chàng trai đứng cô đơn dưới mưa ga tàu điện ngầm Seoul lúc nửa đêm..."></textarea>
-                
-                <div class="relative">
-                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tự động sinh ra (Hãy Copy và dán vào cửa bạt Chat của GPT Plus):</span>
-                    <textarea id="t3-pr" readonly class="w-full h-36 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
-                    <button onclick="copy('t3-pr', 'c3')" id="c3" class="absolute bottom-4 right-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Tạo ảnh GPT -->
+                <div class="bg-[#111827] p-6 rounded-2xl border border-gray-800 space-y-4">
+                    <h3 class="text-sm font-extrabold text-emerald-400 uppercase tracking-widest"><i class="fa-solid fa-camera mr-2"></i>1. Lệnh Tạo Ảnh Cinematic (Dán vào GPT Plus)</h3>
+                    <textarea id="visual-desc" oninput="updateVisualPrompts()" class="w-full h-24 bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-emerald-500 outline-none resize-none" placeholder="Dán mô tả bối cảnh bằng tiếng Hàn từ kịch bản của Claude..."></textarea>
+                    <div class="relative">
+                        <textarea id="visual-img-prompt" readonly class="w-full h-32 bg-[#020617] border border-gray-800 rounded-xl p-4 font-mono text-xs text-gray-400 resize-none"></textarea>
+                        <button onclick="copy('visual-img-prompt', 'btn-c-img')" id="btn-c-img" class="absolute bottom-4 right-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-1.5 px-3 rounded-lg shadow-md transition-all">COPY</button>
+                    </div>
+                </div>
+
+                <!-- Tạo chuyển động Veo 3 -->
+                <div class="bg-[#111827] p-6 rounded-2xl border border-gray-800 space-y-4">
+                    <h3 class="text-sm font-extrabold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-clapperboard mr-2"></i>2. Lệnh Dựng Chuyển Động Veo 3 (Dán vào Gemini Pro)</h3>
+                    <input type="text" id="visual-action" oninput="updateVisualPrompts()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Nhập chuyển động của nhân vật (Ví dụ: Khẽ quay mặt buồn bã...)">
+                    <div class="relative">
+                        <textarea id="visual-vid-prompt" readonly class="w-full h-32 bg-[#020617] border border-gray-800 rounded-xl p-4 font-mono text-xs text-gray-400 resize-none"></textarea>
+                        <button onclick="copy('visual-vid-prompt', 'btn-c-vid')" id="btn-c-vid" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-1.5 px-3 rounded-lg shadow-md transition-all">COPY</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- BƯỚC 4: TẠO CHUYỂN ĐỘNG VIDEO VEO 3 (GEMINI PRO) -->
-        <div id="p4" class="app-panel p-10 flex-col space-y-8">
+        <!-- 6. LÕI TRỘN: CHUẨN HÓA SRT (GEMINI PRO) -->
+        <div id="p-srt" class="app-panel p-10 flex-col space-y-8">
             <div class="border-l-4 border-indigo-500 pl-6">
-                <h2 class="text-3xl font-bold text-white tracking-tight">Bước 4: Điều Khiển Chuyển Động Veo 3 Omni <span class="text-indigo-400 text-lg block font-medium">Sử dụng tài khoản Gemini Pro Advanced</span></h2>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Hệ Thống Lọc Lỗi & Chuẩn Hóa Phụ Đề SRT <span class="text-indigo-400 text-lg block font-medium">Sử dụng Gemini Pro Advanced (Cửa sổ ngữ cảnh siêu lớn)</span></h2>
             </div>
-            
             <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6">
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nhập hành động cốt lõi bạn muốn nhân vật thực hiện trong video 8 giây:</label>
-                <input type="text" id="t4-act" oninput="genStep4()" class="w-full bg-[#020617] border border-gray-700 rounded-xl p-4 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Ví dụ: Nhân vật quay đầu lại nhìn cửa sổ mờ sương, thở dài chậm rãi...">
-                
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Dán tệp SRT thô thu thập từ phần mềm nhận dạng tiếng Hàn:</label>
+                <textarea id="srt-raw" oninput="updateSrtPrompt()" class="w-full h-44 bg-[#020617] border border-gray-700 rounded-xl p-5 font-mono text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="1&#10;00:00:01,200 --> 00:00:03,500&#10;안녕하세요 오늘의 사연심리는..."></textarea>
                 <div class="relative">
-                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tự động sinh ra (Hãy Copy dán vào Gemini Pro để sinh prompt chuyển động cực mượt cho Veo 3):</span>
-                    <textarea id="t4-pr" readonly class="w-full h-36 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
-                    <button onclick="copy('t4-pr', 'c4')" id="c4" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- BƯỚC 5: LÀM SẠCH VÀ CHUẨN HÓA PHỤ ĐỀ SRT (GEMINI PRO) -->
-        <div id="p5" class="app-panel p-10 flex-col space-y-8">
-            <div class="border-l-4 border-indigo-500 pl-6">
-                <h2 class="text-3xl font-bold text-white tracking-tight">Bước 5: Chuẩn Hóa Phụ Đề SRT Tiếng Hàn <span class="text-indigo-400 text-lg block font-medium">Sử dụng sức mạnh Cửa Sổ Ngữ Cảnh của Gemini Pro Advanced</span></h2>
-            </div>
-            
-            <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6">
-                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Dán nội dung phụ đề SRT thô (Xuất từ tính năng tự động của CapCut/Premiere):</label>
-                <textarea id="t5-srt" oninput="genStep5()" class="w-full h-40 bg-[#020617] border border-gray-700 rounded-xl p-5 font-mono text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="1&#10;00:00:01,200 --> 00:00:03,500&#10;안녕하세요 오늘의 심리학 이야기..."></textarea>
-                
-                <div class="relative">
-                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tự động sinh ra (Dán vào Gemini Pro để làm sạch file phụ đề, sửa chính tả và ngắt dòng siêu đẹp):</span>
-                    <!-- SỬA LỖI TẠI ĐÂY: Đồng bộ ID thành t5-pr khớp hoàn toàn với JavaScript -->
-                    <textarea id="t5-pr" readonly class="w-full h-40 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
-                    <button onclick="copy('t5-pr', 'c5')" id="c5" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
+                    <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh lọc lỗi tự động sinh ra (Dán sang Gemini Pro):</span>
+                    <textarea id="srt-prompt-output" readonly class="w-full h-44 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                    <button onclick="copy('srt-prompt-output', 'btn-cp-srt')" id="btn-cp-srt" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- HỆ THỐNG XỬ LÝ LOGIC TRỘN CÂU LỆNH -->
+    <!-- LOGIC JAVASCRIPT XỬ LÝ TOÀN DIỆN MÃ NGUỒN -->
     <script>
-        let currentRatio = '16:9';
+        // Dữ liệu kịch bản 10 chủ đề Hàn Quốc tối tân nhất năm 2026
+        const koreanTopics = [
+            {
+                idx: "01",
+                title: "시어머니가 절대 말 안 하는 속마음 5가지 (Mẹ chồng – nàng dâu)",
+                theory: "Murray Bowen (Thuyết phân hóa hệ thống gia đình)",
+                struct: "Liệt kê 5 điều giấu kín, kể chuyện ngôi thứ 3 truyền cảm cảm xúc sâu lắng.",
+                desc: "Khai thác sâu sắc cảm giác cô đơn của mẹ chồng khi bước vào tuổi già, sự mong muốn được thừa nhận giá trị lao động trong gia đình nhưng lại bộc lộ ra ngoài bằng sự can thiệp thái quá. Cung cấp góc nhìn giúp nàng dâu cảm thông và tháo gỡ mâu thuẫn nhờ phân hóa gia đình của Bowen."
+            },
+            {
+                idx: "02",
+                title: "친했던 친구와 서서히 멀어지는 뜻밖의 3가지 신호 (Bạn bè xa lánh)",
+                theory: "Robin Dunbar & Gerald Mollenhorst (Định luật số Dunbar về giới hạn quan hệ)",
+                struct: "Bao gồm 3 giai đoạn không đánh số, văn phong tự sự đồng cảm sâu, trầm.",
+                desc: "Giải thích bằng khoa học tại sao việc xa cách bạn bè ở tuổi trưởng thành là tất yếu vật lý. Phân tích sự chuyển dịch của các mối quan hệ dựa trên khoảng cách địa lý và thời gian biểu bận rộn của xã hội Hàn Quốc hiện đại."
+            },
+            {
+                idx: "03",
+                title: "착한 아이 증후군: 왜 나는 거절을 못할까? (Không biết từ chối)",
+                theory: "Pete Walker (Fawn Response - Phản ứng quy thuận) & Harriet Braiker",
+                struct: "Nhập vai câu chuyện của nhân vật Minji (Ngôi thứ 3) trải qua áp lực công sở Hàn Quốc.",
+                desc: "Đào sâu vào hội chứng 'Người luôn muốn làm hài lòng người khác'. Giải thích phản ứng 'quy thuận' khi đối mặt với chấn thương tâm lý từ bé và hướng dẫn cách Minji dũng cảm thiết lập ranh giới cá nhân."
+            },
+            {
+                idx: "04",
+                title: "부모님의 뒷모습이 갑자기 작아 보일 때 (Cha mẹ già đi)",
+                theory: "Laura Carstensen (Thuyết Lựa chọn Xã hội - Thuyết SST) & 예기 슬픔 (Nỗi buồn dự báo trước)",
+                struct: "Cấu trúc dòng thời gian hồi tưởng kết hợp như một lá thư gửi tương lai.",
+                desc: "Bóc tách nỗi buồn âm ỉ của những người con khi chứng kiến cha mẹ già đi trong im lặng. Phân tích tâm lý thu hẹp mối quan hệ xã hội của người già để tập trung vào gia đình và cách vượt qua nỗi đau mất mát dự báo trước."
+            },
+            {
+                idx: "05",
+                title: "자꾸 남과 비교하게 되는 마인드 감옥 (So sánh bản thân)",
+                theory: "Leon Festinger (Thuyết so sánh xã hội - 1954)",
+                struct: "Độc thoại trực tiếp ngôi thứ 2 (당신 - Bạn) để đánh mạnh vào tâm lý người xem.",
+                desc: "Phân tích tác động hủy hoại của văn hóa so sánh trên Instagram tại Hàn Quốc. Giải thích tại sao bộ não con người luôn có xu hướng so sánh hướng lên (Upward comparison) và cách thoát khỏi chiếc bẫy tự ti này."
+            },
+            {
+                idx: "06",
+                title: "번아웃 증후군: 조용한 사직을 선택한 당신에게 (Kiệt sức công sở)",
+                theory: "Herbert Freudenberger (Thuyết kiệt sức tâm lý học)",
+                struct: "Cấu trúc độc thoại nội tâm sâu lắng kết hợp nhịp điệu Cinematic chậm rãi.",
+                desc: "Phân tích tâm lý của giới trẻ Hàn Quốc (thế hệ MZ) khi đối mặt với áp lực làm việc điên cuồng tại các tập đoàn lớn dẫn đến hội chứng '조용한 사직' (Quiet Quitting). Giúp họ tìm lại điểm cân bằng."
+            },
+            {
+                idx: "07",
+                title: "가스라이팅: 가족이라는 이름의 가장 잔인한 지배 (Thao túng tâm lý gia đình)",
+                theory: "Robin Stern (Hội chứng Gaslight)",
+                struct: "Sử dụng trường hợp thực tế giả định (Case study) phân tích sâu tâm lý hành vi.",
+                desc: "Tại sao mâu thuẫn thao túng tâm lý trong gia đình Á Đông lại cực khó dứt bỏ? Cách nhận biết các câu nói nhân danh tình yêu thương nhưng thực chất là tước đoạt quyền tự quyết của con cái."
+            },
+            {
+                idx: "08",
+                title: "은둔형 외톨이: 방 밖으로 나오지 못하는 진짜 이유 (Hikikomori Seoul)",
+                theory: "Thuyết Tự quyết (Self-Determination Theory - Decy & Ryan)",
+                struct: "Kể chuyện kết hợp lồng ghép số liệu nghiên cứu của Seoul Metropolitan.",
+                desc: "Bóc tách rào cản tâm lý của hàng trăm ngàn người trẻ Hàn Quốc đang tự cô lập mình trong phòng kín. Giải thích sự sụp đổ của động lực tự thân khi xã hội đặt kỳ vọng quá cao và cách từng bước trị liệu hành vi."
+            },
+            {
+                idx: "09",
+                title: "불안형과 회피형 애착: 왜 우리는 사랑할수록 아플까? (Thuyết gắn bó trong tình yêu)",
+                theory: "John Bowlby (Thuyết gắn bó lâm sàng)",
+                struct: "Cấu trúc so sánh đối lập giữa hai thế giới nội tâm của người lo âu và người né tránh.",
+                desc: "Phân tích vòng lặp đuổi - bắt độc hại trong tình yêu của người trẻ Hàn Quốc. Tại sao người lo âu càng khao khát gần gũi thì người né tránh càng đẩy ra xa và phương án hòa giải tâm lý học."
+            },
+            {
+                idx: "10",
+                title: "가면 증후군: 모두가 나를 똑똑하다고 오해하고 있다 (Hội chứng kẻ giả mạo)",
+                theory: "Pauline Clance & Suzanne Imes (Impostor Syndrome)",
+                struct: "Tự sự đầy tính triết học, giải đáp mâu thuẫn nội tâm sâu thẳm.",
+                desc: "Nỗi sợ hãi vô hình của những người thành đạt tại Hàn Quốc khi luôn cho rằng thành công của mình là do may mắn và sợ một ngày nào đó sẽ bị người khác lột trần mặt nạ kém cỏi của bản thân."
+            }
+        ];
 
-        // Điều hướng mượt mà qua lại giữa các Bước bằng tiếng Việt
+        // Tập dữ liệu mặc định (Lấy mẫu trực tiếp từ file CSV vidIQ người dùng tải lên)
+        let videoData = [
+            { id: "eaWX9nVJOh4", title: "비교를 멈출 수 없는 진짜 이유 (심리학) #비교 #shorts", duration: "00:21", views: 182, likes: 14, comments: 2, descWordCount: 52, vidiq: 55, status: "Tốt", desc: "자꾸 남과 비교하는 건 의지가 약해서가 아닙니다. 1954년 심리학자 레온 페스팅거의 사회비교이론 — 인간은 자신을 평가하기 위해 남과 비교하도록 태어났습니다. 본능을 이기는 방법은 따로 있습니다. 👆 비교 본능에서 벗어나는 법, 전체 영상은 프로필에서 #비교 #사회비교이론 #심리학 #열등감 #자존감 #사연심리 #shorts #힐링" },
+            { id: "0f-q-xP9rgI", title: "시어머니가 음식을 자꾸 권하는 진짜 이유 #shorts", duration: "00:07", views: 110, likes: 8, comments: 1, descWordCount: 15, vidiq: 48, status: "Cần tối ưu", desc: "간섭이 아니라, 인정받고 싶은 마음이었습니다. 시어머니의 인정 욕구. #시어머니 #며느리 #인정욕구 #shorts #사연심리" },
+            { id: "long-sample", title: "시어머니가 절대 말 안 하는 속마음 5가지 (가족 심리학 분석)", duration: "08:36", views: 2450, likes: 195, comments: 24, descWordCount: 65, vidiq: 68, status: "Cần tối ưu", desc: "며느리가 알지 못했던 시어머니의 진짜 속사정은 무엇일까요? 가족 심리학 보웬의 이론을 바탕으로 bóc tách sâu sắc mối quan hệ 고부갈등. 구독과 알림 설정으로 사연심리와 함께하세요. #시어머니 #며느리 #고부갈등 #가족심리 #사연심리" }
+        ];
+
+        let selectedVideo = videoData[0];
+        let currentVisualRatio = '16:9';
+
+        // Tải trang lần đầu
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            renderTopicList();
+            selectVideoForRepair(videoData[0].id);
+            selectTopic("01");
+            setupDragAndDrop();
+        });
+
+        // Thiết lập kéo thả File CSV từ vidIQ
+        function setupDragAndDrop() {
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('csv-input');
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('border-indigo-500', 'bg-indigo-950/20');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('border-indigo-500', 'bg-indigo-950/20');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('border-indigo-500', 'bg-indigo-950/20');
+                const file = e.dataTransfer.files[0];
+                if (file) handleCSVFile(file);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) handleCSVFile(file);
+            });
+        }
+
+        // Xử lý đọc File CSV bằng JavaScript thuần
+        function handleCSVFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                parseCSV(text);
+            };
+            reader.readAsText(file, "UTF-8");
+        }
+
+        // Trình phân tích cấu trúc CSV
+        function parseCSV(text) {
+            const lines = text.split('\n');
+            if (lines.length < 2) return alert("File CSV không hợp lệ hoặc không có dữ liệu!");
+            
+            const rows = [];
+            const headers = lines[0].split(',');
+
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                // Giải quyết vấn đề dấu phẩy trong nháy kép của file CSV
+                let arr = [];
+                let inQuotes = false;
+                let currentStr = '';
+                
+                for (let j = 0; j < lines[i].length; j++) {
+                    let char = lines[i][j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        arr.push(currentStr);
+                        currentStr = '';
+                    } else {
+                        currentStr += char;
+                    }
+                }
+                arr.push(currentStr);
+
+                if (arr.length > 8) {
+                    const id = arr[0] ? arr[0].trim() : 'ID-' + i;
+                    const title = arr[1] ? arr[1].trim() : 'Không rõ tiêu đề';
+                    const desc = arr[2] ? arr[2].trim() : '';
+                    const duration = arr[3] ? arr[3].trim() : '00:00';
+                    const date = arr[5] ? arr[5].trim() : '';
+                    const vidiq = parseInt(arr[7]) || Math.floor(Math.random() * 30) + 40;
+                    const views = parseInt(arr[8]) || 0;
+                    const likes = parseInt(arr[9]) || 0;
+                    const comments = parseInt(arr[10]) || 0;
+                    const descWords = parseInt(arr[12]) || desc.split(' ').length;
+                    
+                    let status = "Tốt";
+                    if (descWords < 40 || vidiq < 50) status = "Cần sửa lỗi đỏ";
+
+                    rows.push({
+                        id, title, desc, duration, date, vidiq, views, likes, comments, descWordCount: descWords, status
+                    });
+                }
+            }
+
+            if (rows.length > 0) {
+                videoData = rows;
+                renderTable();
+                selectVideoForRepair(videoData[0].id);
+                alert("Đã đồng bộ hóa thành công dữ liệu từ file CSV " + videoData.length + " video!");
+            }
+        }
+
+        // Chuyển mượt mà qua lại giữa các Bước bằng tiếng Việt
         function switchPanel(id) {
             document.querySelectorAll('.app-panel').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             
-            document.querySelectorAll('nav button').forEach(b => b.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/40");
+            document.querySelectorAll('nav button').forEach(b => b.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30");
             
             const nav = document.getElementById('n-' + id);
-            const color = id === 'p2' ? 'bg-orange-600' : (id === 'p3' ? 'bg-emerald-600' : 'bg-indigo-600');
-            nav.className = `w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition ${color} text-white shadow-xl`;
+            nav.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-xl shadow-indigo-950/50";
         }
 
-        // Cập nhật tỷ lệ kích thước ảnh
-        function setRatio(r) {
-            currentRatio = r;
+        // Đổ dữ liệu vào Bảng video
+        function renderTable() {
+            const tbody = document.getElementById('video-table-body');
+            tbody.innerHTML = '';
+
+            let totalVidIQ = 0;
+            let totalErrors = 0;
+            let shortsCount = 0;
+
+            videoData.forEach(v => {
+                totalVidIQ += v.vidiq;
+                if (v.status.includes("Cần")) totalErrors++;
+                if (v.duration.includes("00:") && parseInt(v.duration.split(":")[1]) < 60 && v.duration.split(":").length === 2) {
+                    shortsCount++;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-800/40 hover:bg-gray-800/20 cursor-pointer transition-all";
+                tr.onclick = () => {
+                    selectVideoForRepair(v.id);
+                    switchPanel('repair');
+                };
+
+                const isShort = v.title.toLowerCase().includes('#shorts') || (v.duration.split(":").length === 2 && parseInt(v.duration.split(":")[0]) === 0 && parseInt(v.duration.split(":")[1]) <= 60);
+
+                tr.innerHTML = `
+                    <td class="p-4 font-semibold text-sm max-w-sm truncate text-gray-200">
+                        <span class="mr-2">${isShort ? '📱' : '🎞️'}</span>${v.title}
+                    </td>
+                    <td class="p-4 text-xs font-mono text-gray-400">${v.duration}</td>
+                    <td class="p-4 text-xs font-semibold text-gray-300">${v.views.toLocaleString()}</td>
+                    <td class="p-4 text-xs font-mono text-indigo-400 font-bold">${v.vidiq}/100</td>
+                    <td class="p-4 text-xs text-gray-400">${v.descWordCount} từ</td>
+                    <td class="p-4 text-xs">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase ${v.status === 'Tốt' ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-900/30' : 'bg-red-950/60 text-red-400 border border-red-900/30'}">
+                            ${v.status}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Ghi nhận số liệu lên Dashboard
+            document.getElementById('stat-total').innerText = videoData.length;
+            document.getElementById('stat-vidiq').innerText = Math.round(totalVidIQ / videoData.length) + "/100";
+            document.getElementById('stat-errors').innerText = totalErrors;
+            document.getElementById('stat-shorts-ratio').innerText = Math.round((shortsCount / videoData.length) * 100) + "% Shorts";
+        }
+
+        // Chọn một video từ bảng để chẩn đoán & sửa lỗi
+        function selectVideoForRepair(id) {
+            const v = videoData.find(item => item.id === id);
+            if (!v) return;
+            selectedVideo = v;
+
+            document.getElementById('repair-vid-title').innerText = v.title;
+
+            // Kiểm tra lỗi 1: Độ dài mô tả
+            const errDescIcon = document.getElementById('err-icon-desc');
+            const errDescText = document.getElementById('err-text-desc');
+            if (v.descWordCount < 40) {
+                errDescIcon.className = "text-red-500 text-lg mt-0.5";
+                errDescIcon.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
+                errDescText.innerText = `Chỉ có ${v.descWordCount} từ. Mô tả quá ngắn khiến YouTube Bot của Hàn Quốc không thể hiểu rõ từ khóa mục tiêu để xếp hạng phân phối.`;
+            } else {
+                errDescIcon.className = "text-emerald-500 text-lg mt-0.5";
+                errDescIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+                errDescText.innerText = `Độ dài đạt chuẩn (${v.descWordCount} từ). Đảm bảo mật độ từ khóa phân bổ tự nhiên.`;
+            }
+
+            // Kiểm tra lỗi 2: Liên kết Call to action
+            const errLinkIcon = document.getElementById('err-icon-link');
+            const errLinkText = document.getElementById('err-text-link');
+            const hasLink = v.desc.includes('http') || v.desc.includes('www') || v.desc.includes('프로필');
+            if (!hasLink) {
+                errLinkIcon.className = "text-red-500 text-lg mt-0.5";
+                errLinkIcon.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
+                errLinkText.innerText = `Không có link liên kết. Bạn bỏ lỡ cơ hội kéo người xem đăng ký kênh hoặc điều hướng từ video Shorts sang bản full 16:9.`;
+            } else {
+                errLinkIcon.className = "text-emerald-500 text-lg mt-0.5";
+                errLinkIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+                errLinkText.innerText = `Đã tích hợp liên kết kêu gọi hành động chuẩn xác.`;
+            }
+
+            // Kiểm tra lỗi 3: Hệ thống Timestamps
+            const errTimeIcon = document.getElementById('err-icon-time');
+            const errTimeText = document.getElementById('err-text-time');
+            const isShort = v.duration.split(":").length === 2 && parseInt(v.duration.split(":")[0]) === 0 && parseInt(v.duration.split(":")[1]) <= 60;
+            
+            if (isShort) {
+                errTimeIcon.className = "text-gray-500 text-lg mt-0.5";
+                errTimeIcon.innerHTML = `<i class="fa-solid fa-circle-minus"></i>`;
+                errTimeText.innerText = `Đây là Video ngắn (#shorts), cấu trúc kịch bản không yêu cầu phân bổ mốc thời gian (Timestamps).`;
+            } else {
+                const hasTimestamps = v.desc.includes('00:00') || v.desc.includes('00:');
+                if (!hasTimestamps) {
+                    errTimeIcon.className = "text-yellow-500 text-lg mt-0.5";
+                    errTimeIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+                    errTimeText.innerText = `Chưa có mốc thời gian. Với thời lượng dài ${v.duration}, bạn nên thêm mốc thời gian để người xem Hàn tiện theo dõi.`;
+                } else {
+                    errTimeIcon.className = "text-emerald-500 text-lg mt-0.5";
+                    errTimeIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+                    errTimeText.innerText = `Tuyệt vời! Đã tích hợp mốc thời gian giúp tối ưu hóa điểm số SEO kịch trần.`;
+                }
+            }
+
+            // Tự động sản xuất Prompt Bản Vá Lỗi
+            const promptBox = document.getElementById('repair-prompt-box');
+            promptBox.value = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n- Title: "${v.title}"\n- Current Description: "${v.desc}"\n- Duration: ${v.duration}\n\nPlease generate a fully optimized "Metadata Patch Kit" in native South Korean language (한국어) with the following elements:\n1. 3 new clickbait titles targeting local Korean psychology viewers (Max CTR).\n2. A comprehensive, detailed, SEO-friendly video description containing: \n   - A gripping introduction summarizing the story.\n   - Natural call to action links (프로필 링크) encouraging subscribers.\n   - Designated structural tags for timestamps.\n3. An optimized, high-density tags and hashtags block based on Korean domestic search traffic. Please output everything strictly in Korean language.`;
+        }
+
+        // Đổ danh sách 10 chủ đề tối tân ra Bước 3
+        function renderTopicList() {
+            const container = document.getElementById('topic-list-container');
+            container.innerHTML = '';
+
+            koreanTopics.forEach(t => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700 transition-all flex items-center space-x-3";
+                btn.onclick = () => selectTopic(t.idx);
+                btn.id = 't-select-' + t.idx;
+
+                btn.innerHTML = `
+                    <span class="bg-gray-800 text-gray-400 font-extrabold text-xs px-2 py-1 rounded-md">${t.idx}</span>
+                    <span class="text-xs font-semibold text-gray-200 truncate">${t.title}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        // Chọn chủ đề chi tiết ở Bước 3
+        function selectTopic(idx) {
+            const t = koreanTopics.find(item => item.idx === idx);
+            if (!t) return;
+
+            // Xóa trạng thái active cũ
+            koreanTopics.forEach(item => {
+                const b = document.getElementById('t-select-' + item.idx);
+                if (b) b.className = "w-full text-left p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700 transition-all flex items-center space-x-3";
+            });
+
+            // Thêm trạng thái active mới
+            const activeBtn = document.getElementById('t-select-' + idx);
+            if (activeBtn) activeBtn.className = "w-full text-left p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/50 hover:bg-indigo-950/60 transition-all flex items-center space-x-3";
+
+            document.getElementById('topic-active-idx').innerText = "#" + t.idx;
+            document.getElementById('topic-active-title').innerText = t.title;
+            document.getElementById('topic-active-theory').innerText = t.theory;
+            document.getElementById('topic-active-struct').innerText = t.struct;
+            document.getElementById('topic-active-desc').innerText = t.desc;
+        }
+
+        // Chuyển dữ liệu nạp thẳng sang Bộ sinh Prompt ở Bước 4 & 5
+        function sendToPromptEngine(target) {
+            const titleStr = document.getElementById('topic-active-title').innerText;
+            const theoryStr = document.getElementById('topic-active-theory').innerText;
+            const structStr = document.getElementById('topic-active-struct').innerText;
+            const descStr = document.getElementById('topic-active-desc').innerText;
+
+            if (target === 'script') {
+                document.getElementById('script-title').value = titleStr;
+                document.getElementById('script-struct').value = `${theoryStr} - ${structStr}`;
+                updateScriptPrompt();
+                switchPanel('p-script');
+            } else if (target === 'visual') {
+                document.getElementById('visual-desc').value = `Cinematic bối cảnh của câu chuyện: ${titleStr}. ${descStr}`;
+                updateVisualPrompts();
+                switchPanel('p-visual');
+            }
+        }
+
+        // Cập nhật Prompt kịch bản Claude
+        function updateScriptPrompt() {
+            const t = document.getElementById('script-title').value || '[Dán tiêu đề tiếng Hàn]';
+            const s = document.getElementById('script-struct').value || '[Cấu trúc kịch bản phá template]';
+            document.getElementById('script-prompt-output').value = `Act as an elite native South Korean behavioral psychologist and a professional cinematic screenwriter. Write a deep, analytical, and emotionally gripping YouTube video script based on the title: "${t}".\n- Structural requirements: Follow this template/format: "${s}". Incorporate the psychological theories naturally into a storytelling narrative.\n- Tone and language: Must be written entirely in fluent, sophisticated, and empathetic native South Korean language (한국어). Avoid typical generic AI-generated expressions or patterns. Make it touch the hearts of local Korean viewers.\n- Visual guidance: For every major segment, include a brief scene composition description in English inside brackets [like this] describing the lighting, noir/cinematic atmosphere, and background elements so I can use it to generate visuals. The text content must remain strictly in Korean.`;
+        }
+
+        // Cập nhật tỉ lệ ảnh
+        function setVisualRatio(r) {
+            currentVisualRatio = r;
             document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active'));
-            if(r === '16:9') document.getElementById('r169').classList.add('active');
-            else document.getElementById('r916').classList.add('active');
-            genStep3();
+            if(r === '16:9') document.getElementById('r169-v').classList.add('active');
+            else document.getElementById('r916-v').classList.add('active');
+            updateVisualPrompts();
         }
 
-        // Tạo câu lệnh Bước 1: Gemini Market
-        function genStep1() {
-            const t = document.getElementById('t1-topic').value || '[Chủ đề tâm lý học cần làm]';
-            const s = document.getElementById('t1-src').value || '[Học thuyết/Nguồn tâm lý chứng minh]';
-            document.getElementById('t1-pr').value = `Act as a South Korean YouTube Marketing and SEO expert. Analyze the topic: "${t}" with academic basis from: "${s}". \n\n1. Generate 10 curiosity-driven, high-CTR titles in natural native Korean language (한국어) targeting domestic viewers. Ensure they are catchy, deep, and trigger emotional resonance.\n2. Write a Korean SEO-optimized description including relevant target keywords, hashtags and structural suggestion for timestamps. \nOutput strictly in Korean language.`;
+        // Cập nhật Prompt cho Ảnh & Video
+        function updateVisualPrompts() {
+            const d = document.getElementById('visual-desc').value || '[Mô tả bối cảnh sinh ảnh]';
+            const a = document.getElementById('visual-action').value || '[Hành động chuyển động nhân vật]';
+
+            document.getElementById('visual-img-prompt').value = `Cinematic still from a high-end Noir Korean Movie. Scene details: "${d}". \nStyle: High-contrast chiaroscuro lighting, moody atmospheric night scene in Seoul, rain-slicked pavement reflecting neon streetlights, urban isolation aesthetic, 35mm film grain, cinematic color grading, ultra-realistic. \nAspect Ratio: ${currentVisualRatio}. No text, no captions, no subtitles.`;
+            document.getElementById('visual-vid-prompt').value = `Direct AI Video Motion: Slow cinematic panning shot, 8-second video clip. The character is performing this action: "${a}". \nModel guidance: Formulated for Veo 3 Omni integration. Style: Micro-expressions, 24fps motion blur, realistic South Korean moody night ambient lighting, hyper-realistic physics and smooth camera movement. \nOutput prompt strictly in English.`;
         }
 
-        // Tạo câu lệnh Bước 2: Claude Script
-        function genStep2() {
-            const t = document.getElementById('t2-title').value || '[Tiêu đề tiếng Hàn đã chọn]';
-            const s = document.getElementById('t2-struct').value || '[Cấu trúc kịch bản phá template]';
-            document.getElementById('t2-pr').value = `Act as a native Korean cinematic screenwriter and behavioral psychologist. Write a deep, emotional noir-style storytelling video script for the title: "${t}". \n\n- Structural Requirement: Follow this template structure: "${s}". Incorporate the psychological research naturally.\n- Tone: Moody, empathetic, poetic and deep. Strictly avoid generic AI patterns or clichés. Must touch the souls of South Korean viewers.\n- Visual Guidance: For every scene, include a brief scene description in English inside brackets [like this] describing cinematic lighting, camera angles, and moody neon Seoul atmosphere so I can use it directly to generate visuals. \nOutput the main script strictly in natural native Korean.`;
+        // Cập nhật Prompt SRT
+        function updateSrtPrompt() {
+            const s = document.getElementById('srt-raw').value || '[Dán tệp phụ đề SRT thô vào đây]';
+            document.getElementById('srt-prompt-output').value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
         }
 
-        // Tạo câu lệnh Bước 3: GPT Visuals
-        function genStep3() {
-            const s = document.getElementById('t3-scene').value || '[Bối cảnh phân cảnh của Claude]';
-            document.getElementById('t3-pr').value = `Cinematic still from a high-end Noir Korean Movie. Scene details: "${s}". \nStyle: High-contrast chiaroscuro lighting, moody atmospheric night scene in Seoul, rain-slicked pavement reflecting neon streetlights, urban isolation aesthetic, 35mm film grain, cinematic color grading, ultra-realistic. \nAspect Ratio: ${currentRatio}. No text, no captions, no subtitles.`;
-        }
-
-        // Tạo câu lệnh Bước 4: Gemini Motion (Veo 3)
-        function genStep4() {
-            const a = document.getElementById('t4-act').value || '[Hành động chuyển động của nhân vật]';
-            document.getElementById('t4-pr').value = `Direct AI Video Motion: Slow cinematic panning shot, 8-second video clip. The character is performing this action: "${a}". \nModel guidance: Formulated for Veo 3 Omni integration. Style: Micro-expressions, 24fps motion blur, realistic South Korean moody night ambient lighting, hyper-realistic physics and smooth camera movement. \nOutput prompt strictly in English.`;
-        }
-
-        // Tạo câu lệnh Bước 5: Gemini SRT
-        function genStep5() {
-            const s = document.getElementById('t5-srt').value || '[Dữ liệu tệp phụ đề SRT thô]';
-            // SỬA LỖI ĐÃ HOÀN TẤT: Đổi thành 't5-pr' khớp 100% với HTML
-            document.getElementById('t5-pr').value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
-        }
-
-        // Hàm sao chép và đổi trạng thái nút bằng tiếng Việt trực quan
+        // Hàm sao chép dữ liệu nhanh và đẹp mắt
         function copy(id, bId) {
             const t = document.getElementById(id);
             t.select();
@@ -246,19 +762,14 @@
             
             const b = document.getElementById(bId);
             const old = b.innerText;
-            b.innerText = "✓ ĐÃ SAO CHÉP!";
-            b.classList.replace('bg-indigo-600', 'bg-gray-700');
-            b.classList.replace('bg-orange-600', 'bg-gray-700');
-            b.classList.replace('bg-emerald-600', 'bg-gray-700');
+            b.innerText = "✓ ĐÃ COPY";
+            b.classList.add('bg-gray-700');
             
             setTimeout(() => {
                 b.innerText = old;
-                b.classList.replace('bg-gray-700', (id === 't2-pr' ? 'bg-orange-600' : (id === 't3-pr' ? 'bg-emerald-600' : 'bg-indigo-600')));
+                b.classList.remove('bg-gray-700');
             }, 1000);
         }
-
-        // Kích hoạt sinh câu lệnh mặc định khi mở trang
-        window.onload = () => { genStep1(); genStep2(); genStep3(); genStep4(); genStep5(); };
     </script>
 </body>
 </html>
