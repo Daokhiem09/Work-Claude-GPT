@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사연심리 AI Analyst & Audit Hub v6.6.2</title>
+    <title>사연심리 AI Analyst & Audit Hub v7.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Nhúng Chart.js vẽ biểu đồ phân tích chuyên nghiệp như GPT -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -33,7 +33,7 @@
                     <span class="text-2xl">🧠</span>
                     <div>
                         <h1 class="text-base font-extrabold text-white tracking-wide uppercase">사연심리 AI Hub</h1>
-                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Ultimate Suite v6.6.2</p>
+                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Ultimate Suite v7.0</p>
                     </div>
                 </div>
                 
@@ -310,15 +310,15 @@
         <!-- 3. PANEL: ĐỊNH HƯỚNG 10 VIDEO MỚI (TÍCH HỢP SHORTS & THUMBNAIL, SUNO, SEO PROMPT) -->
         <div id="roadmap" class="app-panel space-y-8">
             <div class="border-l-4 border-emerald-500 pl-6">
-                <h2 class="text-3xl font-extrabold text-white tracking-tight">Ma Trận Lộ Trình Video Dài & Shorts Đồng Hành</h2>
-                <p class="text-gray-400 text-sm mt-1">Đầy đủ 10 chủ đề lớn, mỗi chủ đề lớn đi kèm 2 video Shorts độc lập để xây dựng phễu kéo view hoàn hảo.</p>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Ma Trận Lộ Trình Video Dài (15 Phút+) & Shorts Đồng Hành</h2>
+                <p class="text-gray-400 text-sm mt-1">Đầy đủ 10 chủ đề lớn nhắm tới mục tiêu độ dài 15 phút+, mỗi chủ đề lớn đi kèm 2 video Shorts kéo phễu với bộ công cụ dắt liên thông độc quyền.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 <!-- Chọn chủ đề -->
                 <div class="lg:col-span-5 space-y-4">
                     <h3 class="text-sm font-extrabold text-gray-400 uppercase tracking-widest">Chọn một chủ đề nghiên cứu sâu:</h3>
-                    <div class="space-y-2 max-h-[650px] overflow-y-auto pr-2" id="topic-list-container"></div>
+                    <div class="space-y-2 max-h-[700px] overflow-y-auto pr-2" id="topic-list-container"></div>
                 </div>
 
                 <!-- Chi tiết chủ đề, Shorts và Metadata -->
@@ -347,18 +347,24 @@
                             </div>
                         </div>
 
-                        <!-- PHẦN CÁC SHORTS ĐỒNG HÀNH TRÊN LỘ TRÌNH -->
-                        <div class="bg-[#05070f] p-4 rounded-xl border border-gray-800/50 space-y-3">
+                        <!-- PHẦN CÁC SHORTS ĐỒNG HÀNH TRÊN LỘ TRÌNH (SỬA ĐỔI YÊU CẦU SỐ 3: THÊM NÚT NẠP SANG CLAUDE CHO SHORTS) -->
+                        <div class="bg-[#05070f] p-5 rounded-2xl border border-gray-800/50 space-y-4">
                             <p class="text-xs font-extrabold text-purple-400 uppercase tracking-wider"><i class="fa-solid fa-mobile-screen mr-1.5"></i>Các Video Shorts Đồng Hành Tuyển Chọn:</p>
-                            <div class="space-y-2">
-                                <label class="flex items-center space-x-3 bg-gray-900/60 p-2.5 rounded-lg border border-gray-800/40 cursor-pointer">
-                                    <input type="checkbox" id="shorts-1-complete-check" onchange="toggleShorts1Complete()" class="w-3.5 h-3.5 text-purple-600 bg-gray-950 border-gray-700 rounded focus:ring-purple-500">
-                                    <span id="shorts-title-1" class="text-xs font-semibold text-gray-200">Shorts #1: --</span>
-                                </label>
-                                <label class="flex items-center space-x-3 bg-gray-900/60 p-2.5 rounded-lg border border-gray-800/40 cursor-pointer">
-                                    <input type="checkbox" id="shorts-2-complete-check" onchange="toggleShorts2Complete()" class="w-3.5 h-3.5 text-purple-600 bg-gray-950 border-gray-700 rounded focus:ring-purple-500">
-                                    <span id="shorts-title-2" class="text-xs font-semibold text-gray-200">Shorts #2: --</span>
-                                </label>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between bg-gray-900/60 p-3 rounded-xl border border-gray-800/40">
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="checkbox" id="shorts-1-complete-check" onchange="toggleShorts1Complete()" class="w-4 h-4 text-purple-600 bg-gray-950 border-gray-700 rounded focus:ring-purple-500">
+                                        <span id="shorts-title-1" class="text-xs font-semibold text-gray-200">Shorts #1: --</span>
+                                    </label>
+                                    <button onclick="sendShortsToClaude(1)" class="bg-purple-950/60 hover:bg-purple-900/40 border border-purple-800/40 text-purple-300 text-[10px] font-bold py-1 px-3 rounded-lg transition-all"><i class="fa-solid fa-paper-plane mr-1"></i>Nạp Kịch Bản Shorts 1</button>
+                                </div>
+                                <div class="flex items-center justify-between bg-gray-900/60 p-3 rounded-xl border border-gray-800/40">
+                                    <label class="flex items-center space-x-3 cursor-pointer">
+                                        <input type="checkbox" id="shorts-2-complete-check" onchange="toggleShorts2Complete()" class="w-4 h-4 text-purple-600 bg-gray-950 border-gray-700 rounded focus:ring-purple-500">
+                                        <span id="shorts-title-2" class="text-xs font-semibold text-gray-200">Shorts #2: --</span>
+                                    </label>
+                                    <button onclick="sendShortsToClaude(2)" class="bg-purple-950/60 hover:bg-purple-900/40 border border-purple-800/40 text-purple-300 text-[10px] font-bold py-1 px-3 rounded-lg transition-all"><i class="fa-solid fa-paper-plane mr-1"></i>Nạp Kịch Bản Shorts 2</button>
+                                </div>
                             </div>
                         </div>
 
@@ -412,15 +418,15 @@
             </div>
         </div>
 
-        <!-- 4. PANEL: LỊCH TRÌNH SẢN XUẤT HẰNG NGÀY -->
+        <!-- 4. PANEL: LỊCH TRÌNH SẢN XUẤT HẰNG NGÀY (SỬA ĐỔI YÊU CẦU SỐ 4: TĂNG MẬT ĐỘ LỊCH TRÌNH SONG HÀNH SONG SONG) -->
         <div id="schedule-calendar" class="app-panel space-y-8">
             <div class="border-l-4 border-indigo-500 pl-6 flex justify-between items-end">
                 <div>
-                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Lịch Trình Sản Xuất 7 Ngày Độc Quyền</h2>
-                    <p class="text-gray-400 text-sm mt-1">Lịch trình tự động xoay chuyển theo từng ngách kênh bạn chọn và đồng bộ trực tiếp với mốc hoàn thành Lộ trình.</p>
+                    <h2 class="text-3xl font-extrabold text-white tracking-tight">Lịch Trình Sản Xuất 7 Ngày Song Hành Mật Độ Cao</h2>
+                    <p class="text-gray-400 text-sm mt-1">Quy trình sản xuất song song cực kỳ bận rộn để chạy đồng thời nhiều kênh và dứt điểm nhanh gọn từng tuần.</p>
                 </div>
                 <div class="text-xs text-indigo-400 font-bold bg-indigo-950/40 border border-indigo-900/60 px-4 py-2 rounded-xl">
-                    🔥 Đồng Bộ Hệ Thống Đang Kích Hoạt
+                    🔥 Quy Trình Song Hành Đang Chạy
                 </div>
             </div>
 
@@ -442,12 +448,12 @@
             </div>
         </div>
 
-        <!-- 5. PANEL: KHẮC PHỤC PROMPT: ẢNH (GPT) | VIDEO (FLOW) -->
+        <!-- 5. PANEL: KHẮC PHỤC PROMPT: ẢNH (GPT) | VIDEO (FLOW) (SỬA ĐỔI YÊU CẦU SỐ 2: TÁCH RIÊNG KHUNG TẠO ẢNH & VIDEO TRONG BULK LAB) -->
         <div id="bulk-lab" class="app-panel space-y-8">
             <div class="border-l-4 border-indigo-500 pl-6 flex justify-between items-start">
                 <div>
                     <h2 class="text-3xl font-extrabold text-white tracking-tight">Khắc Phục Prompt: Ảnh (GPT) | Video (Flow)</h2>
-                    <p class="text-gray-400 text-sm mt-1">Dán danh sách prompt phân cách bằng một dòng trống hoặc số thứ tự đơn (`1: abab \n 2: njahsc`). Hệ thống sẽ tối ưu hóa đầu ra cho ảnh GPT và video câm chuyển động Flow Omni (8s).</p>
+                    <p class="text-gray-400 text-sm mt-1">Dán danh sách prompt thô phân cách bằng một dấu xuống dòng đơn (`1: abab \n 2: njahsc`). Hệ thống sẽ tự động bóc tách và phân tách thành hai khu vực đóng hộp sao chép độc lập.</p>
                 </div>
                 <div class="bg-[#111827] border border-gray-800 rounded-xl p-3 text-xs text-indigo-400 font-extrabold max-w-sm">
                     🔒 An toàn: Tách riêng card copy cho từng câu, loại bỏ hoàn toàn lỗi sập AI chat do dán quá dài!
@@ -494,7 +500,7 @@
                     </div>
                 </div>
 
-                <!-- HIỂN THỊ THẺ ĐÃ PHÂN TÁCH VÀ NÚT COPY RIÊNG BIỆT CHO ẢNH & VIDEO -->
+                <!-- HIỂN THỊ THẺ ĐÃ PHÂN TÁCH VÀ NÚT COPY RIÊNG BIỆT CHO ẢNH & VIDEO (SỬA ĐỔI YÊU CẦU SỐ 2) -->
                 <div class="lg:col-span-7 flex flex-col space-y-4">
                     <div class="bg-[#111827] border border-gray-800 rounded-2xl flex-1 flex flex-col overflow-hidden">
                         <div class="p-6 border-b border-gray-800 flex justify-between items-center bg-[#090d16]/50">
@@ -518,7 +524,7 @@
             </div>
         </div>
 
-        <!-- 6. LÕI TRỘN: KỊCH BẢN CLAUDE (SOẠN KỊCH BẢN & LIÊN THÔNG BỘ PROMPT) -->
+        <!-- 6. LÕI TRỘN: KỊCH BẢN CLAUDE (SOẠN KỊCH BẢN & LIÊN THÔNG BỘ PROMPT - SỬA ĐỔI YÊU CẦU SỐ 1: TÁCH RIÊNG KHUNG TẠO ẢNH VÀ VIDEO LIÊN THÔNG) -->
         <div id="p-script" class="app-panel space-y-8">
             <div class="border-l-4 border-orange-500 pl-6">
                 <h2 class="text-3xl font-extrabold text-white tracking-tight">Bộ Sinh Lệnh Viết Kịch Bản <span class="text-orange-400 text-lg block font-medium">Sử dụng Claude Team (Opus 4.8) - Tối Ưu Biểu Cảm Không Thoại</span></h2>
@@ -543,23 +549,37 @@
                 </div>
             </div>
 
-            <!-- PHẦN LIÊN THÔNG V6.6: TRÍCH XUẤT PROMPT ẢNH VÀ VIDEO SAU KHI SOẠN KỊCH BẢN -->
+            <!-- PHẦN LIÊN THÔNG V7.0: TRÍCH XUẤT PROMPT ẢNH VÀ VIDEO SAU KHI SOẠN KỊCH BẢN (SỬA ĐỔI YÊU CẦU SỐ 1: CHIA TÁCH BẢNG KHUNG TẠO ẢNH VÀ VIDEO RIÊNG BIỆT) -->
             <div class="bg-[#111827] p-8 rounded-2xl border border-gray-800 space-y-6 mt-8">
                 <div class="border-l-4 border-indigo-500 pl-4">
                     <h3 class="text-lg font-bold text-white">Bộ Tạo Prompt Liên Thông Sau Khi Soạn Kịch Bản</h3>
                     <p class="text-xs text-gray-400 mt-1">Dán kịch bản tiếng Hàn nhận được từ Claude vào đây. Trình phân tích sẽ tự động bóc tách và viết sẵn hai chuỗi prompt ngăn cách nhau bằng 1 dấu xuống dòng để nạp thẳng vào mục Khắc Phục Prompt.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <div class="lg:col-span-4">
                         <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Dán kịch bản tiếng Hàn thô từ Claude:</label>
-                        <textarea id="claude-script-pasted" oninput="generateLinkedPrompts()" class="w-full h-40 bg-[#020617] border border-gray-700 rounded-xl p-4 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Dán kịch bản Claude vừa viết xong vào đây..."></textarea>
+                        <textarea id="claude-script-pasted" oninput="generateLinkedPrompts()" class="w-full h-[320px] bg-[#020617] border border-gray-700 rounded-xl p-4 text-xs text-white focus:ring-2 focus:ring-indigo-500 outline-none resize-none" placeholder="Dán kịch bản Claude vừa viết xong vào đây..."></textarea>
                     </div>
                     
-                    <div class="relative">
-                        <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Chuỗi Prompt GPT (Ảnh) & Flow (Video) liên thông sinh ra:</span>
-                        <textarea id="linked-prompts-output" readonly class="w-full h-40 bg-[#020617] border border-gray-700 rounded-xl p-4 font-mono text-[10px] text-gray-400 focus:outline-none resize-none"></textarea>
-                        <button onclick="copy('linked-prompts-output', 'btn-cp-linked-pr')" id="btn-cp-linked-pr" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all">COPY CHUỖI PROMPT</button>
+                    <!-- KHUNG ĐÓNG HỘP TÁCH BIỆT PROMPT TẠO ẢNH GPT (YÊU CẦU SỐ 1) -->
+                    <div class="lg:col-span-4 relative flex flex-col justify-between bg-gray-950 p-5 rounded-2xl border border-emerald-950/60">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2 block"><i class="fa-solid fa-palette mr-1.5"></i>Khung Toàn Bộ 88 Lệnh Tạo Ảnh (Dán GPT Plus)</span>
+                            <p class="text-[10px] text-gray-500 mb-2 leading-relaxed">Bộ câu lệnh tạo ảnh được tối ưu hóa khoảng trống vàng bên góc để phục vụ việc chèn chữ Thumbnail mượt mà.</p>
+                        </div>
+                        <textarea id="linked-gpt-prompts-output" readonly class="w-full h-44 bg-[#020617] border border-gray-800 rounded-xl p-4 font-mono text-[10px] text-gray-400 focus:outline-none resize-none"></textarea>
+                        <button onclick="copy('linked-gpt-prompts-output', 'btn-cp-linked-gpt')" id="btn-cp-linked-gpt" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2 px-4 rounded-xl shadow-lg transition-all text-center">COPY TOÀN BỘ PROMPT ẢNH</button>
+                    </div>
+
+                    <!-- KHUNG ĐÓNG HỘP TÁCH BIỆT PROMPT TẠO VIDEO FLOW (YÊU CẦU SỐ 1) -->
+                    <div class="lg:col-span-4 relative flex flex-col justify-between bg-gray-950 p-5 rounded-2xl border border-indigo-950/60">
+                        <div>
+                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block"><i class="fa-solid fa-clapperboard mr-1.5"></i>Khung Toàn Bộ 88 Lệnh Tạo Video (Dán Flow)</span>
+                            <p class="text-[10px] text-gray-500 mb-2 leading-relaxed">Bộ câu lệnh tạo chuyển động camera mượt mà, micro-expression, câm lặng 100%, không dính giọng đọc nhếch môi nói.</p>
+                        </div>
+                        <textarea id="linked-flow-prompts-output" readonly class="w-full h-44 bg-[#020617] border border-gray-800 rounded-xl p-4 font-mono text-[10px] text-gray-400 focus:outline-none resize-none"></textarea>
+                        <button onclick="copy('linked-flow-prompts-output', 'btn-cp-linked-flow')" id="btn-cp-linked-flow" class="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 px-4 rounded-xl shadow-lg transition-all text-center">COPY TOÀN BỘ PROMPT VIDEO</button>
                     </div>
                 </div>
             </div>
@@ -616,36 +636,36 @@
 
     <!-- HỆ THỐNG XỬ LÝ SỐ LIỆU & RENDER CHUYÊN SÂU -->
     <script>
-        // Cơ sở dữ liệu kịch bản, lý thuyết, cấu trúc và video SHORTS ĐỒNG HÀNH
+        // Cơ sở dữ liệu kịch bản, lý thuyết, cấu trúc và video SHORTS ĐỒNG HÀNH (SỬA ĐỔI YÊU CẦU SỐ 3: ĐỘ DÀI 15 PHÚT+)
         const nicheRoadmaps = {
             'psychology': [
-                { idx: "01", title: "시어머니가 절대 말 안 하는 속마음 5가지 (Mẹ chồng – nàng dâu)", theory: "Murray Bowen (Thuyết phân hóa gia đình)", struct: "Liệt kê 5 điều giấu kín, kể chuyện truyền cảm cảm xúc sâu lắng.", desc: "Khai thác sự cô dồn nén cảm xúc từ thế hệ trước, mong muốn được thừa nhận giá trị lao động trong nhà nhưng thể hiện bằng sự can thiệp đời sống vợ chồng trẻ...", shorts: ["시어머니가 며느리 앞 연기하는 소름 돋는 이유 #shorts", "며느리가 시댁 전화만 와도 소화가 안 되는 원인 #shorts"] },
-                { idx: "02", title: "친했던 친구와 서서히 멀어지는 뜻밖의 3가지 신호 (Bạn bè xa cách)", theory: "Robin Dunbar & Gerald Mollenhorst (Giới hạn quan hệ)", struct: "3 giai đoạn không đánh số, văn phong tự sự buồn đồng cảm sâu sắc.", desc: "Giải thích tại sao lớn lên tình bạn phai nhạt dần là tất yếu vật lý và cách chấp nhận sự ra đi của các mối quan hệ một cách thanh thản nhất.", shorts: ["친구 연락 안 올 때 절대 매달리지 마세요 #shorts", "단톡방에서 슬며시 멀어지는 절교의 신호 #shorts"] },
-                { idx: "03", title: "착한 아이 증후군: 왜 나는 거절을 못할까? (Không biết từ chối)", theory: "Pete Walker (Fawn Response - Phản ứng quy thuận)", struct: "Nhập vai nhân vật Minji trải qua áp lực công sở Hàn Quốc.", desc: "Đào sâu vào cơ chế tự vệ quy thuận khi đối mặt với chấn thương tâm lý từ bé và hướng dẫn Minji thiết lập ranh giới cá nhân.", shorts: ["거절만 해도 나쁜 사람 취급당할까 겁나나요? #shorts", "착한 사람 증후군 탈출하는 기적의 마법 한마디 #shorts"] },
-                { idx: "04", title: "부모님의 뒷모습이 갑자기 작아 보일 때 (Cha mẹ già đi)", theory: "Laura Carstensen (Thuyết SST) & 예기 슬픔 (Nỗi buồn dự báo trước)", struct: "Cấu trúc dòng thời gian hồi tưởng kết hợp tự sự trầm ấm.", desc: "Bóc tách nỗi buồn âm ỉ của những người con khi chứng kiến cha mẹ già đi trong im lặng. Phân tích tâm lý thu hẹp mối quan hệ xã hội của người già để tập trung vào gia đình.", shorts: ["엄마 아빠가 늙었다는 걸 실감하게 되는 순간들 #shorts", "부모님 살아계실 때 당장 녹음해야 할 3가지 목소리 #shorts"] },
-                { idx: "05", title: "자꾸 남과 비교하게 되는 마인드 감옥 (So sánh bản thân)", theory: "Leon Festinger (Thuyết so sánh xã hội - 1954)", struct: "Độc thoại trực tiếp ngôi thứ 2 (당신 - Bạn) để đánh mạnh vào tâm lý.", desc: "Phân tích tác động hủy hoại của văn hóa so sánh trên Instagram tại Hàn Quốc. Giải thích tại sao bộ não con người luôn có xu hướng so sánh hướng lên và cách thoát khỏi chiếc bẫy tự ti này.", shorts: ["인스타만 보면 나만 불행하다 느껴지는 진짜 원인 #shorts", "남의 인생 훔쳐보기에서 벗어나 편해지는 습관 #shorts"] }
+                { idx: "01", title: "시어머니가 절대 말 안 하는 속마음 5가지 (Mẹ chồng – nàng dâu) [15분+ 장편 kịch bản sâu sắc]", theory: "Murray Bowen (Thuyết phân hóa gia đình)", struct: "Liệt kê 5 điều giấu kín, kể chuyện truyền cảm cảm xúc sâu lắng.", desc: "Khai thác sự cô dồn nén cảm xúc từ thế hệ trước, mong muốn được thừa nhận giá trị lao động trong nhà nhưng thể hiện bằng sự can thiệp đời sống vợ chồng trẻ...", shorts: ["시어머니가 며느리 앞 연기하는 소름 돋는 이유 #shorts", "며느리가 시댁 전화만 와도 소화가 안 되는 원인 #shorts"] },
+                { idx: "02", title: "친했던 친구와 서서히 멀어지는 뜻밖의 3가지 신호 (Bạn bè xa cách) [15분+ 장편 kịch bản sâu sắc]", theory: "Robin Dunbar & Gerald Mollenhorst (Giới hạn quan hệ)", struct: "3 giai đoạn không đánh số, văn phong tự sự buồn đồng cảm sâu sắc.", desc: "Giải thích tại sao lớn lên tình bạn phai nhạt dần là tất yếu vật lý và cách chấp nhận sự ra đi của các mối quan hệ một cách thanh thản nhất.", shorts: ["친구 연락 안 올 때 절대 매달리지 마세요 #shorts", "단톡방에서 슬며시 멀어지는 절교의 신호 #shorts"] },
+                { idx: "03", title: "착한 아이 증후군: 왜 나는 거절을 못할까? (Không biết từ chối) [15분+ 장편 kịch bản sâu sắc]", theory: "Pete Walker (Fawn Response - Phản ứng quy thuận)", struct: "Nhập vai nhân vật Minji trải qua áp lực công sở Hàn Quốc.", desc: "Đào sâu vào cơ chế tự vệ quy thuận khi đối mặt với chấn thương tâm lý từ bé và hướng dẫn Minji thiết lập ranh giới cá nhân.", shorts: ["거절만 해도 나쁜 사람 취급당할까 겁나나요? #shorts", "착한 사람 증후군 탈출하는 기적의 마법 한마디 #shorts"] },
+                { idx: "04", title: "부모님의 뒷모습이 갑자기 작아 보일 때 (Cha mẹ già đi) [15분+ 장편 kịch bản sâu sắc]", theory: "Laura Carstensen (Thuyết SST) & 예기 슬픔 (Nỗi buồn dự báo trước)", struct: "Cấu trúc dòng thời gian hồi tưởng kết hợp tự sự trầm ấm.", desc: "Bóc tách nỗi buồn âm ỉ của những người con khi chứng kiến cha mẹ già đi trong im lặng. Phân tích tâm lý thu hẹp mối quan hệ xã hội của người già để tập trung vào gia đình.", shorts: ["엄마 아빠가 늙었다는 걸 실감하게 되는 순간들 #shorts", "부모님 살아계실 때 당장 녹음해야 할 3가지 목소리 #shorts"] },
+                { idx: "05", title: "자꾸 남과 비교하게 되는 마인드 감옥 (So sánh bản thân) [15분+ 장편 kịch bản sâu sắc]", theory: "Leon Festinger (Thuyết so sánh xã hội - 1954)", struct: "Độc thoại trực tiếp ngôi thứ 2 (당신 - Bạn) để đánh mạnh vào tâm lý.", desc: "Phân tích tác động hủy hoại của văn hóa so sánh trên Instagram tại Hàn Quốc. Giải thích tại sao bộ não con người luôn có xu hướng so sánh hướng lên và cách thoát khỏi chiếc bẫy tự ti này.", shorts: ["인스타만 보면 나만 불행하다 느껴지는 진짜 원인 #shorts", "남의 인생 훔쳐보기에서 벗어나 편해지는 습관 #shorts"] }
             ],
             'gaming': [
-                { idx: "01", title: "페이커(Faker)가 극심한 압박감 속에서 마인드컨트롤을 하는 법 (Tâm lý thi đấu)", theory: "Self-Regulation Theory (Thuyết tự kiểm soát cảm xúc)", struct: "Kể chuyện cinematic kết hợp phân tích giải đấu chuyên nghiệp T1.", desc: "Bóc tách cách siêu sao thể thao điện tử vĩ đại nhất thế giới giữ bình tĩnh trước hàng triệu kỳ vọng của khán giả Hàn Quốc.", shorts: ["페이커가 멘탈 무너질 때 혼잣말로 읊조리는 주문 #shorts", "롤 할 때 무조건 화 참는 3가지 멘탈 회복 습관 #shorts"] },
-                { idx: "02", title: "내가 게임만 하면 폭력적으로 변하는 진짜 심리학적 lý do (Sự ức chế game)", theory: "Frustration-Aggression Hypothesis (Giả thuyết ức chế kích hoạt bạo lực)", struct: "Phân tích khoa học hài hước kết hợp trường hợp game thủ thực tế.", desc: "Giải thích tại sao cơ chế xếp hạng của game đồng đội lại kích hoạt tối đa sự ức chế thần kinh của nam giới Hàn Quốc.", shorts: ["화나서 키보드 부숴본 사람만 보세요 #shorts", "롤 연패할 때 왜 뇌세포가 죽어가는 느낌이 날까 #shorts"] },
-                { idx: "03", title: "스팀(Steam) 할인 때 산 게임을 정작 한 번도 켜지 않는 심리 (Hội chứng mua tích trữ)", theory: "Diderot Effect (Hiệu ứng Diderot về ham muốn tích lũy)", struct: "Kịch bản khảo sát xã hội thực tế dí dỏm.", desc: "Tại sao việc sở hữu (mua game) lại tạo ra cảm giác thỏa mãn giả tạo lừa dối bộ não tốt hơn việc trải nghiệm thực tế.", shorts: ["라이브러리 속 잠든 스팀 게임 진짜 구매 심리 #shorts", "할인율 보고 혹해서 사고 안 지우는 뇌 구조 #shorts"] }
+                { idx: "01", title: "페이커(Faker)가 극심한 압박감 속에서 마인드컨트롤을 하는 법 (Tâm lý thi đấu) [15분+ 장편 kịch bản sâu sắc]", theory: "Self-Regulation Theory (Thuyết tự kiểm soát cảm xúc)", struct: "Kể chuyện cinematic kết hợp phân tích giải đấu chuyên nghiệp T1.", desc: "Bóc tách cách siêu sao thể thao điện tử vĩ đại nhất thế giới giữ bình tĩnh trước hàng triệu kỳ vọng của khán giả Hàn Quốc.", shorts: ["페이커가 멘탈 무너질 때 혼잣말로 읊조리는 주문 #shorts", "롤 할 때 무조건 화 참는 3가지 멘탈 회복 습관 #shorts"] },
+                { idx: "02", title: "내가 게임만 하면 폭력적으로 변하는 진짜 심리학적 lý do (Sự ức chế game) [15분+ 장편 kịch bản sâu sắc]", theory: "Frustration-Aggression Hypothesis (Giả thuyết ức chế kích hoạt bạo lực)", struct: "Phân tích khoa học hài hước kết hợp trường hợp game thủ thực tế.", desc: "Giải thích tại sao cơ chế xếp hạng của game đồng đội lại kích hoạt tối đa sự ức chế thần kinh của nam giới Hàn Quốc.", shorts: ["화나서 키보드 부숴본 사람만 보세요 #shorts", "롤 연패할 때 왜 뇌세포가 죽어가는 느낌이 날까 #shorts"] },
+                { idx: "03", title: "스팀(Steam) 할인 때 산 게임을 정작 한 번도 켜지 않는 심리 (Hội chứng mua tích trữ) [15분+ 장편 kịch bản sâu sắc]", theory: "Diderot Effect (Hiệu ứng Diderot về ham muốn tích lũy)", struct: "Kịch bản khảo sát xã hội thực tế dí dỏm.", desc: "Tại sao việc sở hữu (mua game) lại tạo ra cảm giác thỏa mãn giả tạo lừa dối bộ não tốt hơn việc trải nghiệm thực tế.", shorts: ["라이브러리 속 잠든 스팀 게임 진짜 구매 심리 #shorts", "할인율 보고 혹해서 사고 안 지우는 뇌 구조 #shorts"] }
             ],
             'tech': [
-                { idx: "01", title: "인공지능(AI) 시대에 평범한 개발자가 살아남는 3가지 생존 전략 (Kỹ sư sống sót)", theory: "Law of Accelerating Returns (Định luật gia tốc Ray Kurzweil)", struct: "Tự sự của một kỹ sư IT lâu năm tại Seoul, ngôi thứ 1.", desc: "Phân tích làn sóng sa thải tại thung lũng IT Hàn Quốc (Pangyo) và hướng đi mới cho lập trình viên thích nghi với AI.", shorts: ["AI에 대체당할 개발자 vs 대체 불가능할 개발자 #shorts", "챗GPT가 절대 따라할 수 없는 코딩 영역 #shorts"] },
-                { idx: "02", title: "우리가 스마트폰 알림에 24시간 집착하는 뇌과학적 비밀 (Nghiện điện thoại)", theory: "Dopamine Loop & Intermittent Reinforcement", struct: "Thuyết trình khoa học dễ hiểu, mô phỏng sinh động họa 2D.", desc: "Bóc tách cách các ứng dụng mạng xã hội tại Hàn cấu trúc nút thông báo để thao túng chất hóa học thần kinh của bạn.", shorts: ["도파민 중독에서 도망쳐 무음 처리해야 할 진짜 비밀 #shorts", "잠자기 전 폰 볼 때 뇌에서 경보음이 울린다 #shorts"] },
-                { idx: "03", title: "애플(Apple) 브랜딩이 당신의 자아정체성을 지배하는 방식 (Hiệu ứng cuồng Apple)", theory: "Brand Congruence Theory (Sự đồng điệu thương hiệu cá nhân)", struct: "Phân tích chiến dịch marketing lịch sử đối chiếu tâm lý Gen Z Seoul.", desc: "Tại sao việc sở hữu chiếc iPhone lại trở thành thước đo ranh giới phân cấp xã hội học đường khắt khe của học sinh cấp 3 Hàn Quốc.", shorts: ["애플 로고가 명품 가방보다 자존감 지켜주는 이유 #shorts", "감성이라는 마케팅에 지갑 통째로 바치는 뇌과학 #shorts"] }
+                { idx: "01", title: "인공지능(AI) 시대에 평범한 개발자가 살아남는 3가지 생존 전략 (Kỹ sư sống sót) [15분+ 장편 kịch bản sâu sắc]", theory: "Law of Accelerating Returns (Định luật gia tốc Ray Kurzweil)", struct: "Tự sự của một kỹ sư IT lâu năm tại Seoul, ngôi thứ 1.", desc: "Phân tích làn sóng sa thải tại thung lũng IT Hàn Quốc (Pangyo) và hướng đi mới cho lập trình viên thích nghi với AI.", shorts: ["AI에 대체당할 개발자 vs 대체 불가능할 개발자 #shorts", "챗GPT가 절대 따라할 수 없는 코딩 영역 #shorts"] },
+                { idx: "02", title: "우리가 스마트폰 알림에 24시간 집착하는 뇌과학적 비밀 (Nghiện điện thoại) [15분+ 장편 kịch bản sâu sắc]", theory: "Dopamine Loop & Intermittent Reinforcement", struct: "Thuyết trình khoa học dễ hiểu, mô phỏng sinh động họa 2D.", desc: "Bóc tách cách các ứng dụng mạng xã hội tại Hàn cấu trúc nút thông báo để thao túng chất hóa học thần kinh của bạn.", shorts: ["도파민 중독에서 도망쳐 무음 처리해야 할 진짜 비밀 #shorts", "잠자기 전 폰 볼 때 뇌에서 경보음이 울린다 #shorts"] },
+                { idx: "03", title: "애플(Apple) 브랜딩이 당신의 자아정체성을 지배하는 방식 (Hiệu ứng cuồng Apple) [15분+ 장편 kịch bản sâu sắc]", theory: "Brand Congruence Theory (Sự đồng điệu thương hiệu cá nhân)", struct: "Phân tích chiến dịch marketing lịch sử đối chiếu tâm lý Gen Z Seoul.", desc: "Tại sao việc sở hữu chiếc iPhone lại trở thành thước đo ranh giới phân cấp xã hội học đường khắt khe của học sinh cấp 3 Hàn Quốc.", shorts: ["애플 로고가 명품 가방보다 자존감 지켜주는 이유 #shorts", "감성이라는 마케팅에 지갑 통째로 바치는 뇌과학 #shorts"] }
             ],
             'finance': [
-                { idx: "01", title: "월급 250만 원 직장인이 3년 안에 현실적으로 1억 모으는 비결 (Tiền tích lũy)", theory: "Delayed Gratification (Thuyết trì hoãn sự thỏa mãn)", struct: "Bảng biểu tính toán thực tế, ngôi thứ 2 당신 thuyết phục.", desc: "Xây dựng sơ đồ phân bổ dòng tiền khắc nghiệt giúp người trẻ Hàn thoát khỏi chiếc bẫy tiêu sản sang chảnh giả tạo.", shorts: ["3년 1억 모으기 불가능이라 외치는 사람들 특징 #shorts", "스타벅스 끊고 3억 아낀다는 말 진짜 통장 인증 #shorts"] },
-                { idx: "02", title: "주식 코인 시장에서 매번 고점에 물리는 사람들의 3가지 심리 (Tâm lý đu đỉnh)", theory: "FOMO Effect & Loss Aversion Theory (Hiệu ứng FOMO và thuyết ghét thua lỗ)", struct: "Case study phân tích hành vi của một nhà đầu tư cá nhân.", desc: "Bóc tách tâm lý bầy đàn khiến hàng triệu người chơi coin tại Hàn Quốc vô thức đổ tiền vào các dự án rác.", shorts: ["나 빼고 다 주식 대박 난 것 같은 군중 소외 심리 #shorts", "손실 나고도 손절 못하는 고통의 집착 원인 #shorts"] }
+                { idx: "01", title: "월급 250만 원 직장인이 3년 안에 현실적으로 1억 모으는 비결 (Tiền tích lũy) [15분+ 장편 kịch bản sâu sắc]", theory: "Delayed Gratification (Thuyết trì hoãn sự thỏa mãn)", struct: "Bảng biểu tính toán thực tế, ngôi thứ 2 당신 thuyết phục.", desc: "Xây dựng sơ đồ phân bổ dòng tiền khắc nghiệt giúp người trẻ Hàn thoát khỏi chiếc bẫy tiêu sản sang chảnh giả tạo.", shorts: ["3년 1억 모으기 불가능이라 외치는 사람들 특징 #shorts", "스타벅스 끊고 3억 아낀다는 말 진짜 통장 인증 #shorts"] },
+                { idx: "02", title: "주식 코인 시장에서 매번 고점에 물리는 사람들의 3가지 심리 (Tâm lý đu đỉnh) [15분+ 장편 kịch bản sâu sắc]", theory: "FOMO Effect & Loss Aversion Theory (Hiệu ứng FOMO và thuyết ghét thua lỗ)", struct: "Case study phân tích hành vi của một nhà đầu tư cá nhân.", desc: "Bóc tách tâm lý bầy đàn khiến hàng triệu người chơi coin tại Hàn Quốc vô thức đổ tiền vào các dự án rác.", shorts: ["나 빼고 다 주식 대박 난 것 같은 군중 소외 심리 #shorts", "손실 나고도 손절 못하는 고통의 집착 원인 #shorts"] }
             ],
             'cooking': [
-                { idx: "01", title: "한국 길거리 오뎅국물이 유독 겨울 밤에 더 맛있는 과학적 비밀 (Mùa đông ẩm thực)", theory: "Sensory Marketing & Thermal Comfort Theory", struct: "Hành trình trải nghiệm đêm mưa Seoul.", desc: "Mối liên hệ thần kinh giữa nhiệt độ lạnh giá bên ngoài ga tàu và các kích thích vị giác của nước dùng om cay nóng.", shorts: ["포장마차 오뎅 국물 마실 때 나오는 중독 호르몬 #shorts", "추운 겨울밤 어묵 꼬치가 우리 뇌를 지탱한다 #shorts"] },
-                { idx: "02", title: "외국인들이 한국의 불닭볶음면에 미치도록 중독되는 진짜 비결 (V vị cay nghiện)", theory: "Endorphin Compensation Effect (Sự bù đắp hoóc-môn Endorphin)", struct: "Thực nghiệm ẩm thực kết hợp phân tích y học cơ thể.", desc: "Tại sao cảm giác bỏng rát của ớt lại kích hoạt hoóc-môn giảm stress cực độ của người Hàn sau giờ làm việc căng thẳng.", shorts: ["불닭 먹으면서 눈물 흘려도 기분 좋아지는 호르몬 #shorts", "우울할 때 매운 음식을 굳い 먹으려 하는 뇌 구조 #shorts"] }
+                { idx: "01", title: "한국 길거리 오뎅국물이 유독 겨울 밤에 더 맛있는 과학적 비밀 (Mùa đông ẩm thực) [15분+ 장편 kịch bản sâu sắc]", theory: "Sensory Marketing & Thermal Comfort Theory", struct: "Hành trình trải nghiệm đêm mưa Seoul.", desc: "Mối liên hệ thần kinh giữa nhiệt độ lạnh giá bên ngoài ga tàu và các kích thích vị giác của nước dùng om cay nóng.", shorts: ["포장마차 오뎅 국물 마실 때 나오는 중독 호르몬 #shorts", "추운 겨울밤 어묵 꼬치가 우리 뇌를 지탱한다 #shorts"] },
+                { idx: "02", title: "외국인들이 한국의 불닭볶음면에 미치도록 중독되는 진짜 비결 (V vị cay nghiện) [15분+ 장편 kịch bản sâu sắc]", theory: "Endorphin Compensation Effect (Sự bù đắp hoóc-môn Endorphin)", struct: "Thực nghiệm ẩm thực kết hợp phân tích y học cơ thể.", desc: "Tại sao cảm giác bỏng rát của ớt lại kích hoạt hoóc-môn giảm stress cực độ của người Hàn sau giờ làm việc căng thẳng.", shorts: ["불닭 먹으면서 눈물 흘려도 기분 좋아지는 호르몬 #shorts", "우울할 때 매운 음식을 굳い 먹으려 하는 뇌 구조 #shorts"] }
             ],
             'personal-dev': [
-                { idx: "01", title: "의지력이 아니라 '환경'을 바꿔야 아침 5시에 일어나는 과학 (Kỷ luật dậy sớm)", theory: "Choice Architecture (Thuyết kiến trúc lựa chọn - Thaler)", struct: "Thử thách thực tế 21 ngày, phân tích khoa học hành vi.", desc: "Tại sao việc dùng báo thức lặp lại vô dụng và cách thiết kế phòng ngủ ép bộ não tỉnh táo lập tức.", shorts: ["아침 5시 기상 알람 소리 없이 1초 만 에 눈 뜨는 비결 #shorts", "미라클 모닝 3일 만에 포기하는 사람들의 특징 #shorts"] },
-                { idx: "02", title: "만성 미루기 습관(Procrastination)에서 완벽히 탈출하는 법 (Thoát trì hoãn)", theory: "Temporal Discounting Theory (Sự chiết khấu thời gian tâm lý)", struct: "Sơ đồ giải pháp micro-steps.", desc: "Bóc tách nỗi sợ thất bại ẩn sau hành vi trì hoãn và cách chia nhỏ mục tiêu thành các hành động dưới 2 phút.", shorts: ["할 일 미룰 때 뇌에서 분비되는 스트레스 독소 물질 #shorts", "의지박약자가 당장 실행력을 10배 끌어올리는 비결 #shorts"] }
+                { idx: "01", title: "의지력이 아니라 '환경'을 바꿔야 아침 5시에 일어나는 과학 (Kỷ luật dậy sớm) [15분+ 장편 kịch bản sâu sắc]", theory: "Choice Architecture (Thuyết kiến trúc lựa chọn - Thaler)", struct: "Thử thách thực tế 21 ngày, phân tích khoa học hành vi.", desc: "Tại sao việc dùng báo thức lặp lại vô dụng và cách thiết kế phòng ngủ ép bộ não tỉnh táo lập tức.", shorts: ["아침 5시 기상 알람 소리 없이 1초 만 에 눈 뜨는 비결 #shorts", "미라클 모닝 3일 만에 포기하는 사람들의 특징 #shorts"] },
+                { idx: "02", title: "만성 미루기 습관(Procrastination)에서 완벽히 탈출하는 법 (Thoát trì hoãn) [15분+ 장편 kịch bản sâu sắc]", theory: "Temporal Discounting Theory (Sự chiết khấu thời gian tâm lý)", struct: "Sơ đồ giải pháp micro-steps.", desc: "Bóc tách nỗi sợ thất bại ẩn sau hành vi trì hoãn và cách chia nhỏ mục tiêu thành các hành động dưới 2 phút.", shorts: ["할 일 미룰 때 뇌에서 분비되는 스트레스 독소 물질 #shorts", "의지박약자가 당장 실행력을 10배 끌어올리는 비결 #shorts"] }
             ]
         };
 
@@ -758,6 +778,7 @@
             renderDailyScheduler();
         }
 
+        // SỬA ĐỒNG BỘ CHECKBOX SHORTS 2
         function toggleShorts2Complete() {
             const niche = document.getElementById('channel-niche-select').value;
             const activeIdx = document.getElementById('topic-active-idx').innerText.replace('#', '');
@@ -782,7 +803,7 @@
             }
         }
 
-        // ĐỒNG BỘ LỊCH TRÌNH TỪ CHECKBOX LỊCH TRÌNH HẰNG NGÀY (YÊU CẦU SỐ 5)
+        // ĐỒNG BỘ LỊCH TRÌNH TỪ CHECKBOX LỊCH TRÌNH HẰNG NGÀY (SỬA ĐỔI YÊU CẦU SỐ 5: ĐỒNG BỘ CỰC MẠNH)
         function toggleScheduleFromCalendar(dayIndex) {
             const niche = document.getElementById('channel-niche-select').value;
             const topics = nicheRoadmaps[niche] || [];
@@ -809,7 +830,23 @@
             }
         }
 
-        // DỰNG LỊCH TRÌNH SẢN XUẤT 7 NGÀY THEO NGÁCH KÊNH ĐA DẠNG (YÊU CẦU SỐ 4 & 5)
+        // SỬA ĐỔI YÊU CẦU SỐ 3: PHƯƠNG THỨC NẠP SHORTS SANG VIẾT KỊCH BẢN CHO CLAUDE
+        function sendShortsToClaude(shortsNum) {
+            const niche = document.getElementById('channel-niche-select').value;
+            const activeIdx = document.getElementById('topic-active-idx').innerText.replace('#', '');
+            const topics = nicheRoadmaps[niche] || [];
+            const t = topics.find(item => item.idx === activeIdx);
+
+            if (t && t.shorts) {
+                const shortsTitle = t.shorts[shortsNum - 1];
+                document.getElementById('script-title').value = `${shortsTitle} (Video Ngắn #shorts)`;
+                document.getElementById('script-struct').value = `Độ dài: 60 giây, Kịch bản Shorts nhịp điệu nhanh giật gân, phân cảnh biểu cảm [Silent video directive, NO mouth moving, NO talking, NO voiceover overlays].`;
+                updateScriptPrompt();
+                switchPanel('p-script');
+            }
+        }
+
+        // DỰNG LỊCH TRÌNH SẢN XUẤT 7 NGÀY THEO NGÁCH KÊNH ĐA DẠNG (SỬA ĐỔI YÊU CẦU SỐ 4: TĂNG MẬT ĐỘ LỊCH TRÌNH SONG HÀNH MẬT ĐỘ CAO)
         function renderDailyScheduler() {
             const container = document.getElementById('daily-scheduler-container');
             if (!container) return;
@@ -831,14 +868,15 @@
             const day5Done = localStorage.getItem(getStorageKey(niche, t2.idx, 'shorts1')) === 'true';
             const day6Done = localStorage.getItem(getStorageKey(niche, t2.idx, 'shorts2')) === 'true';
             
+            // LỊCH TRÌNH PHÂN CÔNG ĐA NHIỆM MẬT ĐỘ CAO (HIGH-DENSITY MULTI-TASKING SYSTEM)
             const daysConfig = [
-                { day: 1, title: "Ngày 1: Video Dài #01", task: `Sản xuất: "${t1.title.substring(0, 18)}..."`, done: day1Done },
-                { day: 2, title: "Ngày 2: Shorts #1.1", task: `Sản xuất: "${t1.shorts ? t1.shorts[0].substring(0, 18) : 'Shorts #1'}..."`, done: day2Done },
-                { day: 3, title: "Ngày 3: Shorts #1.2", task: `Sản xuất: "${t1.shorts ? t1.shorts[1].substring(0, 18) : 'Shorts #2'}..."`, done: day3Done },
-                { day: 4, title: "Ngày 4: Video Dài #02", task: `Sản xuất: "${t2.title.substring(0, 18)}..."`, done: day4Done },
-                { day: 5, title: "Ngày 5: Shorts #2.1", task: `Sản xuất: "${t2.shorts ? t2.shorts[0].substring(0, 18) : 'Shorts #1'}..."`, done: day5Done },
-                { day: 6, title: "Ngày 6: Shorts #2.2", task: `Sản xuất: "${t2.shorts ? t2.shorts[1].substring(0, 18) : 'Shorts #2'}..."`, done: day6Done },
-                { day: 7, title: "Ngày 7: Review & Analytics", task: "Phân tích file CSV, đọc báo cáo SEO và lên kịch bản tuần tới", done: false }
+                { day: 1, title: "Thứ 2: Kịch Bản Kịch Trần", task: `Claude: Soạn kịch bản dài 15p+ cho "${t1.title.substring(0, 15)}..." & lên mạch phân cảnh cho 2 Video Shorts đồng hành.`, done: day1Done },
+                { day: 2, title: "Thứ 3: Đồ Họa & Tạo Nhạc", task: `GPT: Dựng toàn bộ ảnh Thumbnail & bối cảnh 2D flat cho Video dài. Suno: Render nhạc nền lofi sáo trúc cho 2 tệp kịch bản Shorts.`, done: day2Done },
+                { day: 3, title: "Thứ 4: Diễn Hoạt Flow 8s", task: `Flow: Dựng chuyển động câm (Silent micro-expression) cho Video dài. TTS: Thu âm giọng đọc trí tuệ nhân tạo (Korean voice).`, done: day3Done },
+                { day: 4, title: "Thứ 5: Diễn Hoạt Shorts", task: `Flow: Dựng diễn hoạt chuyển động cho 2 Video Shorts. CapCut: Ghép nối toàn bộ tệp âm thanh, dựng thô dòng thời gian CapCut.`, done: day4Done },
+                { day: 5, title: "Thứ 6: Chuẩn Hóa Phụ Đề", task: `Gemini: Lọc lỗi chính tả phụ đề tiếng Hàn (띄어쓰기) cho file SRT video dài & Shorts. Thiết kế bộ thẻ SEO keywords.`, done: day5Done },
+                { day: 6, title: "Thứ 7: Render & Lên Lịch", task: `CapCut: Hoàn thiện render 4K video dài & Shorts. YouTube Studio: Tải tệp lên, chèn mốc thời gian Timeline mô tả & lên lịch phát sóng.`, done: day6Done },
+                { day: 7, title: "Chủ Nhật: Đo Lường & Trend", task: "Nạp file CSV vidIQ để AI chấm điểm sụt giảm. Nghiên cứu Naver/YouTube Hàn Quốc để chuẩn bị kịch bản cho tuần tiếp theo.", done: false }
             ];
 
             daysConfig.forEach(d => {
@@ -960,37 +998,42 @@ Perform these tasks strictly in South Korean language (한국어):
             }
         }
 
-        // LIÊN THÔNG BỘ PROMPT: PHÂN TÍCH KỊCH BẢN CLAUDE THÀNH PROMPT CHUỖI CÁCH NHAU DẤU XUỐNG DÒNG
+        // LIÊN THÔNG BỘ PROMPT: PHÂN TÍCH KỊCH BẢN CLAUDE THÀNH PROMPT CHUỖI CÁCH NHAU DẤU XUỐNG DÒNG (SỬA ĐỔI YÊU CẦU SỐ 1: CHIA TÁCH BẢNG KHUNG TẠO ẢNH VÀ VIDEO RIÊNG BIỆT)
         function generateLinkedPrompts() {
             const rawScript = document.getElementById('claude-script-pasted').value;
-            const outputBox = document.getElementById('linked-prompts-output');
+            const gptOutputBox = document.getElementById('linked-gpt-prompts-output');
+            const flowOutputBox = document.getElementById('linked-flow-prompts-output');
 
             if (!rawScript.trim()) {
-                outputBox.value = "Chưa có kịch bản thô. Hãy dán kịch bản Claude của bạn vào ô bên trái để bóc tách tự động!";
+                if (gptOutputBox) gptOutputBox.value = "Chưa có kịch bản. Hãy dán kịch bản Claude vào!";
+                if (flowOutputBox) flowOutputBox.value = "Chưa có kịch bản. Hãy dán kịch bản Claude vào!";
                 return;
             }
 
             // Phân giải các dòng hoặc tìm các đoạn mô tả bối cảnh [brackets]
             const sceneMatches = rawScript.match(/\[(.*?)\]/g) || [];
-            let formattedPrompts = "";
+            let gptPrompts = "";
+            let flowPrompts = "";
 
             if (sceneMatches.length === 0) {
-                // Nếu kịch bản không chứa bối cảnh dấu ngoặc vuông [], tự tạo prompt mẫu dựa vào 3 dòng đầu
                 const lines = rawScript.split('\n').filter(l => l.trim().length > 15).slice(0, 3);
                 lines.forEach((l, i) => {
                     const idx = i + 1;
-                    formattedPrompts += `${idx}: Cinematic shot of ${l.substring(0, 50).trim()}, horizontal 16:9, minimalist flat 2D vector animated illustration style, Korean healing aesthetic, NO talking, NO mouth moving, NO text\n\n`;
+                    const actionSnippet = l.substring(0, 50).replace(/[\[\]]/g, '').trim();
+                    gptPrompts += `${idx}: Cinematic photo sill, focus on ${actionSnippet}, Aspect ratio 16:9, off-center composition with massive empty negative space on left, minimalist flat 2D vector animated illustration style, Korean healing aesthetic, NO text, NO alphabets\n\n`;
+                    flowPrompts += `${idx}: Slow motion video clip, 8-second pacing, ${actionSnippet}, vertical panning, hyper-realistic, micro-expressions (watery eyes, deep sigh), silent cinematic, NO talking, NO mouth moving, NO voiceover overlays, 24fps smooth motion blur\n\n`;
                 });
             } else {
                 sceneMatches.forEach((match, i) => {
                     const idx = i + 1;
                     const cleanedScene = match.replace('[', '').replace(']', '').trim();
-                    // Tạo chuỗi liên kết prompt ngăn cách nhau bằng dấu xuống dòng \n\n
-                    formattedPrompts += `${idx}: ${cleanedScene}, horizontal 16:9, minimalist flat 2D vector animated illustration style, Korean healing aesthetic, NO talking, NO mouth moving, NO text\n\n`;
+                    gptPrompts += `${idx}: Cinematic photo sill, focus on ${cleanedScene}, Aspect ratio 16:9, off-center composition with massive empty negative space on left, minimalist flat 2D vector animated illustration style, Korean healing aesthetic, NO text, NO alphabets\n\n`;
+                    flowPrompts += `${idx}: Slow motion video clip, 8-second pacing, ${cleanedScene}, vertical panning, hyper-realistic, micro-expressions (watery eyes, deep sigh), silent cinematic, NO talking, NO mouth moving, NO voiceover overlays, 24fps smooth motion blur\n\n`;
                 });
             }
 
-            outputBox.value = formattedPrompts.trim();
+            if (gptOutputBox) gptOutputBox.value = gptPrompts.trim();
+            if (flowOutputBox) flowOutputBox.value = flowPrompts.trim();
         }
 
         // TỰ ĐỘNG BẢN VÁ PHÂN TÍCH SỬA ĐA LỖI (INTERACTIVE MULTI-ERROR PATCH)
@@ -1397,7 +1440,7 @@ Perform these tasks strictly in South Korean language (한국어):
         }
 
         // ==========================================
-        // LÕI XỬ LÝ QUẢN LÝ PROMPT HÀNG LOẠT (BULK PORTAL)
+        // LÕI XỬ LÝ QUẢN LÝ PROMPT HÀNG LOẠT (SỬA ĐỔI YÊU CẦU SỐ 2: TÁCH RIÊNG KHUNG TẠO ẢNH GPT & VIDEO FLOW SONG SONG)
         // ==========================================
 
         function changeGlobalRatio(ratio) {
@@ -1483,8 +1526,9 @@ Perform these tasks strictly in South Korean language (한국어):
                 card.id = `card-block-${idx}`;
                 card.className = `bg-[#0d131f] border border-gray-800 p-5 rounded-2xl flex flex-col space-y-4 relative hover:border-gray-700 transition-all shadow-md ${activeOpacityClass}`;
                 
+                // MẬT ĐỘ THIẾT KẾ ĐÓNG KHUNG RIÊNG BIỆT GP PHỔ THÔNG CHO GPT & FLOW TRỰC QUAN (SỬA ĐỔI YÊU CẦU SỐ 2)
                 card.innerHTML = `
-                    <div class="flex justify-between items-center">
+                    <div class="flex justify-between items-center border-b border-gray-800/80 pb-3">
                         <span class="bg-indigo-950 text-indigo-400 text-xs font-extrabold px-3 py-1 rounded-lg">DÒNG PROMPT SỐ ${idx}</span>
                         <div class="flex items-center space-x-3">
                             <label class="flex items-center space-x-1.5 cursor-pointer bg-[#05070f] px-2.5 py-1.5 rounded-lg border border-gray-800 hover:bg-gray-800/40 transition-all select-none">
@@ -1501,18 +1545,22 @@ Perform these tasks strictly in South Korean language (한국어):
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Khung sao chép ảnh GPT -->
-                        <div class="relative bg-gray-950 p-4 rounded-xl border border-emerald-950/60">
-                            <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-palette mr-1.5"></i>Lệnh Tạo Ảnh (GPT Plus)</p>
-                            <p class="text-[11px] font-mono text-gray-400 leading-relaxed break-words pr-12 select-all h-20 overflow-y-auto" id="pr-gpt-text-${idx}">${finalGptPrompt}</p>
-                            <button onclick="copy('pr-gpt-text-${idx}', 'btn-gpt-${idx}')" id="btn-gpt-${idx}" class="absolute bottom-2 right-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[9px] py-1 px-2.5 rounded shadow transition-all">COPY</button>
+                        <!-- Khung sao chép ảnh GPT riêng biệt -->
+                        <div class="relative bg-gray-950 p-4 rounded-xl border border-emerald-950/60 flex flex-col justify-between h-48">
+                            <div>
+                                <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-palette mr-1.5"></i>Lệnh Tạo Ảnh (GPT Plus / DALL-E 3)</p>
+                                <p class="text-xs font-mono text-gray-400 leading-relaxed break-words overflow-y-auto max-h-24 select-all" id="pr-gpt-text-${idx}">${finalGptPrompt}</p>
+                            </div>
+                            <button onclick="copy('pr-gpt-text-${idx}', 'btn-gpt-${idx}')" id="btn-gpt-${idx}" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] py-1.5 rounded-lg shadow transition-all">COPY PROMPT ẢNH</button>
                         </div>
 
-                        <!-- Khung sao chép video Flow Omni -->
-                        <div class="relative bg-gray-950 p-4 rounded-xl border border-indigo-950/60">
-                            <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-clapperboard mr-1.5"></i>Lệnh Tạo Video (Flow Omni 8s)</p>
-                            <p class="text-[11px] font-mono text-gray-400 leading-relaxed break-words pr-12 select-all h-20 overflow-y-auto" id="pr-flow-text-${idx}">${finalFlowPrompt}</p>
-                            <button onclick="copy('pr-flow-text-${idx}', 'btn-flow-${idx}')" id="btn-flow-${idx}" class="absolute bottom-2 right-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[9px] py-1 px-2.5 rounded shadow transition-all">COPY</button>
+                        <!-- Khung sao chép video Flow Omni riêng biệt -->
+                        <div class="relative bg-gray-950 p-4 rounded-xl border border-indigo-950/60 flex flex-col justify-between h-48">
+                            <div>
+                                <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-clapperboard mr-1.5"></i>Lệnh Tạo Video (Flow Omni 8s)</p>
+                                <p class="text-xs font-mono text-gray-400 leading-relaxed break-words overflow-y-auto max-h-24 select-all" id="pr-flow-text-${idx}">${finalFlowPrompt}</p>
+                            </div>
+                            <button onclick="copy('pr-flow-text-${idx}', 'btn-flow-${idx}')" id="btn-flow-${idx}" class="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] py-1.5 rounded-lg shadow transition-all">COPY PROMPT VIDEO</button>
                         </div>
                     </div>
                 `;
