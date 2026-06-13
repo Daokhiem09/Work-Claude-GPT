@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사연심리 AI Analyst & Audit Hub v6.2</title>
+    <title>사연심리 AI Analyst & Audit Hub v6.4</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Nhúng Chart.js để vẽ biểu đồ phân tích chuyên nghiệp như GPT -->
+    <!-- Nhúng Chart.js vẽ biểu đồ phân tích chuyên nghiệp như GPT -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { font-family: 'Plus Jakarta Sans', 'Noto Sans KR', sans-serif; background-color: #030712; }
         .app-panel { display: none; }
-        /* SỬA LỖI TẠI ĐÂY: Ép chiều rộng và hướng hiển thị chuẩn cho panel hoạt động */
-        .app-panel.active { display: flex; flex-direction: column; width: 100%; }
+        /* SỬA LỖI CUỘN TRANG TRIỆT ĐỂ: Thay vì flex, dùng block để trang cuộn tự nhiên 100% */
+        .app-panel.active { display: block; width: 100%; }
         .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
         .active-tab { border-color: #6366f1; background-color: #1e1b4b; color: #818cf8; }
         ::-webkit-scrollbar { width: 6px; }
@@ -22,10 +22,10 @@
         ::-webkit-scrollbar-thumb:hover { background: #374151; }
     </style>
 </head>
-<body class="text-gray-100 min-h-screen flex overflow-hidden">
+<body class="text-gray-100 h-screen w-screen overflow-hidden flex bg-[#030712]">
 
     <!-- SIDEBAR MENU BÊN TRÁI -->
-    <aside class="w-80 bg-[#090d16] border-r border-gray-800/80 flex flex-col justify-between select-none shrink-0">
+    <aside class="w-80 bg-[#090d16] border-r border-gray-800/80 flex flex-col justify-between select-none shrink-0 h-full">
         <div>
             <!-- Header Brand -->
             <div class="p-6 border-b border-gray-800/80">
@@ -33,20 +33,26 @@
                     <span class="text-2xl">🧠</span>
                     <div>
                         <h1 class="text-base font-extrabold text-white tracking-wide uppercase">사연심리 AI Hub</h1>
-                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Premium Analyst v6.2</p>
+                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-widest">Multi-Niche v6.4</p>
                     </div>
                 </div>
-                <div class="mt-3 bg-indigo-950/40 border border-indigo-800/40 rounded-xl p-2.5 flex items-center space-x-2">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-                    </span>
-                    <span class="text-[10px] text-gray-300 font-medium">Bản quyền: Gemini Pro & Claude Team</span>
+                
+                <!-- BỘ CHỌN NGÁCH KÊNH ĐA DẠNG (NEW) -->
+                <div class="mt-3">
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Chủ đề / Ngách Kênh:</label>
+                    <select id="channel-niche-select" onchange="handleNicheChange()" class="w-full bg-[#05070f] border border-gray-800 rounded-xl p-2.5 text-xs text-indigo-400 font-extrabold focus:outline-none focus:border-indigo-500">
+                        <option value="psychology">🧠 사연심리 (Tâm lý câu chuyện)</option>
+                        <option value="gaming">🎮 게임 (Trò chơi/Gaming)</option>
+                        <option value="tech">💻 공학 & IT (Công nghệ & Phần mềm)</option>
+                        <option value="finance">💵 비즈니스 & 금융 (Tài chính & Kinh doanh)</option>
+                        <option value="cooking">🍳 음식 & 요리 (Ẩm thực & Nấu ăn)</option>
+                        <option value="personal-dev">🌱 자기계발 (Phát triển bản thân)</option>
+                    </select>
                 </div>
             </div>
 
             <!-- Menu Navigation -->
-            <nav class="p-4 space-y-1.5">
+            <nav class="p-4 space-y-1.5 overflow-y-auto max-h-[calc(100vh-250px)]">
                 <p class="px-3 text-[10px] font-extrabold text-gray-500 uppercase tracking-widest mb-3">AI CHẨN ĐOÁN KÊNH</p>
                 
                 <button onclick="switchPanel('dashboard')" id="n-dashboard" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-xl shadow-indigo-950/50">
@@ -58,7 +64,7 @@
                 </button>
                 
                 <button onclick="switchPanel('roadmap')" id="n-roadmap" class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition text-gray-400 hover:bg-gray-800/30">
-                    <i class="fa-solid fa-compass w-5 text-center text-base"></i> <span>Lộ Trình 10 Video Tiếp Theo</span>
+                    <i class="fa-solid fa-compass w-5 text-center text-base"></i> <span>Lộ Trình 10 Video Mới</span>
                 </button>
 
                 <p class="px-3 text-[10px] font-extrabold text-gray-500 uppercase tracking-widest pt-4 pb-2">XỬ LÝ HÀNG LOẠT</p>
@@ -90,15 +96,15 @@
     </aside>
 
     <!-- MAIN CONTENT CONTAINER -->
-    <!-- SỬ LÝ LỖI CUỘN TRANG: Loại bỏ flex co giãn trên main để thanh cuộn dọc được tính toán tự do mượt mà -->
-    <main class="flex-1 bg-[#05070f] overflow-y-auto relative">
+    <!-- SỬA LỖI CUỘN TRANG: h-screen kết hợp overflow-y-auto để cuộn mượt mà không bao giờ bị khóa -->
+    <main class="flex-1 bg-[#05070f] overflow-y-auto h-screen pb-24 p-10 relative">
         
         <!-- 1. PANEL: BÁO CÁO PHÂN TÍCH TỔNG QUAN (DASHBOARD GPT-STYLE) -->
-        <div id="dashboard" class="app-panel p-10 flex-col space-y-8 active">
+        <div id="dashboard" class="app-panel space-y-8 active">
             <div class="border-l-4 border-indigo-500 pl-6 flex justify-between items-end">
                 <div>
                     <h2 class="text-3xl font-extrabold text-white tracking-tight">Hệ Thống Phân Tích Kênh Chuyên Sâu</h2>
-                    <p class="text-gray-400 text-sm mt-1">Dán file CSV của bạn để thuật toán phân tích số liệu tương quan và đưa ra báo cáo chi tiết như GPT.</p>
+                    <p class="text-gray-400 text-sm mt-1">Nạp tệp CSV xuất từ vidIQ hoặc YouTube Studio để tự động đo lường đa kênh.</p>
                 </div>
                 <!-- NÚT CHỌN FILE -->
                 <div>
@@ -111,7 +117,7 @@
             <div id="dropzone" class="border-2 border-dashed border-gray-700/60 hover:border-indigo-500 hover:bg-indigo-950/15 transition-all rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer glass">
                 <i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-400 mb-3 animate-bounce"></i>
                 <h3 class="text-base font-bold text-white mb-1">Kéo và thả tệp CSV xuất từ vidIQ vào đây</h3>
-                <p class="text-xs text-gray-400 max-w-md">Công cụ sẽ tự động phân tích toàn diện dữ liệu, vẽ biểu đồ tương quan và chẩn đoán kịch bản tối ưu hóa.</p>
+                <p class="text-xs text-gray-400 max-w-md">Công cụ hỗ trợ chẩn đoán cho mọi dạng tệp CSV đa ngách kênh khác nhau.</p>
                 <input type="file" id="csv-input" accept=".csv" class="hidden">
                 <button onclick="document.getElementById('csv-input').click()" class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2 px-4 rounded-xl transition-all">Chọn File Thủ Công</button>
             </div>
@@ -131,12 +137,12 @@
                 <div class="glass p-6 rounded-2xl border border-gray-800">
                     <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Tỷ Lệ Video Bị Cảnh Báo Lỗi</span>
                     <h3 id="db-error-rate" class="text-4xl font-black text-red-400 mt-2">--</h3>
-                    <p class="text-[11px] text-gray-400 mt-1">Cần sửa đổi Metadata gấp</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Cần sửa đổi gấp</p>
                 </div>
                 <div class="glass p-6 rounded-2xl border border-gray-800">
                     <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block">Lượt Xem Cao Nhất Đạt Được</span>
                     <h3 id="db-max-views" class="text-4xl font-black text-indigo-400 mt-2">--</h3>
-                    <p class="text-[11px] text-gray-400 mt-1">Video có hiệu suất đỉnh nhất</p>
+                    <p class="text-[11px] text-gray-400 mt-1">Video hoạt động đỉnh nhất</p>
                 </div>
             </div>
 
@@ -158,7 +164,7 @@
                 </div>
             </div>
 
-            <!-- BÁO CÁO PHÂN TÍCH TỰ ĐỘNG GPT-STYLE (BẢN ĐẮT GIÁ) -->
+            <!-- BÁO CÁO PHÂN TÍCH TỰ ĐỘNG GPT-STYLE -->
             <div class="bg-gradient-to-r from-indigo-950/40 to-purple-950/20 border border-indigo-800/40 p-8 rounded-3xl space-y-4">
                 <div class="flex items-center space-x-3">
                     <span class="text-2xl">🔮</span>
@@ -195,47 +201,100 @@
             </div>
         </div>
 
-        <!-- 2. PANEL: KHẮC PHỤC LỖI VIDEO CŨ -->
-        <div id="repair" class="app-panel p-10 flex-col space-y-8">
+        <!-- 2. PANEL: KHẮC PHỤC LỖI VIDEO CŨ (MỚI - SỬA ĐA LỖI TRỰC QUAN & CHẨN ĐOÁN LỖI) -->
+        <div id="repair" class="app-panel space-y-8">
             <div class="border-l-4 border-orange-500 pl-6">
                 <h2 class="text-3xl font-extrabold text-white tracking-tight">Hệ Thống Sửa Lỗi Siêu Dữ Liệu Video Cũ (Phòng Sửa Lỗi Đỏ)</h2>
-                <p class="text-gray-400 text-sm mt-1">Chọn một video có cảnh báo lỗi đỏ từ bảng tổng quan. Công cụ sẽ tự phân tích lỗi và tạo bản vá tối ưu hóa.</p>
+                <p class="text-gray-400 text-sm mt-1">Chọn một video để vá lỗi. Tích chọn các lỗi bạn muốn sửa bên dưới, Prompt bản vá sẽ tự động biến đổi thông minh.</p>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- Chẩn đoán lỗi -->
+                <!-- Chẩn đoán và Lựa chọn sửa đa lỗi -->
                 <div class="lg:col-span-5 bg-[#111827] border border-gray-800 p-6 rounded-2xl space-y-6">
-                    <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3"><i class="fa-solid fa-stethoscope text-orange-400 mr-2"></i>Chẩn Đoán Lỗi Chi Tiết</h3>
+                    <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3"><i class="fa-solid fa-list-check text-orange-400 mr-2"></i>Bảng Tùy Chọn Vá Lỗi</h3>
                     
                     <div id="repair-active-info" class="p-4 bg-[#05070f] rounded-xl border border-gray-800">
                         <p class="text-xs text-gray-400 uppercase font-bold">Video đang chọn sửa lỗi:</p>
                         <h4 id="repair-vid-title" class="text-sm font-bold text-white mt-1">Chưa chọn video nào từ danh sách</h4>
                     </div>
 
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-3">
-                            <span id="err-icon-desc" class="text-red-500 text-lg mt-0.5"><i class="fa-solid fa-circle-xmark"></i></span>
-                            <div>
-                                <h5 class="text-xs font-bold text-gray-200">Độ dài phần mô tả video (Description Words)</h5>
-                                <p id="err-text-desc" class="text-[11px] text-gray-400 mt-0.5">--</p>
+                    <!-- PHẦN HIỂN THỊ TRẠNG THÁI LỖI PHỤC HỒI (Fix lỗi runtime index.html V6.3) -->
+                    <div class="space-y-4 bg-[#05070f] p-5 rounded-2xl border border-gray-800/80">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Trạng thái phát hiện lỗi:</p>
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-2">
+                                <span id="err-icon-desc" class="text-red-500 text-sm mt-0.5"><i class="fa-solid fa-circle-xmark"></i></span>
+                                <div>
+                                    <h5 class="text-xs font-bold text-gray-200">Độ dài mô tả:</h5>
+                                    <p id="err-text-desc" class="text-[10px] text-gray-400 mt-0.5">--</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <span id="err-icon-link" class="text-red-500 text-sm mt-0.5"><i class="fa-solid fa-circle-xmark"></i></span>
+                                <div>
+                                    <h5 class="text-xs font-bold text-gray-200">Liên kết điều hướng:</h5>
+                                    <p id="err-text-link" class="text-[10px] text-gray-400 mt-0.5">--</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <span id="err-icon-time" class="text-yellow-500 text-sm mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                                <div>
+                                    <h5 class="text-xs font-bold text-gray-200">Mốc thời gian (Timestamps):</h5>
+                                    <p id="err-text-time" class="text-[10px] text-gray-400 mt-0.5">--</p>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="flex items-start space-x-3">
-                            <span id="err-icon-link" class="text-red-500 text-lg mt-0.5"><i class="fa-solid fa-circle-xmark"></i></span>
+                    <!-- DANH SÁCH CHECKBOX TÙY CHỌN SỬA ĐA LỖI -->
+                    <div class="space-y-4 bg-[#05070f] p-5 rounded-2xl border border-gray-800/80">
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Tích chọn các lỗi muốn sửa đổi:</p>
+                        
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="checkbox" id="fix-title-chk" checked onchange="buildDynamicRepairPrompt()" class="mt-1 w-4 h-4 rounded text-indigo-600 bg-gray-900 border-gray-700 focus:ring-indigo-500">
                             <div>
-                                <h5 class="text-xs font-bold text-gray-200">Liên kết điều hành (Call to action / Links)</h5>
-                                <p id="err-text-link" class="text-[11px] text-gray-400 mt-0.5">--</p>
+                                <span class="text-xs font-bold text-gray-200 group-hover:text-indigo-400 transition-colors">1. Tối ưu tiêu đề giật tít (CTR Title)</span>
+                                <p class="text-[10px] text-gray-500">Bắt buộc AI tạo ra 3 dòng tiêu đề giật tít, tò mò chuẩn tiếng Hàn.</p>
                             </div>
-                        </div>
+                        </label>
 
-                        <div class="flex items-start space-x-3">
-                            <span id="err-icon-time" class="text-yellow-500 text-lg mt-0.5"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="checkbox" id="fix-desc-chk" checked onchange="buildDynamicRepairPrompt()" class="mt-1 w-4 h-4 rounded text-indigo-600 bg-gray-900 border-gray-700 focus:ring-indigo-500">
                             <div>
-                                <h5 class="text-xs font-bold text-gray-200">Hệ thống Mốc Thời Gian (Timestamps)</h5>
-                                <p id="err-text-time" class="text-[11px] text-gray-400 mt-0.5">--</p>
+                                <span class="text-xs font-bold text-gray-200 group-hover:text-indigo-400 transition-colors">2. Viết lại mô tả dài chuẩn SEO (&gt;150 từ)</span>
+                                <p class="text-[10px] text-gray-500">Tự rải từ khóa tự nhiên, viết văn phong chuyên nghiệp và có chiều sâu.</p>
                             </div>
-                        </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="checkbox" id="fix-link-chk" checked onchange="buildDynamicRepairPrompt()" class="mt-1 w-4 h-4 rounded text-indigo-600 bg-gray-900 border-gray-700 focus:ring-indigo-500">
+                            <div>
+                                <span class="text-xs font-bold text-gray-200 group-hover:text-indigo-400 transition-colors">3. Bổ sung Link kêu gọi chuyển đổi (Links)</span>
+                                <p class="text-[10px] text-gray-500">Thêm liên kết kêu gọi đăng ký kênh hoặc dắt người xem từ Shorts về video chính.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="checkbox" id="fix-time-chk" checked onchange="buildDynamicRepairPrompt()" class="mt-1 w-4 h-4 rounded text-indigo-600 bg-gray-900 border-gray-700 focus:ring-indigo-500">
+                            <div>
+                                <span class="text-xs font-bold text-gray-200 group-hover:text-indigo-400 transition-colors">4. Bổ sung mốc phân cảnh (Timestamps)</span>
+                                <p class="text-[10px] text-gray-500">Thêm khung timestamps mẫu để phân chia cấu trúc dòng thời gian.</p>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="checkbox" id="fix-tag-chk" checked onchange="buildDynamicRepairPrompt()" class="mt-1 w-4 h-4 rounded text-indigo-600 bg-gray-900 border-gray-700 focus:ring-indigo-500">
+                            <div>
+                                <span class="text-xs font-bold text-gray-200 group-hover:text-indigo-400 transition-colors">5. Thẻ từ khóa & Hashtag xu hướng</span>
+                                <p class="text-[10px] text-gray-500">Tìm kiếm các tag nội địa Hàn Quốc có traffic tìm kiếm cao nhất.</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- GHI CHÚ CHỈNH SỬA THỦ CÔNG -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest">Yêu cầu bổ sung riêng (Ví dụ: Thêm link affiliate, đổi văn phong...):</label>
+                        <input type="text" id="repair-custom-notes" oninput="buildDynamicRepairPrompt()" class="w-full bg-[#05070f] border border-gray-700 rounded-xl p-3 text-xs text-white outline-none focus:border-indigo-500" placeholder="e.g., Thêm link đăng ký khóa học, Giọng điệu hài hước hơn...">
                     </div>
                 </div>
 
@@ -243,22 +302,22 @@
                 <div class="lg:col-span-7 bg-[#111827] border border-gray-800 p-6 rounded-2xl flex flex-col justify-between space-y-4">
                     <div>
                         <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3"><i class="fa-solid fa-magic text-emerald-400 mr-2"></i>Bản Vá Siêu Dữ Liệu Tự Động (Metadata Repair)</h3>
-                        <p class="text-xs text-gray-400 mt-2">Dưới đây là câu lệnh dán vào Gemini Pro hoặc GPT Plus để sửa toàn bộ mô tả, viết lại tiêu đề cuốn hút bằng tiếng Hàn và bổ sung SEO Tag chuẩn xác.</p>
+                        <p class="text-xs text-gray-400 mt-2">Dưới đây là câu lệnh dán vào Gemini Pro hoặc GPT Plus để sửa chữa toàn bộ các lỗi bạn đã tích chọn.</p>
                     </div>
 
                     <div class="relative">
-                        <textarea id="repair-prompt-box" readonly class="w-full h-80 bg-[#05070f] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
-                        <button onclick="copy('repair-prompt-box', 'btn-c-rep')" id="btn-c-rep" class="absolute bottom-4 right-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2 px-4 rounded-lg shadow-lg transition-all">COPY BẢN VÁ</button>
+                        <textarea id="repair-prompt-box" readonly class="w-full h-[380px] bg-[#05070f] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
+                        <button onclick="copy('repair-prompt-box', 'btn-c-rep')" id="btn-c-rep" class="absolute bottom-4 right-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY BẢN VÁ</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 3. PANEL: ĐỊNH HƯỚNG 10 VIDEO MỚI -->
-        <div id="roadmap" class="app-panel p-10 flex-col space-y-8">
+        <div id="roadmap" class="app-panel space-y-8">
             <div class="border-l-4 border-emerald-500 pl-6">
-                <h2 class="text-3xl font-extrabold text-white tracking-tight">Ma Trận 10 Chủ Đề Video Thắng Đậm Tại Hàn Quốc</h2>
-                <p class="text-gray-400 text-sm mt-1">Dựa trên nghiên cứu hành vi tâm lý học lâm sàng của người Hàn bản địa (Áp lực cạnh tranh, cô đơn, gia đình truyền thống).</p>
+                <h2 class="text-3xl font-extrabold text-white tracking-tight">Ma Trận 10 Chủ Đề Video Thắng Đậm Theo Từng Ngách Kênh</h2>
+                <p class="text-gray-400 text-sm mt-1">Các ý tưởng nội dung độc quyền đã được cá nhân hóa đồng bộ theo chủ đề kênh của bạn để đánh chiếm thị trường Hàn Quốc.</p>
             </div>
 
             <!-- CHỌN CHỦ ĐỀ -->
@@ -277,7 +336,7 @@
                         </div>
                         <div class="grid grid-cols-2 gap-4 text-xs bg-[#05070f] p-4 rounded-xl border border-gray-800/50">
                             <div>
-                                <p class="text-gray-500 font-bold">Học thuyết tâm lý:</p>
+                                <p class="text-gray-500 font-bold">Học thuyết/Nguyên lý khoa học:</p>
                                 <p id="topic-active-theory" class="text-gray-300 font-semibold mt-0.5">Murray Bowen Thuyết Hệ Thống</p>
                             </div>
                             <div>
@@ -302,7 +361,7 @@
         </div>
 
         <!-- 4. LÕI TRỘN: KỊCH BẢN (CLAUDE) -->
-        <div id="p-script" class="app-panel p-10 flex-col space-y-8">
+        <div id="p-script" class="app-panel space-y-8">
             <div class="border-l-4 border-orange-500 pl-6">
                 <h2 class="text-3xl font-extrabold text-white tracking-tight">Bộ Sinh Lệnh Viết Kịch Bản <span class="text-orange-400 text-lg block font-medium">Sử dụng Claude Team (Opus 4.8)</span></h2>
             </div>
@@ -326,7 +385,7 @@
         </div>
 
         <!-- 5. PANEL MỚI: PHÒNG LAB QUẢN LÝ PROMPT HÀNG LOẠT (BULK PROMPT STUDIO) -->
-        <div id="bulk-lab" class="app-panel p-10 flex-col space-y-8">
+        <div id="bulk-lab" class="app-panel space-y-8">
             <div class="border-l-4 border-indigo-500 pl-6 flex justify-between items-start">
                 <div>
                     <h2 class="text-3xl font-extrabold text-white tracking-tight">Phòng Lab Xử Lý & Tối Ưu Prompt Hàng Loạt</h2>
@@ -347,7 +406,7 @@
 
                     <!-- THIẾT LẬP PHONG CÁCH ĐỒNG BỘ (GLOBAL CONFIG) -->
                     <div class="bg-[#111827] border border-gray-800 p-6 rounded-2xl space-y-4">
-                        <h3 class="text-base font-bold text-white"><i class="fa-solid fa-sliders text-indigo-400 mr-2"></i>2. Cấu Hình Style Đồng Bộ</h3>
+                        <h3 class="text-base font-bold text-white"><i class="fa-solid fa-sliders text-indigo-400 mr-2"></i>2. Cấu Hìh Style Đồng Bộ</h3>
                         
                         <!-- Toggle Chọn tỷ lệ kích thước -->
                         <div>
@@ -365,7 +424,7 @@
                                 <option value="healing-vector">🌿 2D Flat Vector Chữa Lành (Korean Healing Art)</option>
                                 <option value="cinematic-noir">🌃 Cinematic Noir Seoul Buồn Tương Phản</option>
                                 <option value="watercolor">🎨 Tranh Vẽ Màu Nước Mơ Màng (Watercolor Memory)</option>
-                                <option value="keep-original">⚠️ Giữ nguyên Style thô đã nhập trong file dán</option>
+                                <option value="keep-original">⚠️ Giữ nguyên Style thô đã nhập trong tệp dán</option>
                             </select>
                         </div>
 
@@ -402,7 +461,7 @@
         </div>
 
         <!-- 6. LÕI TRỘN: CHUẨN HÓA SRT (GEMINI PRO) -->
-        <div id="p-srt" class="app-panel p-10 flex-col space-y-8">
+        <div id="p-srt" class="app-panel space-y-8">
             <div class="border-l-4 border-indigo-500 pl-6">
                 <h2 class="text-3xl font-extrabold text-white tracking-tight">Hệ Thống Lọc Lỗi & Chuẩn Hóa Phụ Đề SRT <span class="text-indigo-400 text-lg block font-medium">Sử dụng Gemini Pro Advanced</span></h2>
             </div>
@@ -421,8 +480,84 @@
 
     <!-- HỆ THỐNG XỬ LÝ SỐ LIỆU & RENDER CHUYÊN SÂU -->
     <script>
+        // Cơ sở dữ liệu 10 kịch bản theo từng ngách chủ đề kênh (NEW & DYNAMIC)
+        const nicheRoadmaps = {
+            'psychology': [
+                { idx: "01", title: "시어머니가 절대 말 안 하는 속마음 5가지 (Mẹ chồng – nàng dâu)", theory: "Murray Bowen (Thuyết phân hóa hệ thống gia đình)", struct: "Liệt kê 5 điều giấu kín, kể chuyện ngôi thứ 3 truyền cảm cảm xúc sâu lắng.", desc: "Khai thác sự cô dồn nén cảm xúc từ thế hệ trước, mong muốn được thừa nhận giá trị lao động trong nhà nhưng thể hiện bằng sự can thiệp đời sống vợ chồng trẻ... Giúp tháo gỡ 고부갈등." },
+                { idx: "02", title: "친했던 친구와 서서히 멀어지는 뜻밖의 3가지 신호 (Bạn bè xa cách)", theory: "Robin Dunbar & Gerald Mollenhorst (Giới hạn quan hệ)", struct: "3 giai đoạn không đánh số, văn phong tự sự buồn đồng cảm sâu sắc.", desc: "Giải thích tại sao lớn lên tình bạn phai nhạt dần là tất yếu vật lý và cách chấp nhận sự ra đi của các mối quan hệ một cách thanh thản nhất." },
+                { idx: "03", title: "착한 아이 증후군: 왜 나는 거절을 못할까? (Không biết từ chối)", theory: "Pete Walker (Fawn Response - Phản ứng quy thuận)", struct: "Nhập vai nhân vật Minji trải qua áp lực công sở Hàn Quốc.", desc: "Đào sâu vào cơ chế tự vệ quy thuận khi đối mặt với chấn thương tâm lý từ bé và hướng dẫn Minji thiết lập ranh giới cá nhân." },
+                { idx: "04", title: "부모님의 뒷모습이 갑자기 작아 보일 때 (Cha mẹ già đi)", theory: "Laura Carstensen (Thuyết Lựa chọn Xã hội - Thuyết SST) & 예기 슬픔 (Nỗi buồn dự báo trước)", struct: "Cấu trúc dòng thời gian hồi tưởng kết hợp như một lá thư gửi tương lai.", desc: "Bóc tách nỗi buồn âm ỉ của những người con khi chứng kiến cha mẹ già đi trong im lặng. Phân tích tâm lý thu hẹp mối quan hệ xã hội của người già để tập trung vào gia đình và cách vượt qua nỗi đau mất mát dự báo trước." },
+                { idx: "05", title: "자꾸 남과 비교하게 되는 마인드 감옥 (So sánh bản thân)", theory: "Leon Festinger (Thuyết so sánh xã hội - 1954)", struct: "Độc thoại trực tiếp ngôi thứ 2 (당신 - Bạn) để đánh mạnh vào tâm lý người xem.", desc: "Phân tích tác động hủy hoại của văn hóa so sánh trên Instagram tại Hàn Quốc. Giải thích tại sao bộ não con người luôn có xu hướng so sánh hướng lên (Upward comparison) và cách thoát khỏi chiếc bẫy tự ti này." },
+                { idx: "06", title: "번아웃 증후군: 조용한 사직을 선택한 당신에게 (Kiệt sức công sở)", theory: "Herbert Freudenberger (Thuyết kiệt sức tâm lý học)", struct: "Cấu trúc độc thoại nội tâm sâu lắng kết hợp nhịp điệu Cinematic chậm rãi.", desc: "Phân tích tâm lý của giới trẻ Hàn Quốc (thế hệ MZ) khi đối mặt với áp lực làm việc điên cuồng tại các tập đoàn lớn dẫn đến hội chứng '조용한 사직' (Quiet Quitting). Giúp họ tìm lại điểm cân bằng." },
+                { idx: "07", title: "가스라이팅: 가족이라는 이름의 가장 잔인한 지배 (Thao túng tâm lý gia đình)", theory: "Robin Stern (Hội chứng Gaslight)", struct: "Sử dụng trường hợp thực tế giả định (Case study) phân tích sâu tâm lý hành vi.", desc: "Tại sao mâu thuẫn thao túng tâm lý trong gia đình Á Đông lại cực khó dứt bỏ? Cách nhận biết các câu nói nhân danh tình yêu thương nhưng thực chất là tước đoạt quyền tự quyết của con cái." },
+                { idx: "08", title: "은둔형 외톨이: 방 밖으로 나오지 못하는 진짜 이유 (Hikikomori Seoul)", theory: "Thuyết Tự quyết (Self-Determination Theory - Decy & Ryan)", struct: "Kể chuyện kết hợp lồng ghép số liệu nghiên cứu của Seoul Metropolitan.", desc: "Bóc tách rào cản tâm lý của hàng trăm ngàn người trẻ Hàn Quốc đang tự cô lập mình trong phòng kín. Giải thích sự sụp đổ của động lực tự thân khi xã hội đặt kỳ vọng quá cao và cách từng bước trị liệu hành vi." },
+                { idx: "09", title: "불안형과 회피형 애착: 왜 우리는 사랑할수록 아플까? (Thuyết gắn bó trong tình yêu)", theory: "John Bowlby (Thuyết gắn bó lâm sàng)", struct: "Cấu trúc so sánh đối lập giữa hai thế giới nội tâm của người lo âu và người né tránh.", desc: "Phân tích vòng lặp đuổi - bắt độc hại trong tình yêu của người trẻ Hàn Quốc. Tại sao người lo âu càng khao khát gần gũi thì người né tránh càng đẩy ra xa và phương án hòa giải tâm lý học." },
+                { idx: "10", title: "가면 증후군: 모두가 나를 똑똑하다고 오해하고 있다 (Hội chứng kẻ giả mạo)", theory: "Pauline Clance & Suzanne Imes (Impostor Syndrome)", struct: "Tự sự đầy tính triết học, giải đáp mâu thuẫn nội tâm sâu thẳm.", desc: "Nỗi sợ hãi vô hình của những người thành đạt tại Hàn Quốc khi luôn cho rằng thành công của mình là do may mắn và sợ một ngày nào đó sẽ bị người khác lột trần mặt nạ kém cỏi của bản thân." }
+            ],
+            'gaming': [
+                { idx: "01", title: "페이커(Faker)가 극심한 압박감 속에서 마인드컨트롤을 하는 법 (Tâm lý thi đấu)", theory: "Self-Regulation Theory (Thuyết tự kiểm soát cảm xúc)", struct: "Kể chuyện cinematic kết hợp phân tích giải đấu chuyên nghiệp T1.", desc: "Bóc tách cách siêu sao thể thao điện tử vĩ đại nhất thế giới giữ bình tĩnh trước hàng triệu kỳ vọng của khán giả Hàn Quốc." },
+                { idx: "02", title: "내가 게임(LoL)만 하면 폭력적으로 변하는 진짜 심리학적 이유 (Sự ức chế game)", theory: "Frustration-Aggression Hypothesis (Giả thuyết ức chế kích hoạt bạo lực)", struct: "Phân tích khoa học hài hước kết hợp trường hợp game thủ thực tế.", desc: "Giải thích tại sao cơ chế xếp hạng của game đồng đội lại kích hoạt tối đa sự ức chế thần kinh của nam giới Hàn Quốc." },
+                { idx: "03", title: "스팀(Steam) 할인 때 산 게임을 정작 한 번도 켜지 않는 심리 (Hội chứng mua tích trữ)", theory: "Diderot Effect (Hiệu ứng Diderot về ham muốn tích lũy)", struct: "Kịch bản khảo sát xã hội thực tế dí dỏm.", desc: "Tại sao việc sở hữu (mua game) lại tạo ra cảm giác thỏa mãn giả tạo lừa dối bộ não tốt hơn việc trải nghiệm thực tế." },
+                { idx: "04", title: "게임 중독과 뇌 도파민 시스템의 숨겨진 음모 (Dopamine Reward Pathway)", theory: "Dopamine Reward Pathway", struct: "Video dài phân tích biểu đồ khoa học trực quan sinh động.", desc: "Cách các nhà phát hành thiết kế tỷ lệ drop đồ vật phẩm để giữ chân người chơi trong trạng thái kích thích liên tục." },
+                { idx: "05", title: "왜 우리는 협동 게임(LoL, Valorant)에서 팀원을 탓할까? (Self-Serving Bias)", theory: "Self-Serving Bias (Thiên kiến tự phục vụ)", struct: "Kể chuyện hài hước kết hợp case study đấu xếp hạng thực tế.", desc: "Giải thích cơ chế tâm lý học đổ lỗi cho hoàn cảnh bên ngoài khi thất bại nhưng nhận hết công trạng về mình khi chiến thắng." },
+                { idx: "06", title: "가챠 게임(Gacha)의 극악 확률에 전 재산을 탕진하는 심리 (Intermittent Reinforcement)", theory: "Intermittent Reinforcement (Củng cố ngắt quãng)", struct: "Phóng sự điều tra tâm lý người chơi trò chơi may rủi.", desc: "Tại sao tỷ lệ trúng thưởng càng thấp và bất định lại càng khiến bộ não thèm muốn được thử vận may nhiều hơn." },
+                { idx: "07", title: "고전 클래식 게임을 플레이할 때 뇌가 느끼는 향수 마케팅 (Nostalgia Psychology)", theory: "Nostalgia Marketing", struct: "Hồi tưởng ấm áp kết hợp phân tích nhạc nền retro.", desc: "Cách âm thanh 8-bit và đồ họa pixel kích hoạt các ký ức tuổi thơ tươi đẹp để chữa lành căng thẳng hiện tại." },
+                { idx: "08", title: "소울라이크(Souls-like) 게임의 고통을 굳이 즐기는 변태적 심리 (Benign Masochism)", theory: "Benign Masochism (Bạo dâm lành tính)", struct: "Độc thoại trực tiếp ngôi kể thứ 2.", desc: "Tại sao việc liên tục thất bại và vượt qua thử thách cực khó của Elden Ring lại mang đến cảm giác thỏa mãn cực độ." },
+                { idx: "09", title: "배틀로얄 게임에서 1등을 했을 때 뇌가 받는 극도의 쾌감 (Peak-End Rule)", theory: "Peak-End Rule", struct: "Nhịp độ nhanh hồi hộp kịch tính.", desc: "Phân tích tâm lý sinh tồn trong PUBG khi khoảnh khắc sinh tử cuối cùng quyết định toàn bộ trải nghiệm vui vẻ của trận đấu." },
+                { idx: "10", title: "VR 가상 현실 게임이 뇌의 지각 능력을 조작하는 방식 (Spatial Presence Theory)", theory: "Spatial Presence Theory", struct: "Trải nghiệm khoa học tương lai viễn tưởng.", desc: "Cơ chế đánh lừa các giác quan vật lý của kính thực tế ảo khiến bộ não nhầm tưởng không gian số là đời thực." }
+            ],
+            'tech': [
+                { idx: "01", title: "인공지능(AI) 시대에 평범한 개발자가 살아남는 3가지 생존 전략 (Kỹ sư sống sót)", theory: "Law of Accelerating Returns (Định luật gia tốc Ray Kurzweil)", struct: "Tự sự của một kỹ sư IT lâu năm tại Seoul, ngôi thứ 1.", desc: "Phân tích làn sóng sa thải tại thung lũng IT Hàn Quốc (Pangyo) và hướng đi mới cho lập trình viên thích nghi với AI." },
+                { idx: "02", title: "우리가 스마트폰 알림에 24시간 집착하는 뇌과학적 비밀 (Nghiện điện thoại)", theory: "Dopamine Loop & Intermittent Reinforcement", struct: "Thuyết trình khoa học dễ hiểu, mô phỏng sinh động họa 2D.", desc: "Bóc tách cách các ứng dụng mạng xã hội tại Hàn cấu trúc nút thông báo để thao túng chất hóa học thần kinh của bạn." },
+                { idx: "03", title: "애플(Apple) 브랜딩이 당신의 자아정체성을 지배하는 방식 (Hiệu ứng cuồng Apple)", theory: "Brand Congruence Theory (Sự đồng điệu thương hiệu cá nhân)", struct: "Phân tích chiến dịch marketing lịch sử đối chiếu tâm lý Gen Z Seoul.", desc: "Tại sao việc sở hữu chiếc iPhone lại trở thành thước đo ranh giới phân cấp xã hội học đường khắt khe của học sinh cấp 3 Hàn Quốc." },
+                { idx: "04", title: "코딩 공부를 시작한 지 3일 만에 포기하는 사람들의 심리 (Zeigarnik Effect)", theory: "Zeigarnik Effect", struct: "Hướng dẫn thực nghiệm tâm lý học thực tế.", desc: "Tại sao những nhiệm vụ chưa hoàn thành luôn lơ lửng trong đầu gây áp lực, dẫn đến hành vi trốn tránh trì hoãn học tập." },
+                { idx: "05", title: "소셜 미디어 알고리즘이 당신을 필터 버블에 가두는 원리 (Confirmation Bias)", theory: "Confirmation Bias (Thiên kiến xác nhận)", struct: "Phóng sự tài liệu đồ họa chuyển động.", desc: "Cách TikTok và YouTube phân phối những nội dung bạn thích để củng cố định kiến cũ, tạo ra sự chia rẽ xã hội cực đoan." },
+                { idx: "06", title: "왜 스마트 기기가 발달할수록 현대인은 더 외로울까? (Solitude Deprivation)", theory: "Solitude Deprivation (Sự tước đoạt cô độc)", desc: "Phân tích triết học sâu lắng kết hợp đời sống Seoul.", struct: "Độc thoại tự sự chậm rãi, nhạc nền trầm ấm.", desc: "Khi điện thoại cướp đi những giây phút rảnh rỗi hiếm hoi để tự trò chuyện với bản thân, chúng ta dần đánh mất khả năng tự chữa lành." },
+                { idx: "07", title: "챗GPT(ChatGPT)에 지나치게 의존하다 능력을 상실하는 심리 (Cognitive Offloading)", theory: "Cognitive Offloading", struct: "Khảo sát hành vi của giới văn phòng MZ tại Hàn.", desc: "Sự sụt giảm khả năng tư duy độc lập và giải quyết vấn đề khi giao phó hoàn toàn công việc viết lách cho trí tuệ nhân tạo." },
+                { idx: "08", title: "사이버 보안: 왜 사람들은 뻔한 피싱 사기에 계속 당할까? (Social Engineering)", theory: "Social Engineering (Thao túng hành vi xã hội)", struct: "Dựng lại hiện trường giả định kịch tính.", desc: "Phân tích cơ chế tâm lý đánh vào lòng tham hoặc nỗi sợ hãi tột cùng để ép nạn nhân tự giao mã OTP tài khoản." },
+                { idx: "09", title: "스마트워치 심박수 데이터가 당신의 건강 염려증을 키우는 lý do (Cyberchondria)", theory: "Cyberchondria (Rối loạn lo âu bệnh lý không gian số)", struct: "Case study lâm sàng khoa tâm thần.", desc: "Nỗi sợ hãi vô hình xuất hiện khi liên tục kiểm tra các thông số sinh học trên cổ tay dẫn đến rối loạn hoảng sợ giả tạo." },
+                { idx: "10", title: "긱 이코노미(Gig Economy) tự do mang đến sự bất an tột độ (Anomie Theory)", theory: "Anomie Theory (Thuyết vô chuẩn mực xã hội)", struct: "Tài liệu cuộc sống thực tế của shipper công nghệ.", desc: "Mặt tối của nền kinh tế tự do khi người lao động mất đi sự kết nối tổ chức truyền thống và sống trong lo âu thu nhập mỗi ngày." }
+            ],
+            'finance': [
+                { idx: "01", title: "월급 250만 원 직장인이 3년 안에 현실적으로 1억 모으는 비결 (Tiền tích lũy)", theory: "Delayed Gratification (Thuyết trì hoãn sự thỏa mãn)", struct: "Bảng biểu tính toán thực tế, ngôi thứ 2 당신 thuyết phục.", desc: "Xây dựng sơ đồ phân bổ dòng tiền khắc nghiệt giúp người trẻ Hàn thoát khỏi chiếc bẫy tiêu sản sang chảnh giả tạo." },
+                { idx: "02", title: "주식 코인 시장에서 매번 고점에 물리는 사람들의 3가지 심리 (Tâm lý đu đỉnh)", theory: "FOMO Effect & Loss Aversion Theory (Hiệu ứng FOMO và thuyết ghét thua lỗ)", struct: "Case study phân tích hành vi của một nhà đầu tư cá nhân.", desc: "Bóc tách tâm lý bầy đàn khiến hàng triệu người chơi coin tại Hàn Quốc vô thức đổ tiền vào các dự án rác." },
+                { idx: "03", title: "대한민국 영끌족이 집값 하락에 유독 공포를 느끼는 진짜 이유 (Nợ mua nhà)", theory: "Sunk Cost Fallacy (Chi phí chìm khổng lồ)", struct: "Kịch bản phóng sự tài liệu xã hội học trầm lắng.", desc: "Nỗi đau âm ỉ của thế hệ trẻ khi dồn toàn bộ tiền tiết kiệm và khoản vay ngân hàng để mua bất động sản đúng đỉnh sóng." },
+                { idx: "04", title: "명품 가방 하나가 당신의 가난을 숨겨주지 못하는 경제학적 lý do (Veblen Effect)", theory: "Veblen Effect (Hiệu ứng Veblen về tiêu dùng xa xỉ)", struct: "Phân tích văn hóa khoe của (Flex) trên mạng xã hội Hàn Quốc.", desc: "Tại sao người nghèo lại có xu hướng mua đồ hiệu đắt đỏ để tạo ra chiếc khiên bảo vệ địa vị xã hội mong manh của mình." },
+                { idx: "05", title: "복리의 마법: 왜 일찍 저축을 시작하는 것이 무조건 이득일까? (Time Value)", theory: "Time Value of Money (Giá trị thời gian của tiền tệ)", struct: "Đồ họa so sánh tài sản trực quan sinh động.", desc: "Sự khác biệt tài sản khổng lồ sau 20 năm của người tích lũy sớm từ tuổi 20 so với người bắt đầu từ tuổi 35." },
+                { idx: "06", title: "투자 시장에서 똑똑한 전문가들의 예측이 매번 틀리는 lý do (Overconfidence Bias)", theory: "Overconfidence Bias (Thiên kiến quá tự tin)", struct: "Điểm lại các sự kiện sụp đổ tài chính lịch sử.", desc: "Tại sao những bộ óc thiên tài nhất phố Wall vẫn thất bại trước các biến động ngẫu nhiên của thị trường." },
+                { idx: "07", title: "벼락거지 증후군: 나만 가난해지는 것 같은 집단적 불안감 (Relative Deprivation)", theory: "Relative Deprivation (Sự tước đoạt tương đối)", struct: "Tự sự triết lý, đồng cảm tâm lý người làm công ăn lương.", desc: "Cảm giác bị tụt lại phía sau khi đồng nghiệp xung quanh khoe kiếm tiền tỷ từ bất động sản và coin." },
+                { idx: "08", title: "파이어족(FIRE): 현실적으로 직장을 조기 은퇴하기 위한 은퇴 공식 (SWR)", theory: "Safe Withdrawal Rate (Quy tắc rút tiền an toàn 4%)", struct: "Sơ đồ kế hoạch tài chính chi tiết từng bước.", desc: "Cách tính toán số tiền tối thiểu để tự do tài chính và kế hoạch cắt giảm chi phí để nghỉ hưu trước tuổi 40." },
+                { idx: "09", title: "부자들의 소비 습관: 진짜 부자들은 로고가 없는 옷을 입는다 (Quiet Luxury)", theory: "Quiet Luxury (Sang trọng thầm lặng)", struct: "So sánh phong cách tiêu dùng giới siêu giàu và trung lưu Hàn.", desc: "Tại sao giới tinh hoa ưu tiên chất lượng trải nghiệm kín đáo thay vì phô trương thương hiệu ra bên ngoài." },
+                { idx: "10", title: "인플레이션 시대에 가만히 저축만 하는 것이 가장 위험한 lý do (Real Interest Rate)", theory: "Real Interest Rate (Lãi suất thực tế âm)", struct: "Phân tích kinh tế vĩ mô dễ hiểu bằng hoạt họa.", desc: "Cách lạm phát âm thầm bào mòn sức mua của tiền tiết kiệm gửi ngân hàng và giải pháp phân bổ tài sản phòng thủ." }
+            ],
+            'cooking': [
+                { idx: "01", title: "한국 길거리 오뎅국물이 유독 겨울 밤에 더 맛있는 과학적 비밀 (Mùa đông ẩm thực)", theory: "Sensory Marketing & Thermal Comfort Theory", struct: "Hành trình trải nghiệm đêm mưa Seoul.", desc: "Mối liên hệ thần kinh giữa nhiệt độ lạnh giá bên ngoài ga tàu và các kích thích vị giác của nước dùng om cay nóng." },
+                { idx: "02", title: "외국인들이 한국의 불닭볶음면에 미치도록 중독되는 진짜 비결 (Vị cay nghiện)", theory: "Endorphin Compensation Effect (Sự bù đắp hoóc-môn Endorphin)", struct: "Thực nghiệm ẩm thực kết hợp phân tích y học cơ thể.", desc: "Tại sao cảm giác bỏng rát của ớt lại kích hoạt hoóc-môn giảm stress cực độ của người Hàn sau giờ làm việc căng thẳng." },
+                { idx: "03", title: "우리가 배가 고프지 않아도 야식을 시키는 진짜 가짜 배고픔 (Thèm ăn đêm)", theory: "Emotional Eating Theory (Ăn uống do tác động cảm xúc dồn nén)", struct: "Kịch bản kể chuyện cinematic ngôi kể thứ 3 Minji.", desc: "Bóc tách thói quen đặt đồ ăn đêm (배달) của dân văn phòng Hàn Quốc như một cơ chế trốn tránh nỗi cô đơn áp lực." },
+                { idx: "04", title: "어머니의 손맛이 유독 깊은 그리움을 자극하는 기억의 뇌과학 (Proust Effect)", theory: "Proust Effect (Hiệu ứng Proust về mùi hương ký ức)", struct: "Kể chuyện xúc động, màu sắc hoài cổ ấm áp.", desc: "Cách các phân tử mùi vị món ăn gia đình kích hoạt trực tiếp vùng hải mã kiểm soát ký ức dài hạn để chữa lành tổn thương." },
+                { idx: "05", title: "왜 우리는 스트레스를 받으면 단것과 기름진 음식을 갈망할까? (Cortisol Response)", theory: "Cortisol Response", struct: "Phân tích y học sinh học cơ thể dưới dạng 2D vector.", desc: "Cách hoóc-môn căng thẳng cortisol báo động giả khiến bộ não thèm khát đường và chất béo để nạp năng lượng khẩn cấp." },
+                { idx: "06", title: "고급 레스토랑의 비싼 파인 다이닝이 대접하는 시각적 쾌감 (Plating Visual)", theory: "Visual Gastronomy (Tâm lý học trình bày đĩa ăn)", struct: "Hình ảnh cận cảnh nghệ thuật bày trí đĩa ăn.", desc: "Cách sắp xếp hình khối đối đối xứng và tương phản màu sắc nâng tầm cảm nhận độ ngon miệng của món ăn lên gấp 3 lần." },
+                { idx: "07", title: "비건(Vegan) 소비를 하며 도덕적 우월감을 느끼는 심리 (Moral Licensing)", theory: "Moral Licensing (Sự cấp phép đạo đức tự thân)", struct: "Phân tích xu hướng lối sống thuần chay tại Seoul.", desc: "Cách việc thực hiện một hành vi tốt tạo ra sự tự mãn đạo đức, đôi khi khiến chúng ta dễ dãi hơn với các lỗi lầm khác." },
+                { idx: "08", title: "ASMR 먹방 소리가 침을 흘리게 만드는 원리 (Classical Conditioning)", theory: "Classical Conditioning (Phản xạ có điều kiện Pavlov)", struct: "Âm thanh sống động kết hợp hoạt họa sinh học thần kinh.", desc: "Cách các kích thích âm thanh nhai giòn rụm được lặp lại nhiều lần liên kết thẳng với cơ chế tiết nước bọt tự động." },
+                { idx: "09", title: "음식의 유통기한이 지나면 무조건 버려야 한다고 착각하는 심리 (Loss Aversion)", theory: "Loss Aversion (Tâm lý né tránh tổn thất)", struct: "Thực nghiệm đo lường hạn sử dụng thực tế của thực phẩm.", desc: "Sự nhầm lẫn tai hại giữa hạn bán hàng (Sell-by) và hạn sử dụng an toàn (Use-by) gây lãng phí hàng tấn thực phẩm." },
+                { idx: "10", title: "커피 한 잔이 아침 잠을 깨우는 것 이상의 강력한 각성 효과 (Placebo Effect)", theory: "Placebo Effect (Hiệu ứng giả dược thần kinh)", struct: "Khảo sát thói quen uống cafe sáng của giới văn phòng.", desc: "Cách nghi thức pha cafe và mùi hương quen thuộc đánh lừa não bộ tỉnh táo ngay cả khi chất cafein chưa kịp ngấm vào máu." }
+            ],
+            'personal-dev': [
+                { idx: "01", title: "의지력이 아니라 '환경'을 바꿔야 아침 5시에 일어나는 과학 (Kỷ luật dậy sớm)", theory: "Choice Architecture (Thuyết kiến trúc lựa chọn - Thaler)", struct: "Thử thách thực tế 21 ngày, phân tích khoa học hành vi.", desc: "Tại sao việc dùng báo thức lặp lại vô dụng và cách thiết kế phòng ngủ ép bộ não tỉnh táo lập tức." },
+                { idx: "02", title: "만성 미루기 습관(Procrastination)에서 완벽히 탈출하는 법 (Thoát trì hoãn)", theory: "Temporal Discounting Theory (Sự chiết khấu thời gian tâm lý)", struct: "Hướng dẫn thực tế, sơ đồ giải pháp micro-steps.", desc: "Bóc tách nỗi sợ thất bại ẩn sau hành vi trì hoãn và cách chia nhỏ mục tiêu thành các hành động dưới 2 phút." },
+                { idx: "03", title: "성인 ADHD가 유독 현대 직장인들에게 많이 나타나는 이유 (Tập trung kém)", theory: "Attention Restoration Theory (Thuyết khôi phục sự chú ý)", struct: "Phân tích y học hành vi kết hợp lời khuyên cải thiện.", desc: "Sự phân rã khả năng tập trung sâu do thói quen đa nhiệm và giải pháp thiết lập chế độ làm việc đơn nhiệm (Deep Work)." },
+                { idx: "04", title: "매일 책을 읽기로 결심하고도 작심삼일로 끝나는 심리 (Implementation Intentions)", theory: "Implementation Intentions (Ý định thực thi cụ thể)", struct: "Sổ tay hành động tự kỷ luật bản thân.", desc: "Cách liên kết thói quen đọc sách mới vào một hành động sẵn có hàng ngày theo công thức: 'Nếu... Thì...' để giảm tải năng lượng ý chí." },
+                { idx: "05", title: "스탠포드 마음가짐 수업: 고정 마인드셋을 성장 마인드셋으로 바꾸는 법 (Growth Mindset)", theory: "Growth Mindset (Tư duy phát triển Carol Dweck)", struct: "Sử dụng sơ đồ tư duy trực quan đối chiếu.", desc: "Cách viết lại lời tự thoại bên trong não bộ để coi thất bại là bài học nâng cấp kỹ năng thay vì là bản án phán xét năng lực." },
+                { idx: "06", title: "미니멀리즘: 불필요한 물건을 과감히 버릴 때 일어나는 뇌의 변화 (Endowment Effect)", theory: "Endowment Effect (Hiệu ứng sở hữu quá đà)", struct: "Hành trình dọn dẹp căn phòng 10m2 tại Seoul.", desc: "Tại sao việc vứt bỏ một món đồ cũ lại đau đớn như mất đi một phần cơ thể và cách giải phóng năng lượng cho não bộ." },
+                { idx: "07", title: "왜 우리는 사소한 부정적 피드백 하나에 온 하루를 망칠까? (Negativity Bias)", theory: "Negativity Bias (Thiên kiến tiêu cực tiến hóa)", struct: "Độc thoại trực tiếp chạm sâu cảm xúc người xem.", desc: "Cơ chế sinh tồn từ thời tiền sử ép bộ não tập trung vào nguy hiểm và cách tái thiết lập trạng thái cân bằng tinh thần." },
+                { idx: "08", title: "타이탄의 도구들: 위대한 성공을 이룬 사람들의 5가지 아침 루틴 (Habit Stacking)", theory: "Habit Stacking (Xếp chồng thói quen James Clear)", struct: "Mô phỏng 2D vector tối giản các bước hành động.", desc: "Cách xây dựng chuỗi thói quen buổi sáng vững chắc bằng cách neo thói quen mới vào các hành động tự nhiên của cơ thể." },
+                { idx: "09", title: "가짜 바쁨: 왜 현대인은 바쁘게 일하면서도 정작 성과를 내지 못할까? (Active Procrastination)", theory: "Active Procrastination (Trì hoãn chủ động)", struct: "Bóc tách nhật ký làm việc của dân văn phòng Hàn Quốc.", desc: "Cách chúng ta tự lừa dối bản thân bằng việc làm những việc nhỏ phụ nhặt để trốn tránh nhiệm vụ cốt lõi quan trọng nhất." },
+                { idx: "10", title: "회복 탄력성(Resilience): 시련을 겪고 더 단단해지는 사람들의 뇌과학 (Cognitive Reappraisal)", theory: "Cognitive Reappraisal (Tái đánh giá nhận thức)", struct: "Kịch bản phóng sự truyền cảm hứng nghị lực vượt khó.", desc: "Cách vùng vỏ não trước trán ức chế phản ứng sợ hãi của hạch hạnh nhân để biến nghịch cảnh thành động lực bứt phá giới hạn." }
+            ]
+        };
+
         let videoData = [
-            { id: "eaWX9nVJOh4", title: "비교를 멈출 수 없는 진짜 이유 (심리학) #비교 #shorts", duration: "00:21", views: 182, likes: 14, comments: 2, descWordCount: 52, vidiq: 55, status: "Tốt", desc: "자꾸 남과 비교하는 건 의지가 약해서가 아닙니다. 1954년 심리학자 레온 페스팅거 của 사회비교이론 — 인간은 자신을 평가하기 위해 남과 비교하도록 태어났습니다. 본능을 이기는 방법은 따로 있습니다.  👆 비교 본능에서 벗어나는 법, 전체 영상은 프로필에서  #비교 #사회비교이론 #심리학 #열등감 #자존감 #뇌과학 #사연심리 #shorts #힐링" },
+            { id: "eaWX9nVJOh4", title: "비교를 멈출 수 없는 진짜 이유 (심리학) #비교 #shorts", duration: "00:21", views: 182, likes: 14, comments: 2, descWordCount: 52, vidiq: 55, status: "Tốt", desc: "자꾸 남과 비교하는 건 의지가 약해서가 아닙니다. 1954년 심리학자 레온 페스팅거의 사회비교이론 — 인간은 자신을 평가하기 위해 남과 비교하도록 태어났습니다. 본능을 이기는 방법은 따로 있습니다.  👆 비교 본능에서 벗어나는 법, 전체 영상은 프로필에서  #비교 #사회비교이론 #심리학 #열등감 #자존감 #뇌과학 #사연심리 #shorts #힐링" },
             { id: "0f-q-xP9rgI", title: "시어머니가 음식을 자꾸 권하는 진짜 이유 #shorts", duration: "00:07", views: 110, likes: 8, comments: 1, descWordCount: 15, vidiq: 48, status: "Cần tối ưu", desc: "간섭이 아니라, 인정받고 싶은 마음이었습니다. 시어머니의 인정 욕구.  👆 전체 영상은 프로필에서  #시어머니 #며느리 #인정욕구 #고부관계 #심리학 #사연심리 #shorts #힐링" },
             { id: "long-sample", title: "시어머니가 절대 말 안 하는 속마음 5가지 (가족 심리학 분석)", duration: "08:36", views: 2450, likes: 195, comments: 24, descWordCount: 65, vidiq: 68, status: "Cần tối ưu", desc: "며느리가 알지 못했던 시어머니의 진짜 속사정은 무엇일까요? 가족 심리학 보웬의 이론을 바탕으로 bóc tách sâu sắc mối quan hệ 고부갈등. 구독과 알림 설정으로 사연심리와 함께하세요. #시어머니 #며느리 #고부갈등 #가족심리 #사연심리" }
         ];
@@ -430,9 +565,9 @@
         let selectedVideo = videoData[0];
         let globalRatio = '16:9';
         let parsedPromptsData = [];
-        let charts = {}; // Lưu trữ đối tượng Chart.js để hủy khi vẽ lại
+        let charts = {}; 
 
-        // Preset style cho bulk lab
+        // Style presets cho bulk lab
         const stylePresets = {
             'healing-vector': 'minimalist flat 2D vector animated illustration style, Korean healing aesthetic, soft pastel palette (cream beige, dusty blue, terracotta, warm brown shadows), consistent bold clean black outlines, uniform line weight, flat color fills, character WITHOUT detailed facial features, very smooth slow gentle animation, NO fast cuts, soft transitions',
             'cinematic-noir': 'high-end cinematic film style, moody atmospheric noir setting in South Korea, rain-slicked dark pavement, deep shadows and glowing warm neon reflection, high contrast, shallow depth of field, subtle film grain, ultra-realistic, highly emotional facial details, smooth camera panning motion, cinematic color grading',
@@ -440,95 +575,13 @@
             'keep-original': ''
         };
 
-        // Danh sách 10 chủ đề Hàn Quốc tối tân nhất năm 2026
-        const koreanTopics = [
-            {
-                idx: "01",
-                title: "시어머니가 절대 말 안 하는 속마음 5가지 (Mẹ chồng – nàng dâu)",
-                theory: "Murray Bowen (Thuyết phân hóa hệ thống gia đình)",
-                struct: "Liệt kê 5 điều giấu kín, kể chuyện ngôi thứ 3 truyền cảm cảm xúc sâu lắng.",
-                desc: "Khai thác sâu sắc cảm giác cô đơn của mẹ chồng khi bước vào tuổi già, sự mong muốn được thừa nhận giá trị lao động trong gia đình nhưng lại bộc lộ ra ngoài bằng sự can thiệp thái quá. Cung cấp góc nhìn giúp nàng dâu cảm thông và tháo gỡ mâu thuẫn nhờ phân hóa gia đình của Bowen."
-            },
-            {
-                idx: "02",
-                title: "친했던 친구와 서서히 멀어지는 뜻밖의 3가지 신호 (Bạn bè xa lánh)",
-                theory: "Robin Dunbar & Gerald Mollenhorst (Định luật số Dunbar về giới hạn quan hệ)",
-                struct: "Bao gồm 3 giai đoạn không đánh số, văn phong tự sự đồng cảm sâu, trầm.",
-                desc: "Giải thích bằng khoa học tại sao việc xa cách bạn bè ở tuổi trưởng thành là tất yếu vật lý. Phân tích sự chuyển dịch của các mối quan hệ dựa trên khoảng cách địa lý và thời gian biểu bận rộn của xã hội Hàn Quốc hiện đại."
-            },
-            {
-                idx: "03",
-                title: "착한 아이 증후군: 왜 나는 거절을 못할까? (Không biết từ chối)",
-                theory: "Pete Walker (Fawn Response - Phản ứng quy thuận) & Harriet Braiker",
-                struct: "Nhập vai câu chuyện của nhân vật Minji (Ngôi thứ 3) trải qua áp lực công sở Hàn Quốc.",
-                desc: "Đào sâu vào hội chứng 'Người luôn muốn làm hài lòng người khác'. Giải thích phản ứng 'quy thuận' khi đối mặt với chấn thương tâm lý từ bé và hướng dẫn cách Minji dũng cảm thiết lập ranh giới cá nhân."
-            },
-            {
-                idx: "04",
-                title: "부모님의 뒷모습이 갑자기 작아 보일 때 (Cha mẹ già đi)",
-                theory: "Laura Carstensen (Thuyết Lựa chọn Xã hội - Thuyết SST) & 예기 슬픔 (Nỗi buồn dự báo trước)",
-                struct: "Cấu trúc dòng thời gian hồi tưởng kết hợp như một lá thư gửi tương lai.",
-                desc: "Bóc tách nỗi buồn âm ỉ của những người con khi chứng kiến cha mẹ già đi trong im lặng. Phân tích tâm lý thu hẹp mối quan hệ xã hội của người già để tập trung vào gia đình và cách vượt qua nỗi đau mất mát dự báo trước."
-            },
-            {
-                idx: "05",
-                title: "자꾸 남과 비교하게 되는 마인드 감옥 (So sánh bản thân)",
-                theory: "Leon Festinger (Thuyết so sánh xã hội - 1954)",
-                struct: "Độc thoại trực tiếp ngôi thứ 2 (당신 - Bạn) để đánh mạnh vào tâm lý người xem.",
-                desc: "Phân tích tác động hủy hoại của văn hóa so sánh trên Instagram tại Hàn Quốc. Giải thích tại sao bộ não con người luôn có xu hướng so sánh hướng lên (Upward comparison) và cách thoát khỏi chiếc bẫy tự ti này."
-            },
-            {
-                idx: "06",
-                title: "번아웃 증후군: 조용한 사직을 선택한 당신에게 (Kiệt sức công sở)",
-                theory: "Herbert Freudenberger (Thuyết kiệt sức tâm lý học)",
-                struct: "Cấu trúc độc thoại nội tâm sâu lắng kết hợp nhịp điệu Cinematic chậm rãi.",
-                desc: "Phân tích tâm lý của giới trẻ Hàn Quốc (thế hệ MZ) khi đối mặt với áp lực làm việc điên cuồng tại các tập đoàn lớn dẫn đến hội chứng '조용한 사직' (Quiet Quitting). Giúp họ tìm lại điểm cân bằng."
-            },
-            {
-                idx: "07",
-                title: "가스라이팅: 가족이라는 이름의 가장 잔인한 지배 (Thao túng tâm lý gia đình)",
-                theory: "Robin Stern (Hội chứng Gaslight)",
-                struct: "Sử dụng trường hợp thực tế giả định (Case study) phân tích sâu tâm lý hành vi.",
-                desc: "Tại sao mâu thuẫn thao túng tâm lý trong gia đình Á Đông lại cực khó dứt bỏ? Cách nhận biết các câu nói nhân danh tình yêu thương nhưng thực chất là tước đoạt quyền tự quyết của con cái."
-            },
-            {
-                idx: "08",
-                title: "은둔형 외톨이: 방 밖으로 나오지 못하는 진짜 이유 (Hikikomori Seoul)",
-                theory: "Thuyết Tự quyết (Self-Determination Theory - Decy & Ryan)",
-                struct: "Kể chuyện kết hợp lồng ghép số liệu nghiên cứu của Seoul Metropolitan.",
-                desc: "Bóc tách rào cản tâm lý của hàng trăm ngàn người trẻ Hàn Quốc đang tự cô lập mình trong phòng kín. Giải thích sự sụp đổ của động lực tự thân khi xã hội đặt kỳ vọng quá cao và cách từng bước trị liệu hành vi."
-            },
-            {
-                idx: "09",
-                title: "불안형과 회피형 애착: 왜 우리는 사랑할수록 아플까? (Thuyết gắn bó trong tình yêu)",
-                theory: "John Bowlby (Thuyết gắn bó lâm sàng)",
-                struct: "Cấu trúc so sánh đối lập giữa hai thế giới nội tâm của người lo âu và người né tránh.",
-                desc: "Phân tích vòng lặp đuổi - bắt độc hại trong tình yêu của người trẻ Hàn Quốc. Tại sao người lo âu càng khao khát gần gũi thì người né tránh càng đẩy ra xa và phương án hòa giải tâm lý học."
-            },
-            {
-                idx: "10",
-                title: "가면 증후군: 모두가 나를 똑똑하다고 오해하고 있다 (Hội chứng kẻ giả mạo)",
-                theory: "Pauline Clance & Suzanne Imes (Impostor Syndrome)",
-                struct: "Tự sự đầy tính triết học, giải đáp mâu thuẫn nội tâm sâu thẳm.",
-                desc: "Nỗi sợ hãi vô hình của những người thành đạt tại Hàn Quốc khi luôn cho rằng thành công của mình là do may mắn và sợ một ngày nào đó sẽ bị người khác lột trần mặt nạ kém cỏi của bản thân."
-            }
-        ];
-
-        // Khởi động ứng dụng
         window.addEventListener('DOMContentLoaded', () => {
             renderDashboard();
-            renderTopicList();
+            handleNicheChange(); // Render kịch bản theo ngách mặc định ban đầu
             setupCSVInputs();
             selectVideoForRepair(videoData[0].id);
-            selectTopic("01");
-
-            // Cập nhật giá trị ban đầu cho các khối prompt để tránh ô trống
             updateScriptPrompt();
             updateSrtPrompt();
-
-            // Mẫu prompt hàng loạt có sẵn
-            document.getElementById('bulk-input').value = `87: grown child warmly expressing love through a gentle embrace and shared time, warm closing glow motion, 8 second clip, horizontal 16:9, minimalist flat 2D vector animated illustration style, Korean healing aesthetic\n\n88: parent and grown child together in warm complete light, peaceful and full, gentle closing fade, 8 second clip, horizontal 16:9, minimalist flat 2D vector animated illustration style, Korean healing aesthetic`;
-            parseBulkPrompts();
         });
 
         // ĐIỀU HƯỚNG PANEL MENU TRÁI
@@ -540,9 +593,171 @@
             nav.className = "w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-semibold transition bg-indigo-600 text-white shadow-xl shadow-indigo-950/50";
         }
 
-        // THIẾT LẬP KÉO THẢ VÀ INPUT FILE CSV (AN TOÀN TUYỆT ĐỐI)
+        // XỬ LÝ KHI NGƯỜI DÙNG THAY ĐỔI NGÁCH KÊNH (DYNMIC ROADMAP)
+        function handleNicheChange() {
+            const selectedNiche = document.getElementById('channel-niche-select').value;
+            const topics = nicheRoadmaps[selectedNiche] || nicheRoadmaps['psychology'];
+            
+            // Tái thiết lập danh sách chủ đề đề xuất ở Bước 3
+            const container = document.getElementById('topic-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            topics.forEach((t, i) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700 transition-all flex items-center space-x-3";
+                btn.onclick = () => selectNicheTopic(selectedNiche, t.idx);
+                btn.id = 't-select-' + t.idx;
+
+                btn.innerHTML = `
+                    <span class="bg-gray-800 text-indigo-400 font-extrabold text-xs px-2 py-1 rounded-md">${t.idx}</span>
+                    <span class="text-xs font-semibold text-gray-200 truncate">${t.title}</span>
+                `;
+                container.appendChild(btn);
+            });
+
+            // Chọn mặc định chủ đề đầu tiên của ngách mới
+            selectNicheTopic(selectedNiche, topics[0].idx);
+        }
+
+        function selectNicheTopic(nicheKey, idx) {
+            const topics = nicheRoadmaps[nicheKey];
+            const t = topics.find(item => item.idx === idx);
+            if (!t) return;
+
+            topics.forEach(item => {
+                const b = document.getElementById('t-select-' + item.idx);
+                if (b) b.className = "w-full text-left p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700 transition-all flex items-center space-x-3";
+            });
+
+            const activeBtn = document.getElementById('t-select-' + idx);
+            if (activeBtn) activeBtn.className = "w-full text-left p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/50 hover:bg-indigo-950/60 transition-all flex items-center space-x-3";
+
+            document.getElementById('topic-active-idx').innerText = "#" + t.idx;
+            document.getElementById('topic-active-title').innerText = t.title;
+            document.getElementById('topic-active-theory').innerText = t.theory;
+            document.getElementById('topic-active-struct').innerText = t.struct;
+            document.getElementById('topic-active-desc').innerText = t.desc;
+        }
+
+        // TỰ ĐỘNG BẢN VÁ PHÂN TÍCH SỬA ĐA LỖI (INTERACTIVE MULTI-ERROR PATCH)
+        function buildDynamicRepairPrompt() {
+            if (!selectedVideo) return;
+
+            const fixTitle = document.getElementById('fix-title-chk').checked;
+            const fixDesc = document.getElementById('fix-desc-chk').checked;
+            const fixLink = document.getElementById('fix-link-chk').checked;
+            const fixTime = document.getElementById('fix-time-chk').checked;
+            const fixTag = document.getElementById('fix-tag-chk').checked;
+            const customNotes = document.getElementById('repair-custom-notes').value;
+
+            let prompt = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n`;
+            prompt += `- Title: "${selectedVideo.title}"\n`;
+            prompt += `- Current Description: "${selectedVideo.desc}"\n`;
+            prompt += `- Duration: ${selectedVideo.duration}\n\n`;
+            prompt += `Please generate a custom "Metadata Repair Patch Kit" written in native South Korean language (한국어) with the following strictly requested updates:\n\n`;
+
+            if (fixTitle) {
+                prompt += `🎯 1. TITLE REPAIR (CTR): Create 3 highly clickable, viral, and curiosity-gap alternative titles in fluent, native Korean targeting domestic search habits. Maximize CTR.\n`;
+            }
+            if (fixDesc) {
+                prompt += `📝 2. DESCRIPTION REPAIR (LENGTH): Write a highly engaging, long description (>150 words) outlining the core narrative of the video in fluent Korean. Naturally distribute search keywords related to the niche.\n`;
+            }
+            if (fixLink) {
+                prompt += `🔗 3. CALL TO ACTION LINKS: Bổ sung các cụm từ dắt người xem click đăng ký kênh (구독하기) hoặc liên kết quay trở lại xem các video chính trên kênh (전체 영상 프로필 링크).\n`;
+            }
+            if (fixTime) {
+                prompt += `⏳ 4. TIMESTAMPS: Bổ sung khung mốc thời gian (timestamps) tượng trưng cho cấu trúc phân cảnh để tăng điểm giữ chân khán giả.\n`;
+            }
+            if (fixTag) {
+                prompt += `🏷️ 5. HIGH-DENSITY SEO TAGS: Cung cấp danh sách thẻ từ khóa tags và 7-10 hashtag có lượt tìm kiếm cao nhất ở Hàn Quốc cho ngách này.\n`;
+            }
+            if (customNotes.trim() !== '') {
+                prompt += `💡 ADDITIONAL CUSTOM INSTRUCTIONS: "${customNotes}"\n`;
+            }
+
+            prompt += `\nOutput all final metadata solutions strictly in South Korean language (한국어). Keep the instructions clear so I can copy-paste them directly into YouTube Studio.`;
+
+            const promptBox = document.getElementById('repair-prompt-box');
+            if (promptBox) promptBox.value = prompt;
+        }
+
+        // CHỌN VIDEO TỪ BẢNG ĐỂ NẠP SIÊU DỮ LIỆU SỬA LỖI (Sửa lỗi runtime V6.3)
+        function selectVideoForRepair(id) {
+            const v = videoData.find(item => item.id === id);
+            if (!v) return;
+            selectedVideo = v;
+
+            document.getElementById('repair-vid-title').innerText = v.title;
+
+            // Đếm số từ mô tả thực tế
+            const wordCount = v.descWordCount;
+            const isShort = v.title.toLowerCase().includes('#shorts') || (v.duration.split(":").length === 2 && parseInt(v.duration.split(":")[0]) === 0 && parseInt(v.duration.split(":")[1]) <= 60);
+
+            // Tự động kiểm tra trạng thái Checkbox dựa trên thực tế
+            document.getElementById('fix-title-chk').checked = true;
+            document.getElementById('fix-desc-chk').checked = (wordCount < 40);
+            document.getElementById('fix-link-chk').checked = !v.desc.includes('http');
+            document.getElementById('fix-time-chk').checked = !isShort && !v.desc.includes('00:');
+            document.getElementById('fix-tag-chk').checked = true;
+
+            // Hiển thị lỗi cảnh báo trực quan dễ hiểu cho người dùng Việt
+            const errDescIcon = document.getElementById('err-icon-desc');
+            const errDescText = document.getElementById('err-text-desc');
+            if (errDescIcon && errDescText) {
+                if (wordCount < 40) {
+                    errDescIcon.className = "text-red-500 text-lg mt-0.5 shrink-0";
+                    errDescIcon.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
+                    errDescText.innerText = `Chỉ có ${wordCount} từ (Quá ngắn). Thuật toán AI của YouTube Hàn Quốc không hiểu nổi chủ đề video để đề xuất cho khán giả bản địa.`;
+                } else {
+                    errDescIcon.className = "text-emerald-500 text-lg mt-0.5 shrink-0";
+                    errDescIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+                    errDescText.innerText = `Độ dài ổn (${wordCount} từ). Nhưng vẫn nên tối ưu thêm từ khóa SEO.`;
+                }
+            }
+
+            const errLinkIcon = document.getElementById('err-icon-link');
+            const errLinkText = document.getElementById('err-text-link');
+            if (errLinkIcon && errLinkText) {
+                const hasLink = v.desc && (v.desc.includes('http') || v.desc.includes('www') || v.desc.includes('프로필'));
+                if (!hasLink) {
+                    errLinkIcon.className = "text-red-500 text-lg mt-0.5 shrink-0";
+                    errLinkIcon.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
+                    errLinkText.innerText = `Thiếu Link kêu gọi hành động. Khán giả xem xong không biết bấm vào đâu để xem tiếp video dài hoặc đăng ký kênh.`;
+                } else {
+                    errLinkIcon.className = "text-emerald-500 text-lg mt-0.5 shrink-0";
+                    errLinkIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+                    errLinkText.innerText = `Đã tích hợp đầy đủ liên kết kêu gọi hành động chuyển đổi thành công.`;
+                }
+            }
+
+            const errTimeIcon = document.getElementById('err-icon-time');
+            const errTimeText = document.getElementById('err-text-time');
+            if (errTimeIcon && errTimeText) {
+                if (isShort) {
+                    errTimeIcon.className = "text-gray-500 text-lg mt-0.5 shrink-0";
+                    errTimeIcon.innerHTML = `<i class="fa-solid fa-circle-minus"></i>`;
+                    errTimeText.innerText = `Video ngắn không bắt buộc phải có mốc thời gian (Timestamps).`;
+                } else {
+                    const hasTimestamps = v.desc && (v.desc.includes('00:00') || v.desc.includes('00:'));
+                    if (!hasTimestamps) {
+                        errTimeIcon.className = "text-yellow-500 text-lg mt-0.5 shrink-0";
+                        errTimeIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
+                        errTimeText.innerText = `Chưa chia mốc thời gian. Đối với video 16:9, chia mốc thời gian giúp tăng 35% tỷ lệ giữ chân người xem Hàn.`;
+                    } else {
+                        errTimeIcon.className = "text-emerald-500 text-lg mt-0.5 shrink-0";
+                        errTimeIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
+                        errTimeText.innerText = `Đã chia Timestamps chuẩn chỉ.`;
+                    }
+                }
+            }
+
+            // Tái cấu trúc Prompt động
+            buildDynamicRepairPrompt();
+        }
+
+        // THIẾT LẬP KÉO THẢ VÀ PHÂN TÍCH CSV AN TOÀN
         function setupCSVInputs() {
-            // Drag and drop zone ở tab CSV
             const dropzone = document.getElementById('dropzone');
             const csvInput = document.getElementById('csv-input');
             const dbCsvInput = document.getElementById('dashboard-csv-input');
@@ -555,7 +770,6 @@
                 reader.readAsText(file, "UTF-8");
             };
 
-            // Phòng vệ chống lỗi Null khi không tìm thấy phần tử HTML
             if (dropzone) {
                 dropzone.addEventListener('dragover', (e) => {
                     e.preventDefault();
@@ -571,29 +785,50 @@
                 });
             }
 
-            if (csvInput) {
-                csvInput.addEventListener('change', (e) => {
-                    if (e.target.files[0]) handleFile(e.target.files[0]);
-                });
-            }
-
-            if (dbCsvInput) {
-                dbCsvInput.addEventListener('change', (e) => {
-                    if (e.target.files[0]) handleFile(e.target.files[0]);
-                });
-            }
+            if (csvInput) csvInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+            if (dbCsvInput) dbCsvInput.addEventListener('change', (e) => { if (e.target.files[0]) handleFile(e.target.files[0]); });
         }
 
-        // TRÌNH XỬ LÝ ĐỌC FILE CSV CHUYÊN SÂU
+        // BÓC TÁCH FILE CSV ĐA NGÁCH CHUYÊN NGHIỆP (MỚI - THÍCH ỨNG DỰA TRÊN TIÊU ĐỀ CỘT)
         function parseAndLoadCSV(csvText) {
             const lines = csvText.split('\n');
             if (lines.length < 2) return alert("File CSV không chứa đủ dữ liệu hoặc sai định dạng!");
 
             const rows = [];
+            
+            // THUẬT TOÁN TỰ ĐỘNG KHỚP CỘT TIÊU ĐỀ KHÔNG SỢ LỆCH THỨ TỰ (NEW)
+            const headers = lines[0].toLowerCase().split(',');
+            let idIdx = headers.findIndex(h => h.includes('id'));
+            let titleIdx = headers.findIndex(h => h.includes('tiêu đề') || h.includes('title'));
+            let descIdx = headers.findIndex(h => h.includes('mô tả') || h.includes('description') || h.includes('desc'));
+            let durationIdx = headers.findIndex(h => h.includes('thời gian') || h.includes('duration') || h.includes('length') || h.includes('time'));
+            let vidiqIdx = headers.findIndex(h => h.includes('vidiq') || h.includes('điểm'));
+            let viewsIdx = headers.findIndex(h => h.includes('view') || h.includes('lượt xem') || h.includes('views'));
+            let descWordsIdx = headers.findIndex(h => h.includes('số từ') || h.includes('word') || h.includes('từ trong mô tả'));
+
+            // Gán giá trị mặc định phòng hờ nếu không khớp được tiêu đề cột
+            if (idIdx === -1) idIdx = 0;
+            if (titleIdx === -1) titleIdx = 1;
+            if (descIdx === -1) descIdx = 2;
+            if (durationIdx === -1) durationIdx = 3;
+            if (vidiqIdx === -1) vidiqIdx = 7;
+            if (viewsIdx === -1) viewsIdx = 8;
+            if (descWordsIdx === -1) descWordsIdx = 12;
+
+            // Thử đoán ngách chủ đề từ nội dung text của tệp dán lên
+            let detectedNiche = "psychology";
+            const fileSampleText = csvText.toLowerCase();
+            if (fileSampleText.includes("game") || fileSampleText.includes("롤") || fileSampleText.includes("play") || fileSampleText.includes("gaming")) detectedNiche = "gaming";
+            else if (fileSampleText.includes("개발") || fileSampleText.includes("tech") || fileSampleText.includes("code") || fileSampleText.includes("it")) detectedNiche = "tech";
+            else if (fileSampleText.includes("머니") || fileSampleText.includes("돈") || fileSampleText.includes("코인") || fileSampleText.includes("주식") || fileSampleText.includes("finance")) detectedNiche = "finance";
+            else if (fileSampleText.includes("음식") || fileSampleText.includes("요리") || fileSampleText.includes("cook") || fileSampleText.includes("cooking")) detectedNiche = "cooking";
+            else if (fileSampleText.includes("성공") || fileSampleText.includes("습관") || fileSampleText.includes("의지") || fileSampleText.includes("ADHD")) detectedNiche = "personal-dev";
+
+            document.getElementById('channel-niche-select').value = detectedNiche;
+
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
 
-                // Xử lý dấu phẩy nằm trong dấu ngoặc kép của mô tả
                 let cells = [];
                 let inQuotes = false;
                 let currentCell = '';
@@ -611,23 +846,20 @@
                 }
                 cells.push(currentCell);
 
-                if (cells.length > 8) {
-                    const id = cells[0] ? cells[0].trim() : 'ID-' + i;
-                    const title = cells[1] ? cells[1].trim() : 'Tiêu đề trống';
-                    const desc = cells[2] ? cells[2].trim() : '';
-                    const duration = cells[3] ? cells[3].trim() : '00:00';
-                    const date = cells[5] ? cells[5].trim() : '';
-                    const vidiq = parseInt(cells[7]) || Math.floor(Math.random() * 30) + 40;
-                    const views = parseInt(cells[8]) || 0;
-                    const likes = parseInt(cells[9]) || 0;
-                    const comments = parseInt(cells[10]) || 0;
-                    const descWords = parseInt(cells[12]) || desc.split(' ').length;
+                if (cells.length > Math.max(idIdx, titleIdx, descIdx, durationIdx, vidiqIdx, viewsIdx, descWordsIdx)) {
+                    const id = cells[idIdx] ? cells[idIdx].trim() : 'ID-' + i;
+                    const title = cells[titleIdx] ? cells[titleIdx].trim() : 'Tiêu đề trống';
+                    const desc = cells[descIdx] ? cells[descIdx].trim() : '';
+                    const duration = cells[durationIdx] ? cells[durationIdx].trim() : '00:00';
+                    const vidiq = parseInt(cells[vidiqIdx]) || Math.floor(Math.random() * 30) + 40;
+                    const views = parseInt(cells[viewsIdx]) || 0;
+                    const descWords = parseInt(cells[descWordsIdx]) || desc.split(' ').length;
 
                     let status = "Tốt";
                     if (descWords < 40 || vidiq < 50) status = "Cần tối ưu";
 
                     rows.push({
-                        id, title, desc, duration, date, vidiq, views, likes, comments, descWordCount: descWords, status
+                        id, title, desc, duration, vidiq, views, descWordCount: descWords, status
                     });
                 }
             }
@@ -635,12 +867,12 @@
             if (rows.length > 0) {
                 videoData = rows;
                 renderDashboard();
+                handleNicheChange(); // Cập nhật kịch bản 10 video theo ngách quét được
                 selectVideoForRepair(videoData[0].id);
-                alert("Đã nhập thành công " + videoData.length + " video từ tệp CSV của bạn!");
+                alert("Đã phân tích tự động thành công " + videoData.length + " video từ tệp! Đã tự động nhận diện ngách kênh: " + detectedNiche.toUpperCase());
             }
         }
 
-        // PHÂN TÍCH VÀ RENDER TOÀN BỘ DASHBOARD CHUYÊN SÂU (GPT-STYLE)
         function renderDashboard() {
             let totalVidIQ = 0;
             let totalErrors = 0;
@@ -650,6 +882,7 @@
             let mostViewedVideo = videoData[0];
 
             const tbody = document.getElementById('db-video-table-body');
+            if (!tbody) return;
             tbody.innerHTML = '';
 
             videoData.forEach(v => {
@@ -657,7 +890,6 @@
                 totalViews += v.views;
                 if (v.status.includes("Cần")) totalErrors++;
                 
-                // Nhận dạng Shorts dựa vào thời lượng hoặc hashtag
                 const isShort = v.title.toLowerCase().includes('#shorts') || (v.duration.split(":").length === 2 && parseInt(v.duration.split(":")[0]) === 0 && parseInt(v.duration.split(":")[1]) <= 60);
                 if (isShort) shortsCount++;
 
@@ -666,7 +898,6 @@
                     mostViewedVideo = v;
                 }
 
-                // Render dòng của bảng
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-gray-800/40 hover:bg-gray-800/20 cursor-pointer transition-all";
                 tr.onclick = () => {
@@ -691,43 +922,37 @@
                 tbody.appendChild(tr);
             });
 
-            // Ghi nhận số liệu lên UI
             document.getElementById('db-total-vids').innerText = videoData.length;
             document.getElementById('db-avg-seo').innerText = Math.round(totalVidIQ / videoData.length) + "/100";
             document.getElementById('db-error-rate').innerText = Math.round((totalErrors / videoData.length) * 100) + "%";
             document.getElementById('db-max-views').innerText = maxViews.toLocaleString();
 
-            // SINH BÁO CÁO GPT-STYLE TỰ ĐỘNG BẰNG TIẾNG VIỆT
             generateAIForensicReport(totalErrors, shortsCount, mostViewedVideo, totalViews);
-
-            // VẼ LẠI CÁC BIỂU ĐỒ TƯƠNG QUAN CHUYÊN NGHIỆP
-            renderCharts(shortsCount);
+            
+            try {
+                renderCharts(shortsCount);
+            } catch(e) {
+                console.error("Lỗi vẽ biểu đồ Chart.js:", e);
+            }
         }
 
-        // BỘ NÃO VIẾT BÁO CÁO CHẨN ĐOÁN TỰ ĐỘNG (HEURISTIC GPT ANALYST)
         function generateAIForensicReport(totalErrors, shortsCount, mostViewedVideo, totalViews) {
             const avgDescWords = Math.round(videoData.reduce((acc, v) => acc + v.descWordCount, 0) / videoData.length);
-            const avgSeo = Math.round(videoData.reduce((acc, v) => acc + v.vidiq, 0) / videoData.length);
             const reportBox = document.getElementById('ai-report-box');
+            if (!reportBox) return;
+            const selectedNiche = document.getElementById('channel-niche-select').value.toUpperCase();
 
             let reportHtml = `
-                <p>📊 <strong>Phân Tích Cấu Trúc Định Dạng:</strong> Kênh của bạn đang có <strong>${shortsCount} video ngắn (Shorts)</strong> và <strong>${videoData.length - shortsCount} video dài (Longs)</strong>. Đây là cấu trúc phân bổ <em>Multi-format</em> hợp lý giúp tối ưu hóa lượt tiếp cận của thuật toán YouTube Hàn Quốc năm 2026.</p>
+                <p>📊 <strong>Phân Tích Cơ Cấu Ngách Kênh (${selectedNiche}):</strong> Hệ thống đã quét được <strong>${shortsCount} Shorts (9:16)</strong> và <strong>${videoData.length - shortsCount} Video chính (16:9)</strong>. Tệp của bạn có tốc độ bao phủ SEO ngách rất ấn tượng.</p>
                 
-                <p>🔴 <strong>Chẩn Đoán Lỗi Chí Mạng (SEO Leak Alert):</strong> Hiện tại, có khoảng <strong>${totalErrors} video</strong> đang rơi vào tình trạng thiếu hụt dữ liệu mô tả (mô tả dưới 40 từ) hoặc điểm SEO quá thấp. Độ dài mô tả trung bình của toàn kênh chỉ đạt <strong>${avgDescWords} từ</strong>. Điều này làm thuật toán Bot của YouTube Hàn Quốc bị "mù" từ khóa, không thể phân phối video của bạn đến đúng tệp khán giả nội địa đang có nhu cầu tìm kiếm cao.</p>
+                <p>🔴 <strong>Cảnh Báo Lỗi SEO (Hàn Quốc):</strong> Khoảng <strong>${totalErrors} video</strong> bị sụt giảm xếp hạng do mô tả thô sơ (trung bình chỉ đạt <strong>${avgDescWords} từ/mô tả</strong>). Khán giả Hàn Quốc rất khắt khe về việc đọc tóm tắt học thuyết, nguồn tham khảo hoặc tìm kiếm liên kết mua sắm/khóa học trong mô tả.</p>
                 
-                <p>🏆 <strong>Đột Phá Hiệu Suất (Top Performer):</strong> Video có lượt xem tốt nhất của bạn hiện tại là <strong>"${mostViewedVideo.title}"</strong> đạt <strong>${mostViewedVideo.views.toLocaleString()} views</strong>. Điều này chứng minh ngách nội dung về <em>"${mostViewedVideo.title.split(' ')[0]}"</em> đang kích thích mạnh mẽ trí tò mò của người Hàn bản địa.</p>
-                
-                <p>🛠️ <strong>Hành Động Khắc Phục Ngay Lập Tức:</strong> 
-                    <br>1. Hãy chuyển sang tab <strong>"Khắc Phục Lỗi Video Cũ"</strong> bên trái, chọn những video bị cảnh báo lỗi đỏ để lấy Bản vá SEO dán đè lên YouTube Studio.
-                    <br>2. Bắt buộc phải bổ sung hệ thống liên kết điều hướng kêu gọi người xem từ các video Shorts có tương tác tốt quay trở lại xem các video 16:9 bản dài để tối ưu hóa thời gian xem (Watch-time) tổng thể của kênh.
-                </p>
+                <p>🏆 <strong>Video Lớn Nhất Đạt Đề Xuất:</strong> Video <strong>"${mostViewedVideo.title}"</strong> đạt <strong>${mostViewedVideo.views.toLocaleString()} views</strong> chính là bài học kịch bản thành công nhất của kênh. Hãy giữ nguyên cấu trúc thời gian giữ chân của video này để phát triển cho 10 chủ đề tiếp theo.</p>
             `;
             reportBox.innerHTML = reportHtml;
         }
 
-        // TRÌNH VẼ BIỂU ĐỒ BẰNG CHART.JS CDN
         function renderCharts(shortsCount) {
-            // Hủy các biểu đồ cũ nếu có để tránh lỗi bộ nhớ của canvas
             if (charts.seoViews) charts.seoViews.destroy();
             if (charts.format) charts.format.destroy();
 
@@ -739,7 +964,6 @@
             const ctxSeo = canvasSeo.getContext('2d');
             const ctxFormat = canvasFormat.getContext('2d');
 
-            // Chuẩn bị dữ liệu cho biểu đồ SEO vs Views
             const labels = videoData.map(v => v.title.substring(0, 15) + '...');
             const viewsData = videoData.map(v => v.views);
             const seoScores = videoData.map(v => v.vidiq);
@@ -750,7 +974,7 @@
                     labels: labels,
                     datasets: [
                         {
-                            label: 'Lượt Xem (Views)',
+                            label: 'Views (Lượt Xem)',
                             data: viewsData,
                             borderColor: '#818cf8',
                             backgroundColor: 'rgba(129, 140, 248, 0.1)',
@@ -760,7 +984,7 @@
                             fill: true
                         },
                         {
-                            label: 'SEO Score (vidIQ)',
+                            label: 'Điểm SEO vidIQ',
                             data: seoScores,
                             borderColor: '#34d399',
                             backgroundColor: 'transparent',
@@ -802,7 +1026,6 @@
                 }
             });
 
-            // Biểu đồ cơ cấu định dạng
             charts.format = new Chart(ctxFormat, {
                 type: 'doughnut',
                 data: {
@@ -818,153 +1041,10 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: { color: '#f1f5f9' }
-                        }
+                        legend: { position: 'bottom', labels: { color: '#f1f5f9' } }
                     }
                 }
             });
-        }
-
-        // ==========================================
-        // CÁC CHỨC NĂNG KHẮC PHỤC LỖI & SỬA LỖI ĐỎ
-        // ==========================================
-
-        function selectVideoForRepair(id) {
-            const v = videoData.find(item => item.id === id);
-            if (!v) return;
-            selectedVideo = v;
-
-            document.getElementById('repair-vid-title').innerText = v.title;
-
-            // Kiểm tra lỗi 1: Mô tả
-            const errDescIcon = document.getElementById('err-icon-desc');
-            const errDescText = document.getElementById('err-text-desc');
-            if (v.descWordCount < 40) {
-                errDescIcon.className = "text-red-500 text-lg mt-0.5";
-                errDescIcon.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
-                errDescText.innerText = `Chỉ có ${v.descWordCount} từ. Mô tả quá ngắn khiến YouTube Bot của Hàn Quốc không thể hiểu rõ từ khóa mục tiêu để xếp hạng phân phối.`;
-            } else {
-                errDescIcon.className = "text-emerald-500 text-lg mt-0.5";
-                errDescIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
-                errDescText.innerText = `Độ dài đạt chuẩn (${v.descWordCount} từ). Đảm bảo mật độ từ khóa phân bổ tự nhiên.`;
-            }
-
-            // Kiểm tra lỗi 2: Link liên kết
-            const errLinkIcon = document.getElementById('err-icon-link');
-            const errLinkText = document.getElementById('err-text-link');
-            const hasLink = v.desc && (v.desc.includes('http') || v.desc.includes('www') || v.desc.includes('프로필'));
-            if (!hasLink) {
-                errLinkIcon.className = "text-red-500 text-lg mt-0.5";
-                errLinkIcon.innerHTML = `<i class="fa-solid fa-circle-xmark"></i>`;
-                errLinkText.innerText = `Không tìm thấy link điều hướng. Bạn cần bổ sung liên kết kêu gọi đăng ký kênh hoặc điều hướng từ Shorts sang Long.`;
-            } else {
-                errLinkIcon.className = "text-emerald-500 text-lg mt-0.5";
-                errLinkIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
-                errLinkText.innerText = `Đã tích hợp đầy đủ liên kết kêu gọi hành động chuẩn xác.`;
-            }
-
-            // Kiểm tra lỗi 3: Timestamps
-            const errTimeIcon = document.getElementById('err-icon-time');
-            const errTimeText = document.getElementById('err-text-time');
-            const isShort = v.title.toLowerCase().includes('#shorts') || (v.duration.split(":").length === 2 && parseInt(v.duration.split(":")[0]) === 0 && parseInt(v.duration.split(":")[1]) <= 60);
-
-            if (isShort) {
-                errTimeIcon.className = "text-gray-500 text-lg mt-0.5";
-                errTimeIcon.innerHTML = `<i class="fa-solid fa-circle-minus"></i>`;
-                errTimeText.innerText = `Video ngắn không bắt buộc phải có mốc thời gian (Timestamps).`;
-            } else {
-                const hasTimestamps = v.desc && (v.desc.includes('00:00') || v.desc.includes('00:'));
-                if (!hasTimestamps) {
-                    errTimeIcon.className = "text-yellow-500 text-lg mt-0.5";
-                    errTimeIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i>`;
-                    errTimeText.innerText = `Chưa có mốc thời gian. Đối với video dài hơn 5 phút, thêm timestamps sẽ tăng vọt thời gian xem trung bình.`;
-                } else {
-                    errTimeIcon.className = "text-emerald-500 text-lg mt-0.5";
-                    errTimeIcon.innerHTML = `<i class="fa-solid fa-circle-check"></i>`;
-                    errTimeText.innerText = `Đã tích hợp mốc thời gian chuẩn chỉ.`;
-                }
-            }
-
-            // Tạo bản vá lỗi SEO
-            const promptBox = document.getElementById('repair-prompt-box');
-            if (promptBox) {
-                promptBox.value = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n- Title: "${v.title}"\n- Current Description: "${v.desc}"\n- Duration: ${v.duration}\n\nPlease generate a fully optimized "Metadata Patch Kit" in native South Korean language (한국어) with the following elements:\n1. 3 new clickbait titles targeting local Korean psychology viewers (Max CTR).\n2. A comprehensive, detailed, SEO-friendly video description containing: \n   - A gripping introduction summarizing the story.\n   - Natural call to action links (프로필 링크) encouraging subscribers.\n   - Designated structural tags for timestamps.\n3. An optimized, high-density tags and hashtags block based on Korean domestic search traffic. Please output everything strictly in Korean language.`;
-            }
-        }
-
-        // Render ma trận chủ đề mới
-        function renderTopicList() {
-            const container = document.getElementById('topic-list-container');
-            if (!container) return;
-            container.innerHTML = '';
-
-            koreanTopics.forEach(t => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700 transition-all flex items-center space-x-3";
-                btn.onclick = () => selectTopic(t.idx);
-                btn.id = 't-select-' + t.idx;
-
-                btn.innerHTML = `
-                    <span class="bg-gray-800 text-gray-400 font-extrabold text-xs px-2 py-1 rounded-md">${t.idx}</span>
-                    <span class="text-xs font-semibold text-gray-200 truncate">${t.title}</span>
-                `;
-                container.appendChild(btn);
-            });
-        }
-
-        function selectTopic(idx) {
-            const t = koreanTopics.find(item => item.idx === idx);
-            if (!t) return;
-
-            koreanTopics.forEach(item => {
-                const b = document.getElementById('t-select-' + item.idx);
-                if (b) b.className = "w-full text-left p-3.5 rounded-xl bg-gray-900/60 border border-gray-800/80 hover:bg-gray-800/40 hover:border-gray-700 transition-all flex items-center space-x-3";
-            });
-
-            const activeBtn = document.getElementById('t-select-' + idx);
-            if (activeBtn) activeBtn.className = "w-full text-left p-3.5 rounded-xl bg-indigo-950/40 border border-indigo-500/50 hover:bg-indigo-950/60 transition-all flex items-center space-x-3";
-
-            document.getElementById('topic-active-idx').innerText = "#" + t.idx;
-            document.getElementById('topic-active-title').innerText = t.title;
-            document.getElementById('topic-active-theory').innerText = t.theory;
-            document.getElementById('topic-active-struct').innerText = t.struct;
-            document.getElementById('topic-active-desc').innerText = t.desc;
-        }
-
-        function sendToPromptEngine(target) {
-            const titleStr = document.getElementById('topic-active-title').innerText;
-            const theoryStr = document.getElementById('topic-active-theory').innerText;
-            const structStr = document.getElementById('topic-active-struct').innerText;
-
-            if (target === 'script') {
-                document.getElementById('script-title').value = titleStr;
-                document.getElementById('script-struct').value = `${theoryStr} - ${structStr}`;
-                updateScriptPrompt();
-                switchPanel('p-script');
-            } else if (target === 'visual') {
-                document.getElementById('bulk-input').value = `01: grown child warmly expressing love through a gentle embrace and shared time\n\n02: parent and grown child together in warm complete light`;
-                parseBulkPrompts();
-                switchPanel('bulk-lab');
-            }
-        }
-
-        function updateScriptPrompt() {
-            const t = document.getElementById('script-title').value || '[Dán tiêu đề tiếng Hàn]';
-            const s = document.getElementById('script-struct').value || '[Cấu trúc kịch bản phá template]';
-            const outputBox = document.getElementById('script-prompt-output');
-            if (outputBox) {
-                outputBox.value = `Act as an elite native South Korean behavioral psychologist and a professional cinematic screenwriter. Write a deep, analytical, and emotionally gripping YouTube video script based on the title: "${t}".\n- Structural requirements: Follow this template/format: "${s}". Incorporate the psychological theories naturally into a storytelling narrative.\n- Tone and language: Must be written entirely in fluent, sophisticated, and empathetic native South Korean language (한국어). Avoid typical generic AI-generated expressions or patterns. Make it touch the hearts of local Korean viewers.\n- Visual guidance: For every major segment, include a brief scene composition description in English inside brackets [like this] describing the lighting, noir/cinematic atmosphere, and background elements so I can use it to generate visuals. The text content must remain strictly in Korean.`;
-            }
-        }
-
-        function updateSrtPrompt() {
-            const s = document.getElementById('srt-raw').value || '[Dán tệp phụ đề SRT thô vào đây]';
-            const outputBox = document.getElementById('srt-prompt-output');
-            if (outputBox) {
-                outputBox.value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
-            }
         }
 
         // ==========================================
@@ -1065,7 +1145,6 @@
             if (counterEl) counterEl.innerText = `Đã phân tách thành công: ${counter} thẻ prompt`;
         }
 
-        // Xuất toàn bộ danh sách prompt ra dạng tệp File Text
         function exportAllPrompts() {
             if (parsedPromptsData.length === 0) return alert("Không có dữ liệu để xuất!");
             let outputText = "";
@@ -1079,9 +1158,45 @@
             link.click();
         }
 
+        // ĐỒNG BỘ PROMPT ĐƠN
+        function sendToPromptEngine(target) {
+            const titleStr = document.getElementById('topic-active-title').innerText;
+            const theoryStr = document.getElementById('topic-active-theory').innerText;
+            const structStr = document.getElementById('topic-active-struct').innerText;
+
+            if (target === 'script') {
+                document.getElementById('script-title').value = titleStr;
+                document.getElementById('script-struct').value = `${theoryStr} - ${structStr}`;
+                updateScriptPrompt();
+                switchPanel('p-script');
+            } else if (target === 'visual') {
+                document.getElementById('bulk-input').value = `01: grown child warmly expressing love through a gentle embrace and shared time\n\n02: parent and grown child together in warm complete light`;
+                parseBulkPrompts();
+                switchPanel('bulk-lab');
+            }
+        }
+
+        function updateScriptPrompt() {
+            const t = document.getElementById('script-title').value || '[Dán tiêu đề tiếng Hàn]';
+            const s = document.getElementById('script-struct').value || '[Cấu trúc kịch bản phá template]';
+            const outputBox = document.getElementById('script-prompt-output');
+            if (outputBox) {
+                outputBox.value = `Act as an elite native South Korean behavioral psychologist and a professional cinematic screenwriter. Write a deep, analytical, and emotionally gripping YouTube video script based on the title: "${t}".\n- Structural requirements: Follow this template/format: "${s}". Incorporate the psychological theories naturally into a storytelling narrative.\n- Tone and language: Must be written entirely in fluent, sophisticated, and empathetic native South Korean language (한국어). Avoid typical generic AI-generated expressions or patterns. Make it touch the hearts of local Korean viewers.\n- Visual guidance: For every major segment, include a brief scene composition description in English inside brackets [like this] describing the lighting, noir/cinematic atmosphere, and background elements so I can use it to generate visuals. The text content must remain strictly in Korean.`;
+            }
+        }
+
+        function updateSrtPrompt() {
+            const s = document.getElementById('srt-raw').value || '[Dán tệp phụ đề SRT thô vào đây]';
+            const outputBox = document.getElementById('srt-prompt-output');
+            if (outputBox) {
+                outputBox.value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
+            }
+        }
+
         // SAO CHÉP NHANH BẢO MẬT
         function copy(id, bId) {
             const t = document.getElementById(id);
+            if (!t) return;
             t.select();
             
             if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1091,6 +1206,7 @@
             }
             
             const b = document.getElementById(bId);
+            if (!b) return;
             const old = b.innerText;
             b.innerText = "✓ COPIED";
             b.classList.add('bg-gray-700');
