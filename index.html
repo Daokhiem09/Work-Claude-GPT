@@ -302,31 +302,17 @@
                     </div>
                 </div>
 
-                <!-- LẬP TỨC SỬA LỖI ĐỎ - ĐỐI VỚI SỬA VIDEO CŨ ĐƠN LẺ CHIA THÀNH 2 Ô KHUNG GIỐNG PHẦN HÀNG LOẠT (SỬA ĐỒNG BỘ - YÊU CẦU 1) -->
+                <!-- LẬP TỨC SỬA LỖI ĐỎ - 1 Ô CÂU LỆNH KHẮC PHỤC METADATA DÁN SANG GPT/CLAUDE -->
                 <div class="lg:col-span-8 bg-[#111827] border border-gray-800 p-6 rounded-2xl flex flex-col justify-between space-y-4">
                     <div>
                         <h3 class="text-lg font-bold text-white border-b border-gray-800 pb-3"><i class="fa-solid fa-magic text-emerald-400 mr-2"></i>Bản Vá Siêu Dữ Liệu Tự Động (Metadata Repair)</h3>
-                        <p class="text-xs text-gray-400 mt-2">Dưới đây là câu lệnh dán song song giúp bạn tối ưu hóa độc lập cho ảnh bìa hoặc file chuyển động Veo 3 Omni.</p>
+                        <p class="text-xs text-gray-400 mt-2">Câu lệnh tổng hợp bên dưới sửa toàn bộ lỗi bạn đã tích chọn (tiêu đề, mô tả SEO, link, timestamps, tag). Bấm COPY rồi dán thẳng sang GPT / Claude để nhận bộ metadata tiếng Hàn hoàn chỉnh.</p>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Khung tạo ảnh GPT -->
-                        <div class="relative bg-gray-950 p-4 rounded-xl border border-emerald-950/60 flex flex-col justify-between h-80">
-                            <div>
-                                <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-palette mr-1.5"></i>Lệnh Tạo Ảnh & SEO (GPT Plus)</p>
-                                <textarea id="repair-gpt-prompt-box" readonly class="w-full h-44 bg-gray-950 border border-gray-800 rounded-lg p-2.5 font-mono text-[10px] text-gray-400 focus:outline-none resize-none"></textarea>
-                            </div>
-                            <button onclick="copy('repair-gpt-prompt-box', 'btn-rep-gpt')" id="btn-rep-gpt" class="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] py-1.5 rounded-lg shadow transition-all">COPY PROMPT ẢNH</button>
-                        </div>
-
-                        <!-- Khung tạo video Flow Omni -->
-                        <div class="relative bg-gray-950 p-4 rounded-xl border border-indigo-950/60 flex flex-col justify-between h-80">
-                            <div>
-                                <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-clapperboard mr-1.5"></i>Lệnh Tạo Video (Veo 3 Omni 8s)</p>
-                                <textarea id="repair-flow-prompt-box" readonly class="w-full h-44 bg-gray-950 border border-gray-800 rounded-lg p-2.5 font-mono text-[10px] text-gray-400 focus:outline-none resize-none"></textarea>
-                            </div>
-                            <button onclick="copy('repair-flow-prompt-box', 'btn-rep-flow')" id="btn-rep-flow" class="mt-2 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] py-1.5 rounded-lg shadow transition-all">COPY PROMPT VIDEO</button>
-                        </div>
+                    <div class="relative bg-gray-950 p-4 rounded-xl border border-emerald-950/60 flex flex-col flex-1">
+                        <p class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider mb-1"><i class="fa-solid fa-wand-magic-sparkles mr-1.5"></i>Câu Lệnh Khắc Phục Lỗi (Dán sang GPT / Claude)</p>
+                        <textarea id="repair-prompt-box" readonly class="w-full flex-1 min-h-[18rem] bg-gray-950 border border-gray-800 rounded-lg p-3 font-mono text-[11px] text-gray-300 focus:outline-none resize-none"></textarea>
+                        <button onclick="copy('repair-prompt-box', 'btn-rep-prompt')" id="btn-rep-prompt" class="mt-3 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 rounded-lg shadow transition-all">COPY CÂU LỆNH KHẮC PHỤC</button>
                     </div>
                 </div>
             </div>
@@ -1271,33 +1257,35 @@ Perform these tasks strictly in South Korean language (한국어):
             const fixTag = document.getElementById('fix-tag-chk').checked;
             const customNotes = document.getElementById('repair-custom-notes').value;
 
-            const isShortVid = (selectedVideo.duration || '').startsWith('00:');
-            const ratioImg = isShortVid ? '9:16 vertical ratio' : '16:9 ratio';
-            const ratioVid = isShortVid ? 'vertical 9:16 framing' : 'horizontal 16:9 framing';
+            let prompt = `You are a YouTube Metadata SEO Engineer inside Google. This is my old video showing performance leaks in South Korea:\n\n`;
+            prompt += `- Title: "${selectedVideo.title}"\n`;
+            prompt += `- Current Description: "${selectedVideo.desc}"\n`;
+            prompt += `- Duration: ${selectedVideo.duration}\n\n`;
+            prompt += `Please generate a custom "Metadata Repair Patch Kit" written in native South Korean language (한국어) with the following strictly requested updates:\n\n`;
 
-            // === Ô 1: PROMPT TẠO ẢNH THUMBNAIL + BẢN VÁ SEO (dán sang GPT Plus) ===
-            let gpt = `Act as an elite YouTube Thumbnail designer AND a native South Korean SEO engineer at Google Seoul.\n\n`;
-            gpt += `OLD VIDEO needing a fix:\n- Title: "${selectedVideo.title}"\n- Duration: ${selectedVideo.duration}\n- Current description: "${selectedVideo.desc}"\n\n`;
-            gpt += `PART A — THUMBNAIL IMAGE PROMPT (for DALL-E 3 / GPT image):\nDesign a high-CTR thumbnail composed using the rule of thirds: the main emotional subject sits on the RIGHT third while the LEFT side stays clean and empty for Korean text overlay later. Soft pastel palette or moody cinematic noir, flat 2D vector illustration. Negative: [NO text, NO Hangul, NO alphabets, NO borders, NO badges]. ${ratioImg}.\n\n`;
-            gpt += `PART B — METADATA REPAIR KIT (write the final output strictly in native Korean 한국어):\n`;
-            if (fixTitle) gpt += `🎯 Create 3 viral, curiosity-gap titles that maximize CTR for domestic Korean search.\n`;
-            if (fixDesc)  gpt += `📝 Rewrite a long, engaging SEO description (>150 words) with naturally distributed niche keywords.\n`;
-            if (fixLink)  gpt += `🔗 Add call-to-action links (구독하기 / 전체 영상 프로필 링크).\n`;
-            if (fixTime)  gpt += `⏳ Add chapter timestamps representing the scene structure to boost retention.\n`;
-            if (fixTag)   gpt += `🏷️ Provide a high-density tag list + 7–10 trending Korean hashtags for this niche.\n`;
-            if (customNotes.trim() !== '') gpt += `💡 Extra request: "${customNotes}".\n`;
-            gpt += `\nKeep everything copy-paste ready for YouTube Studio.`;
+            if (fixTitle) {
+                prompt += `🎯 1. TITLE REPAIR (CTR): Create 3 highly clickable, viral, and curiosity-gap alternative titles in fluent, native Korean targeting domestic search habits. Maximize CTR.\n`;
+            }
+            if (fixDesc) {
+                prompt += `📝 2. DESCRIPTION REPAIR (LENGTH): Write a highly engaging, long description (>150 words) outlining the core narrative of the video in fluent Korean. Naturally distribute search keywords related to the niche.\n`;
+            }
+            if (fixLink) {
+                prompt += `🔗 3. CALL TO ACTION LINKS: Bổ sung các cụm từ dắt người xem click đăng ký kênh (구독하기) hoặc liên kết quay trở lại xem các video chính trên kênh (전체 영상 프로필 링크).\n`;
+            }
+            if (fixTime) {
+                prompt += `⏳ 4. TIMESTAMPS: Bổ sung khung mốc thời gian (timestamps) tượng trưng cho cấu trúc phân cảnh để tăng điểm giữ chân khán giả.\n`;
+            }
+            if (fixTag) {
+                prompt += `🏷️ 5. HIGH-DENSITY SEO TAGS: Cung cấp danh sách thẻ từ khóa tags và 7-10 hashtag có lượt tìm kiếm cao nhất ở Hàn Quốc cho ngách này.\n`;
+            }
+            if (customNotes.trim() !== '') {
+                prompt += `💡 ADDITIONAL CUSTOM INSTRUCTIONS: "${customNotes}"\n`;
+            }
 
-            // === Ô 2: PROMPT TẠO VIDEO CHUYỂN ĐỘNG CÂM 8s (dán sang Veo 3 Omni / Flow) ===
-            let flow = `Slow motion cinematic video clip, 8-second pacing, illustrating the theme of "${selectedVideo.title}". `;
-            flow += `A single emotional Korean character communicates purely through micro-expressions (watery eyes, quivering lip, deep pensive sigh, slow gaze shift) — silent, NO talking, NO mouth moving, NO voiceover overlays. `;
-            flow += `Soft cinematic lighting, slow dolly zoom, 24fps smooth motion blur, ${ratioVid}. Negative: [NO text, NO Hangul, NO subtitles].`;
-            if (customNotes.trim() !== '') flow += ` Extra art direction: ${customNotes}.`;
+            prompt += `\nOutput all final metadata solutions strictly in South Korean language (한국어). Keep the instructions clear so I can copy-paste them directly into YouTube Studio.`;
 
-            const gptBox = document.getElementById('repair-gpt-prompt-box');
-            const flowBox = document.getElementById('repair-flow-prompt-box');
-            if (gptBox) gptBox.value = gpt;
-            if (flowBox) flowBox.value = flow;
+            const promptBox = document.getElementById('repair-prompt-box');
+            if (promptBox) promptBox.value = prompt;
         }
 
         // CHỌN VIDEO TỪ BẢNG ĐỂ NẠP SIÊU DỮ LIỆU SỬA LỖI
