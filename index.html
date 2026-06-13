@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>사연심리 Studio Workspace v4.2</title>
+    <title>사연심리 Studio Workspace v4.3</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -23,7 +23,7 @@
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-700 flex items-center justify-center font-bold text-white shadow-lg">사</div>
                 <div>
                     <h1 class="text-sm font-bold text-white tracking-wider uppercase">사연심리 Studio</h1>
-                    <span class="text-[10px] text-indigo-400 font-bold uppercase">Quy trình chuyên nghiệp v4.2</span>
+                    <span class="text-[10px] text-indigo-400 font-bold uppercase">Quy trình chuyên nghiệp v4.3</span>
                 </div>
             </div>
 
@@ -122,7 +122,7 @@
                     <h2 class="text-3xl font-bold text-white tracking-tight">Bước 3: Tạo Ảnh Phân Cảnh Cinematic</h2>
                     <p class="text-emerald-400 text-sm mt-1">Dán mô tả bối cảnh từ Claude vào GPT Plus để xuất ảnh nghệ thuật chuẩn kích thước.</p>
                 </div>
-                <!-- NÚT CHỌN KÍCH THƯỚC (QUAN TRỌNG) -->
+                <!-- NÚT CHỌN KÍCH THƯỚC -->
                 <div class="flex bg-[#111827] rounded-xl p-1 border border-gray-800 shadow-xl">
                     <button id="r169" onclick="setRatio('16:9')" class="ratio-btn px-4 py-2.5 text-xs font-bold uppercase rounded-lg transition-all active">🎞️ Video Dài (16:9)</button>
                     <button id="r916" onclick="setRatio('9:16')" class="ratio-btn px-4 py-2.5 text-xs font-bold uppercase rounded-lg transition-all">📱 Shorts/Tiktok (9:16)</button>
@@ -171,6 +171,7 @@
                 
                 <div class="relative">
                     <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh tự động sinh ra (Dán vào Gemini Pro để làm sạch file phụ đề, sửa chính tả và ngắt dòng siêu đẹp):</span>
+                    <!-- SỬA LỖI TẠI ĐÂY: Đồng bộ ID thành t5-pr khớp hoàn toàn với JavaScript -->
                     <textarea id="t5-pr" readonly class="w-full h-40 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
                     <button onclick="copy('t5-pr', 'c5')" id="c5" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
                 </div>
@@ -233,7 +234,8 @@
         // Tạo câu lệnh Bước 5: Gemini SRT
         function genStep5() {
             const s = document.getElementById('t5-srt').value || '[Dữ liệu tệp phụ đề SRT thô]';
-            document.getElementById('t5-prompt').value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
+            // SỬA LỖI ĐÃ HOÀN TẤT: Đổi thành 't5-pr' khớp 100% với HTML
+            document.getElementById('t5-pr').value = `You are an expert native South Korean video editor and subtitle coordinator. Review, proofread, and correct the following raw South Korean (한국어) SRT subtitle data generated from automated speech recognition:\n\n${s}\n\nYou must strictly follow these rules:\n1. Correct all spelling, spacing (띄어쓰기), grammatical errors, and misheard vocabulary into professional, natural, and fluent native South Korean language suitable for a deep psychological narrative.\n2. Optimize line breaks so that the subtitle block is aesthetically balanced on mobile and desktop screens. Each block must contain only 1 to a maximum of 2 short, concise, and clean lines.\n3. CRITICAL DATA RULE: You must preserve 100% of all index lines and exact timecode timestamps formats ("00:00:00,000 --> 00:00:00,000"). Do not modify, shift, or corrupt even a single character of the SRT timecode data structure. Output the cleaned raw SRT content directly.`;
         }
 
         // Hàm sao chép và đổi trạng thái nút bằng tiếng Việt trực quan
