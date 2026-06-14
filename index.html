@@ -118,6 +118,9 @@
                 </div>
             </div>
 
+            <!-- BĂNG-RÔN: SỐ LIỆU TỰ ĐỘNG TỪ YOUTUBE (ẩn cho tới khi nạp được data/latest.json) -->
+            <div id="auto-update-banner" class="hidden text-xs text-emerald-300 bg-emerald-950/30 border border-emerald-800/40 rounded-2xl px-5 py-3"></div>
+
             <!-- VÙNG KÉO THẢ TỆP CSV -->
             <div id="dropzone" class="border-2 border-dashed border-gray-700/60 hover:border-indigo-500 hover:bg-indigo-950/15 transition-all rounded-3xl p-8 flex flex-col items-center justify-center text-center cursor-pointer glass">
                 <i class="fa-solid fa-cloud-arrow-up text-4xl text-indigo-400 mb-3 animate-bounce"></i>
@@ -566,6 +569,29 @@
                                 <button onclick="copy('bulk-flow-prompts-output', 'btn-bulk-flow')" id="btn-bulk-flow" class="mt-3 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-4 rounded-xl shadow-lg transition-all text-center">COPY TOÀN BỘ PROMPT VIDEO</button>
                             </div>
                         </div>
+
+                        <!-- KHỐI TỰ ĐỘNG TẠO ẢNH (chỉ hiện khi mở hub qua engine local) -->
+                        <div id="auto-img-block" class="hidden mt-4 p-5 rounded-2xl bg-emerald-950/15 border border-emerald-800/40 space-y-3">
+                            <div class="flex items-center gap-2"><span class="text-lg">🤖</span><h4 class="text-sm font-bold text-emerald-300">Tự tạo TOÀN BỘ ảnh qua ChatGPT (dùng danh sách "Tất Cả Prompt Ảnh" ở trên)</h4></div>
+                            <div class="flex flex-col md:flex-row gap-2 md:items-center">
+                                <select id="auto-img-profile" class="flex-1 bg-[#05070f] border border-gray-700 rounded-lg px-3 py-2 text-xs"><option value="">(Bấm "Tải hồ sơ ChatGPT")</option></select>
+                                <button onclick="loadImgProfiles()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold py-2 px-4 rounded-lg whitespace-nowrap">🔄 Tải hồ sơ ChatGPT</button>
+                                <button onclick="autoMakeImages()" id="auto-img-btn" class="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold py-2 px-4 rounded-lg whitespace-nowrap">🤖 Tạo toàn bộ ảnh</button>
+                            </div>
+                            <p id="auto-img-status" class="text-[11px] text-gray-400"></p>
+                            <div id="auto-img-results" class="grid grid-cols-3 sm:grid-cols-4 gap-2"></div>
+                        </div>
+
+                        <!-- KHỐI TỰ ĐỘNG TẠO VIDEO (chỉ hiện khi mở hub qua engine local) -->
+                        <div id="auto-vid-block" class="hidden mt-4 p-5 rounded-2xl bg-indigo-950/15 border border-indigo-800/40 space-y-3">
+                            <div class="flex items-center gap-2"><span class="text-lg">🤖</span><h4 class="text-sm font-bold text-indigo-300">Tự tạo TOÀN BỘ video qua Flow (dùng danh sách "Tất Cả Prompt Video" ở trên)</h4></div>
+                            <div class="flex flex-col md:flex-row gap-2 md:items-center">
+                                <button onclick="checkFlowAccounts()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold py-2 px-4 rounded-lg whitespace-nowrap">🔄 Kiểm tra tài khoản Flow</button>
+                                <button onclick="autoMakeVideos()" id="auto-vid-btn" class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold py-2 px-4 rounded-lg whitespace-nowrap">🤖 Tạo toàn bộ video</button>
+                            </div>
+                            <p id="auto-vid-status" class="text-[11px] text-gray-400"></p>
+                            <div id="auto-vid-results" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+                        </div>
                     </div>
 
                     <!-- DANH SÁCH KIỂM SOÁT TIẾN ĐỘ TỪNG CARD LẺ (Checkbox Tracker) -->
@@ -610,6 +636,24 @@
                     <textarea id="script-prompt-output" readonly class="w-full h-52 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
                     <button onclick="copy('script-prompt-output', 'btn-cp-sc')" id="btn-cp-sc" class="absolute bottom-4 right-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
                 </div>
+
+                <!-- KHỐI TỰ ĐỘNG: chỉ hiện khi mở hub qua "engine local" (điều khiển Claude web bằng Chrome GPM). Trên GitHub Pages sẽ tự ẩn. -->
+                <div id="auto-claude-block" class="hidden mt-6 p-5 rounded-2xl bg-indigo-950/20 border border-indigo-800/40 space-y-3">
+                    <div class="flex items-center gap-2"><span class="text-lg">🤖</span><h4 class="text-sm font-bold text-indigo-300">Để Claude TỰ viết (mở Chrome GPM đã đăng nhập Claude)</h4></div>
+                    <div class="flex flex-col md:flex-row gap-2 md:items-center">
+                        <select id="auto-claude-profile" class="flex-1 bg-[#05070f] border border-gray-700 rounded-lg px-3 py-2 text-xs"></select>
+                        <button onclick="autoWriteClaude()" id="auto-claude-btn" class="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold py-2 px-5 rounded-lg whitespace-nowrap">🤖 Tự động viết kịch bản</button>
+                    </div>
+                    <p id="auto-claude-status" class="text-[11px] text-gray-400"></p>
+                    <div id="auto-claude-result-wrap" class="hidden">
+                        <span class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1 block">Kịch bản Claude vừa viết:</span>
+                        <textarea id="auto-claude-result" class="w-full h-44 bg-[#020617] border border-gray-800 rounded-xl p-4 font-mono text-xs text-gray-300"></textarea>
+                        <div class="flex gap-2 mt-2">
+                            <button onclick="copy('auto-claude-result','btn-auto-cp')" id="btn-auto-cp" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2 px-4 rounded-lg">COPY KỊCH BẢN</button>
+                            <button onclick="sendScriptToSrt()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2 px-4 rounded-lg">→ Nạp sang SRT</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -634,6 +678,36 @@
                     <span class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">📋 Câu lệnh sinh tệp SRT thô tự động (Dán sang Gemini Pro):</span>
                     <textarea id="srt-script-prompt-output" readonly class="w-full h-40 bg-[#020617] border border-gray-800 rounded-xl p-5 font-mono text-xs text-gray-400 focus:outline-none resize-none"></textarea>
                     <button onclick="copy('srt-script-prompt-output', 'btn-cp-script-srt')" id="btn-cp-script-srt" class="absolute bottom-4 right-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-2.5 px-5 rounded-xl shadow-lg transition-all">COPY CÂU LỆNH</button>
+                </div>
+
+                <!-- KHỐI TẠO GIỌNG ĐỌC genmax (chỉ hiện khi mở qua engine local) -->
+                <div id="auto-voice-block" class="hidden mt-6 p-5 rounded-2xl bg-amber-950/15 border border-amber-800/40 space-y-3">
+                    <div class="flex items-center gap-2"><span class="text-lg">🎙️</span><h4 class="text-sm font-bold text-amber-300">Tạo giọng đọc tự động (genmax · ElevenLabs/MiniMax) — đọc kịch bản ở ô trên</h4></div>
+                    <div class="flex flex-col md:flex-row gap-2">
+                        <input type="password" id="gmx-key" placeholder="Dán API key genmax (sk_...) — chỉ lưu trên trình duyệt của bạn" class="flex-1 bg-[#05070f] border border-gray-700 rounded-lg px-3 py-2 text-xs">
+                        <button onclick="saveGmxKey()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold py-2 px-4 rounded-lg whitespace-nowrap">Lưu key</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                        <select id="voice-provider" class="bg-[#05070f] border border-gray-700 rounded-lg px-2 py-2 text-xs">
+                            <option value="elevenlabs">ElevenLabs</option>
+                            <option value="minimax">MiniMax</option>
+                        </select>
+                        <select id="voice-id-sel" class="bg-[#05070f] border border-gray-700 rounded-lg px-2 py-2 text-xs col-span-2 md:col-span-3"><option value="">(Bấm "Tải voice")</option></select>
+                        <input type="text" id="voice-lang" value="ko" class="bg-[#05070f] border border-gray-700 rounded-lg px-2 py-2 text-xs" placeholder="ko / Korean">
+                    </div>
+                    <div class="flex flex-wrap gap-3 items-center">
+                        <button onclick="loadVoices()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold py-2 px-4 rounded-lg">🔄 Tải voice</button>
+                        <label class="text-[11px] text-gray-300 flex items-center gap-1.5"><input type="checkbox" id="voice-srt"> Kèm SRT (genmax tự xuất, +15% credit)</label>
+                        <button onclick="autoMakeVoice()" id="voice-btn" class="bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-xs font-bold py-2 px-4 rounded-lg">🎙️ Tạo giọng đọc</button>
+                    </div>
+                    <p id="voice-status" class="text-[11px] text-gray-400"></p>
+                    <div id="voice-result" class="hidden space-y-2">
+                        <audio id="voice-audio" controls class="w-full"></audio>
+                        <div class="flex gap-3 items-center">
+                            <a id="voice-dl" href="#" download class="text-[11px] text-amber-300 underline">⬇ Tải mp3</a>
+                            <button onclick="sendVoiceSrtToTimeline()" id="voice-srt-btn" class="hidden text-[11px] text-indigo-300 underline">→ Nạp SRT sang Timeline</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -789,7 +863,333 @@
             updateSrtPrompt();
             updateRawSrtGeneratorPrompt();
             updateTimelineGeneratorPrompt();
+
+            // Tự nạp số liệu mới nhất do robot 8h tối ghi ra (data/latest.json) nếu có
+            loadAutoData();
+
+            // Nếu đang mở hub qua engine local -> bật khối tự động (Claude tự viết)
+            initEngineAuto();
         });
+
+        // TỰ NẠP SỐ LIỆU TỰ ĐỘNG TỪ data/latest.json (robot GitHub Actions ghi ra mỗi tối)
+        async function loadAutoData() {
+            try {
+                const res = await fetch('data/latest.json', { cache: 'no-store' });
+                if (!res.ok) return; // chưa có file (lần đầu) hoặc mở bằng file:// -> dùng dữ liệu thủ công
+                const data = await res.json();
+                if (!data || !Array.isArray(data.videos) || data.videos.length === 0) return;
+
+                videoData = data.videos;
+                localStorage.setItem('cached-video-data', JSON.stringify(videoData));
+
+                if (data.niche) {
+                    const sel = document.getElementById('channel-niche-select');
+                    if (sel) sel.value = data.niche;
+                }
+
+                renderDashboard();
+                handleNicheChange();
+                selectVideoForRepair(videoData[0].id);
+                showAutoUpdateBanner(data);
+            } catch (e) {
+                // Bỏ qua: không có mạng / mở bằng file:// -> trang vẫn chạy với dữ liệu thủ công
+                console.warn('Không nạp được số liệu tự động:', e);
+            }
+        }
+
+        function showAutoUpdateBanner(data) {
+            const el = document.getElementById('auto-update-banner');
+            if (!el) return;
+            const when = data.generatedAtLocal || data.generatedAt || '';
+            const channel = data.channelTitle ? ` · Kênh: <strong>${data.channelTitle}</strong>` : '';
+            el.innerHTML = `<i class="fa-solid fa-bolt mr-2 text-emerald-400"></i>Số liệu tự động lấy từ YouTube, cập nhật lúc <strong>${when}</strong>${channel}. <span class="opacity-70">Điểm SEO là ước tính nội bộ (không phải vidIQ). Bạn vẫn có thể kéo CSV để xem dữ liệu khác.</span>`;
+            el.classList.remove('hidden');
+        }
+
+        // ====== TỰ ĐỘNG QUA ENGINE LOCAL (Claude web tự viết kịch bản) ======
+        let ENGINE_PROFILES = [];
+        let claudeJobTimer = null;
+
+        async function initEngineAuto() {
+            try {
+                const r = await fetch('/api/ping', { cache: 'no-store' });
+                if (!r.ok) return;                 // không có engine (vd GitHub Pages) -> giữ ẩn
+                const profs = await (await fetch('/api/profiles')).json();
+                ENGINE_PROFILES = Array.isArray(profs) ? profs : [];
+                const sel = document.getElementById('auto-claude-profile');
+                if (sel) {
+                    sel.innerHTML = ENGINE_PROFILES.length
+                        ? ENGINE_PROFILES.map(p => `<option value="${p.uuid}">${p.name}${p.group ? ' · ' + p.group : ''}</option>`).join('')
+                        : '<option value="">(Không thấy profile GPM)</option>';
+                    // tự chọn sẵn profile Claude (nhóm Calude/Claude, hoặc tên "Tài Khoản")
+                    const cl = ENGINE_PROFILES.find(p => /c[al]+ude/i.test(p.group || '') || /tài kho|tai kho/i.test(p.name || ''));
+                    if (cl) sel.value = cl.uuid;
+                }
+                const block = document.getElementById('auto-claude-block');
+                if (block) block.classList.remove('hidden');
+                const ib = document.getElementById('auto-img-block');
+                if (ib) ib.classList.remove('hidden');
+                const vb = document.getElementById('auto-vid-block');
+                if (vb) vb.classList.remove('hidden');
+                const vc = document.getElementById('auto-voice-block');
+                if (vc) vc.classList.remove('hidden');
+                const gk = document.getElementById('gmx-key');
+                if (gk) gk.value = localStorage.getItem('gmx-key') || '';
+            } catch (e) {
+                /* không có engine -> hub vẫn chạy bình thường, khối tự động ẩn */
+            }
+        }
+
+        // ====== GĐ4: TẠO GIỌNG ĐỌC (genmax) ======
+        let voiceJobTimer = null, lastVoiceSrt = '';
+        function saveGmxKey() {
+            const v = (document.getElementById('gmx-key').value || '').trim();
+            localStorage.setItem('gmx-key', v);
+            showToast('Đã lưu API key genmax (chỉ trên máy bạn)', 'success');
+        }
+        function gmxKey() { return (document.getElementById('gmx-key').value || localStorage.getItem('gmx-key') || '').trim(); }
+
+        async function loadVoices() {
+            const key = gmxKey();
+            const status = document.getElementById('voice-status');
+            if (!key) { showToast('Dán API key genmax + Lưu key trước', 'error'); return; }
+            const provider = document.getElementById('voice-provider').value;
+            status.textContent = '⏳ Đang tải danh sách voice…';
+            try {
+                const r = await fetch('/api/voice/voices', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, provider }) });
+                const j = await r.json();
+                if (!r.ok) throw new Error(j.error || 'Lỗi');
+                let raw = j.voices;
+                let arr = Array.isArray(raw) ? raw : (raw.voices || raw.data || raw.results || []);
+                const sel = document.getElementById('voice-id-sel');
+                sel.innerHTML = arr.length ? arr.map(v => {
+                    const id = v.voice_id || v.id || v.uniq_id || v.voiceId || '';
+                    const nm = v.name || v.display_name || v.voice_name || id;
+                    const lang = v.language || v.labels?.language || v.locale || '';
+                    return `<option value="${id}">${nm}${lang ? ' (' + lang + ')' : ''}</option>`;
+                }).join('') : '<option value="">(Không có voice)</option>';
+                status.textContent = `Có ${arr.length} voice. Mẹo: gõ 한 / Korean để tìm; voice ElevenLabs đa số đọc được tiếng Hàn với model multilingual.`;
+            } catch (e) { status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error'); }
+        }
+
+        async function autoMakeVoice() {
+            const key = gmxKey();
+            if (!key) { showToast('Dán API key genmax + Lưu key trước', 'error'); return; }
+            // lấy kịch bản Hàn, bỏ chỉ dẫn [SCENE: ...] / [..]
+            const text = (document.getElementById('srt-script-input').value || '').replace(/\[[^\]]*\]/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+            if (!text) { showToast('Ô kịch bản tiếng Hàn đang trống', 'error'); return; }
+            const voice_id = document.getElementById('voice-id-sel').value;
+            if (!voice_id) { showToast('Chọn voice (bấm "Tải voice")', 'error'); return; }
+            const provider = document.getElementById('voice-provider').value;
+            const language_code = (document.getElementById('voice-lang').value || 'ko').trim();
+            const export_transcript = document.getElementById('voice-srt').checked;
+            const btn = document.getElementById('voice-btn'), status = document.getElementById('voice-status');
+            btn.disabled = true; status.textContent = '⏳ Đang gửi genmax…';
+            try {
+                const r = await fetch('/api/auto/voice', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key, voice_id, provider, language_code, export_transcript, text }) });
+                const j = await r.json();
+                if (!r.ok || !j.job_id) throw new Error(j.error || 'Không bắt đầu được');
+                pollVoiceJob(j.job_id);
+            } catch (e) { btn.disabled = false; status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error'); }
+        }
+
+        function pollVoiceJob(jid) {
+            if (voiceJobTimer) clearInterval(voiceJobTimer);
+            const btn = document.getElementById('voice-btn'), status = document.getElementById('voice-status');
+            voiceJobTimer = setInterval(async () => {
+                try {
+                    const j = await (await fetch('/api/auto/voice_job/' + jid, { cache: 'no-store' })).json();
+                    if (j.state === 'running') { status.textContent = '⏳ ' + (j.msg || 'Đang chạy…'); return; }
+                    clearInterval(voiceJobTimer); voiceJobTimer = null; btn.disabled = false;
+                    if (j.state === 'done' && j.audio_url) {
+                        document.getElementById('voice-audio').src = j.audio_url;
+                        document.getElementById('voice-dl').href = j.audio_url;
+                        document.getElementById('voice-result').classList.remove('hidden');
+                        lastVoiceSrt = j.srt_text || '';
+                        document.getElementById('voice-srt-btn').classList.toggle('hidden', !lastVoiceSrt);
+                        status.textContent = `✅ Xong! ${j.chars ? j.chars + ' ký tự · ' : ''}${j.credits ? j.credits + ' credit' : ''}`;
+                        showToast('Đã tạo giọng đọc!', 'success');
+                    } else { status.textContent = '⚠️ ' + (j.error || 'Lỗi không rõ'); showToast('Lỗi: ' + (j.error || ''), 'error'); }
+                } catch (e) { /* giữ poll */ }
+            }, 3000);
+        }
+
+        function sendVoiceSrtToTimeline() {
+            const inp = document.getElementById('srt-timeline-input');
+            if (inp && lastVoiceSrt) inp.value = lastVoiceSrt;
+            switchSrtSubTab('timeline');
+            updateTimelineGeneratorPrompt();
+            showToast('Đã nạp SRT sang mục Timeline', 'success');
+        }
+
+        // ====== GĐ2: TỰ TẠO ẢNH HÀNG LOẠT (qua chatgpt-image-auto) ======
+        let IMG_ACCOUNTS = [];
+        let imgJobTimer = null;
+
+        async function loadImgProfiles() {
+            const sel = document.getElementById('auto-img-profile');
+            const status = document.getElementById('auto-img-status');
+            status.textContent = '⏳ Đang mở app tạo ảnh & tải hồ sơ…';
+            try {
+                const r = await fetch('/api/img/accounts');
+                const j = await r.json();
+                if (!r.ok) throw new Error(j.error || 'Lỗi tải hồ sơ');
+                IMG_ACCOUNTS = j.accounts || [];
+                sel.innerHTML = IMG_ACCOUNTS.length
+                    ? IMG_ACCOUNTS.map(a => `<option value="${a.uuid}">${a.logged_in ? '✅ ' : '⬜ '}${a.name}</option>`).join('')
+                    : '<option value="">(Không có hồ sơ GPM)</option>';
+                const logged = IMG_ACCOUNTS.filter(a => a.logged_in).length;
+                status.textContent = logged ? `Có ${logged} hồ sơ đã đăng nhập ChatGPT (✅). Chọn 1 rồi bấm Tạo.` : '⚠️ Chưa hồ sơ nào đăng nhập ChatGPT — đăng nhập rồi Tải lại.';
+            } catch (e) { status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error'); }
+        }
+
+        async function autoMakeImages() {
+            const prompts = (document.getElementById('bulk-gpt-prompts-output').value || '').trim();
+            if (!prompts) { showToast('Chưa có prompt ảnh — dán danh sách ở ô trên cùng để tách trước', 'error'); return; }
+            const sel = document.getElementById('auto-img-profile');
+            const uuid = sel ? sel.value : '';
+            const acc = IMG_ACCOUNTS.find(a => a.uuid === uuid);
+            if (!uuid || !acc) { showToast('Chưa chọn hồ sơ ChatGPT (bấm "Tải hồ sơ")', 'error'); return; }
+            const titleEl = document.getElementById('script-title');
+            const title = (titleEl && titleEl.value) ? titleEl.value : 'bulk';
+            const btn = document.getElementById('auto-img-btn');
+            const status = document.getElementById('auto-img-status');
+            btn.disabled = true; status.textContent = '⏳ Bắt đầu tạo ảnh…';
+            try {
+                const r = await fetch('/api/auto/images', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompts, ratio: globalRatio, uuid, name: acc.name, title }) });
+                const j = await r.json();
+                if (!r.ok || !j.run_id) throw new Error(j.error || 'Không bắt đầu được');
+                status.textContent = `▸ Đang tạo ${j.n} ảnh… (lưu ở ${j.out_dir})`;
+                pollImgJobs(j.run_id);
+            } catch (e) { btn.disabled = false; status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error'); }
+        }
+
+        function pollImgJobs(run_id) {
+            if (imgJobTimer) clearInterval(imgJobTimer);
+            const btn = document.getElementById('auto-img-btn');
+            const status = document.getElementById('auto-img-status');
+            const res = document.getElementById('auto-img-results');
+            imgJobTimer = setInterval(async () => {
+                try {
+                    const j = await (await fetch('/api/auto/img_jobs?run_id=' + encodeURIComponent(run_id), { cache: 'no-store' })).json();
+                    const jobs = j.jobs || [];
+                    const done = jobs.filter(x => x.status === 'done').length;
+                    const failed = jobs.filter(x => x.status === 'failed').length;
+                    const total = jobs.length;
+                    status.textContent = `▸ ${done}/${total} ảnh xong${failed ? ` · ${failed} lỗi` : ''}…`;
+                    res.innerHTML = jobs.filter(x => x.url).map(x => `<a href="${x.url}" target="_blank"><img src="${x.url}" class="w-full h-20 object-cover rounded-lg border border-gray-800"></a>`).join('');
+                    if (total && done + failed >= total) {
+                        clearInterval(imgJobTimer); imgJobTimer = null; btn.disabled = false;
+                        status.textContent = `✅ Xong ${done}/${total} ảnh${failed ? ` (${failed} lỗi)` : ''}. Lưu trong thư mục output.`;
+                        showToast('Tạo ảnh xong!', 'success');
+                    }
+                } catch (e) { /* giữ poll */ }
+            }, 3000);
+        }
+
+        // ====== GĐ3: TỰ TẠO VIDEO HÀNG LOẠT (qua flow-auto, text-to-video) ======
+        let vidJobTimer = null;
+
+        async function checkFlowAccounts() {
+            const status = document.getElementById('auto-vid-status');
+            status.textContent = '⏳ Đang mở app tạo video & kiểm tra tài khoản Flow…';
+            try {
+                const r = await fetch('/api/video/accounts');
+                const j = await r.json();
+                if (!r.ok) throw new Error(j.error || 'Lỗi');
+                const n = (j.accounts || []).length;
+                status.textContent = n ? `Có ${n} tài khoản Flow sẵn sàng. Bấm "Tạo toàn bộ video".` : '⚠️ Chưa quét tài khoản Flow — mở flow-auto, bấm "Quét tài khoản" trước.';
+            } catch (e) { status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error'); }
+        }
+
+        async function autoMakeVideos() {
+            const prompts = (document.getElementById('bulk-flow-prompts-output').value || '').trim();
+            if (!prompts) { showToast('Chưa có prompt video — dán danh sách ở ô trên cùng để tách trước', 'error'); return; }
+            const btn = document.getElementById('auto-vid-btn');
+            const status = document.getElementById('auto-vid-status');
+            btn.disabled = true; status.textContent = '⏳ Bắt đầu tạo video…';
+            try {
+                const r = await fetch('/api/auto/videos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompts, ratio: globalRatio }) });
+                const j = await r.json();
+                if (!r.ok || !j.run_id) throw new Error(j.error || 'Không bắt đầu được');
+                status.textContent = `▸ Đang tạo ${j.n_jobs} video bằng ${j.accounts} tài khoản…`;
+                pollVideoJobs(j.run_id);
+            } catch (e) { btn.disabled = false; status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error'); }
+        }
+
+        function pollVideoJobs(run_id) {
+            if (vidJobTimer) clearInterval(vidJobTimer);
+            const btn = document.getElementById('auto-vid-btn');
+            const status = document.getElementById('auto-vid-status');
+            const res = document.getElementById('auto-vid-results');
+            vidJobTimer = setInterval(async () => {
+                try {
+                    const j = await (await fetch('/api/auto/video_jobs?run_id=' + encodeURIComponent(run_id), { cache: 'no-store' })).json();
+                    const jobs = j.jobs || [];
+                    const done = jobs.filter(x => x.status === 'done').length;
+                    const failed = jobs.filter(x => x.status === 'failed').length;
+                    const total = jobs.length;
+                    status.textContent = `▸ ${done}/${total} video xong${failed ? ` · ${failed} lỗi` : ''}…`;
+                    res.innerHTML = jobs.flatMap((x, i) => (x.result_urls || []).map(u => `<a href="${u}" target="_blank" class="block text-[10px] text-indigo-300 bg-[#020617] border border-gray-800 rounded-lg p-2 truncate">🎬 Cảnh ${i + 1}</a>`)).join('');
+                    if (total && done + failed >= total) {
+                        clearInterval(vidJobTimer); vidJobTimer = null; btn.disabled = false;
+                        status.textContent = `✅ Xong ${done}/${total} video${failed ? ` (${failed} lỗi)` : ''}. Lưu trong flow-auto/outputs.`;
+                        showToast('Tạo video xong!', 'success');
+                    }
+                } catch (e) { /* giữ poll */ }
+            }, 4000);
+        }
+
+        async function autoWriteClaude() {
+            const sel = document.getElementById('auto-claude-profile');
+            const uuid = sel ? sel.value : '';
+            const prompt = (document.getElementById('script-prompt-output').value || '').trim();
+            if (!uuid) { showToast('Chưa chọn profile GPM đã đăng nhập Claude', 'error'); return; }
+            if (!prompt) { showToast('Chưa có câu lệnh — nhập tiêu đề trước', 'error'); return; }
+            const btn = document.getElementById('auto-claude-btn');
+            const status = document.getElementById('auto-claude-status');
+            btn.disabled = true; status.textContent = '⏳ Đang mở Claude…';
+            try {
+                const res = await fetch('/api/auto/claude', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ uuid, prompt }) });
+                const j = await res.json();
+                if (!res.ok || !j.job_id) throw new Error(j.error || 'Không bắt đầu được');
+                pollClaudeJob(j.job_id);
+            } catch (e) {
+                btn.disabled = false; status.textContent = '⚠️ ' + e.message; showToast(e.message, 'error');
+            }
+        }
+
+        function pollClaudeJob(jid) {
+            if (claudeJobTimer) clearInterval(claudeJobTimer);
+            const btn = document.getElementById('auto-claude-btn');
+            const status = document.getElementById('auto-claude-status');
+            claudeJobTimer = setInterval(async () => {
+                try {
+                    const j = await (await fetch('/api/auto/job/' + jid, { cache: 'no-store' })).json();
+                    if (j.state === 'running') { status.textContent = '⏳ ' + (j.msg || 'Đang chạy…'); return; }
+                    clearInterval(claudeJobTimer); claudeJobTimer = null; btn.disabled = false;
+                    if (j.state === 'done' && j.text) {
+                        document.getElementById('auto-claude-result').value = j.text;
+                        document.getElementById('auto-claude-result-wrap').classList.remove('hidden');
+                        status.textContent = '✅ Xong! Claude đã viết kịch bản.';
+                        showToast('Claude đã viết xong kịch bản!', 'success');
+                    } else {
+                        status.textContent = '⚠️ ' + (j.error || 'Lỗi — xem ~/Apps/dao-dien/logs/');
+                        showToast('Lỗi: ' + (j.error || 'không rõ'), 'error');
+                    }
+                } catch (e) { /* giữ poll */ }
+            }, 2500);
+        }
+
+        function sendScriptToSrt() {
+            const txt = document.getElementById('auto-claude-result').value;
+            const inp = document.getElementById('srt-script-input');
+            if (inp) inp.value = txt;
+            switchPanel('p-srt');
+            switchSrtSubTab('raw-srt');
+            updateRawSrtGeneratorPrompt();
+            showToast('Đã nạp kịch bản sang mục SRT', 'success');
+        }
 
         // HỘP THÔNG BÁO TOAST THAY THẾ CHO TRÌNH DUYỆT ALERT TRUYỀN THỐNG
         function showToast(message, type = 'success') {
