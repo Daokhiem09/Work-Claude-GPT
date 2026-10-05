@@ -290,6 +290,17 @@
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @media (max-width: 640px) {
+      body { padding: 16px; }
+      header { flex-direction: column; align-items: flex-start; gap: 12px; }
+      header h1 { font-size: 20px; flex-wrap: wrap; }
+      header .status-tag { white-space: nowrap; }
+      .card { padding: 16px; }
+      .card-title { font-size: 16px; }
+      .table-header { flex-direction: column; align-items: stretch; gap: 12px; }
+      .table-header > div:last-child { flex-wrap: wrap; }
+      .search-input { width: 100%; min-width: 0; flex: 1 1 180px; }
+    }
   </style>
 </head>
 <body>
@@ -301,7 +312,7 @@
         <h1>⚡ MASTER FLOW · QUẢN TRỊ BẢN QUYỀN</h1>
         <div style="color:var(--muted); font-size:14px; margin-top:4px;">Cấp Key cho khách & Thu hồi / Xóa Key thiết bị theo yêu cầu</div>
       </div>
-      <div class="status-tag">🟢 Máy Chủ Cục Bộ Online (Port 8890)</div>
+      <div class="status-tag">🟢 Máy chủ trực tuyến</div>
     </header>
 
     <!-- PHẦN 1: CẤP KEY NHANH CHO KHÁCH -->
