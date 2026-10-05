@@ -360,10 +360,15 @@
         </div>
       </div>
 
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0">
+        <label><input id="selectAllKeys" type="checkbox"> Chọn tất cả key đang hiển thị</label>
+        <button id="btnDeleteSelected" class="action-btn btn-revoke" disabled>🗑 Xóa key đã chọn (0)</button>
+      </div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
+              <th>Chọn</th>
               <th style="width:25%">Mã Máy / Tên Thiết Bị</th>
               <th style="width:22%">Key Bản Quyền / Khách Hàng</th>
               <th style="width:18%">Gói Cước & Hiệu Lực</th>
@@ -373,7 +378,7 @@
             </tr>
           </thead>
           <tbody id="tableBody">
-            <tr><td colspan="6" style="text-align:center; padding:30px; color:var(--muted)">Đang tải danh sách bản quyền...</td></tr>
+            <tr><td colspan="7" style="text-align:center; padding:30px; color:var(--muted)">Đang tải danh sách bản quyền...</td></tr>
           </tbody>
         </table>
       </div>
@@ -383,6 +388,65 @@
   <script>
     const $ = id => document.getElementById(id);
     let selectedDays = 30;
+    const selectedKeys = new Set();
+    let visibleSubscriptions = [], deletingKeys = false, loadingTable = false;
+    const deletedMarker = id => '[QKF_DELETED:' + id + ']';
+    const isDeletedKey = (sub, customer) => sub.status === 'revoked' && String(customer?.notes || '').includes(deletedMarker(sub.id));
+
+    async function getKeyCustomer(sub) {
+      const res = await api('/api/v1/admin/customers?query=' + encodeURIComponent(sub.customer_name || sub.customer_email || ''));
+      const customer = (res.customers || []).find(c => c.id === sub.customer_id);
+      if (!customer) throw new Error('Không tìm thấy khách hàng của key ' + sub.license_key_prefix);
+      return customer;
+    }
+
+    function updateSelection() {
+      $('btnDeleteSelected').disabled = deletingKeys || selectedKeys.size === 0;
+      $('btnDeleteSelected').textContent = '🗑 Xóa key đã chọn (' + selectedKeys.size + ')';
+      $('selectAllKeys').checked = visibleSubscriptions.length > 0 && visibleSubscriptions.every(s => selectedKeys.has(s.id));
+      document.querySelectorAll('input[data-key-id]').forEach(box => { box.checked = selectedKeys.has(box.dataset.keyId); box.disabled = deletingKeys; });
+    }
+
+    async function removeKeyFromManager(sub) {
+      const customer = await getKeyCustomer(sub);
+      const marker = deletedMarker(sub.id);
+      const notes = String(customer.notes || '');
+      const updatedNotes = notes.includes(marker) ? notes : (notes ? notes + '\n' : '') + marker;
+      if (updatedNotes.length > 2000) throw new Error('Ghi chú khách hàng đã đầy; key chưa bị xóa.');
+      if (sub.status !== 'revoked') {
+        const result = await api('/api/v1/admin/subscriptions/' + encodeURIComponent(sub.id) + '/actions', {
+          method: 'POST', body: JSON.stringify({action: 'revoke', reason: 'Xóa key khỏi bộ quản lý'})
+        });
+        if (result.subscription?.status !== 'revoked') throw new Error('Chưa xác nhận thu hồi key; chưa xóa khỏi danh sách.');
+        sub.status = 'revoked';
+      }
+      if (!notes.includes(marker)) {
+        const result = await api('/api/v1/admin/customers/' + encodeURIComponent(customer.id), {
+          method: 'PATCH', body: JSON.stringify({notes: updatedNotes})
+        });
+        if (!String(result.customer?.notes || '').includes(marker)) throw new Error('Key đã thu hồi nhưng chưa lưu được việc xóa khỏi danh sách.');
+      }
+    }
+
+    async function deleteSelectedKeys() {
+      if (deletingKeys) return;
+      const chosen = visibleSubscriptions.filter(s => selectedKeys.has(s.id));
+      if (!chosen.length) return;
+      const labels = chosen.slice(0,10).map(s => (s.customer_name || '') + ' · ' + s.license_key_prefix).join('\n');
+      if (!confirm('XÓA ' + chosen.length + ' KEY KHỎI BỘ QUẢN LÝ?\n\n' + labels + '\n\nCác key này sẽ bị thu hồi và không còn trong danh sách trên mọi thiết bị. Không thể kích hoạt lại bằng key đã thu hồi.')) return;
+      deletingKeys = true; updateSelection();
+      let done = 0; const failed = [];
+      try {
+        for (const sub of chosen) {
+          try { await removeKeyFromManager(sub); selectedKeys.delete(sub.id); done++; }
+          catch (error) { failed.push((sub.license_key_prefix || sub.id) + ': ' + error.message); }
+        }
+      } finally { deletingKeys = false; await loadTable(); updateSelection(); }
+      const summary = 'Đã xóa ' + done + '/' + chosen.length + ' key.';
+      showToast(summary, failed.length > 0);
+      if (failed.length) alert(summary + '\nCác key chưa xóa vẫn được giữ trong danh sách:\n' + failed.join('\n'));
+    }
+
 
     function showToast(msg, isBad = false) {
       const el = $('toast');
@@ -512,11 +576,21 @@
 
     // Load table data
     async function loadTable() {
+      if (deletingKeys || loadingTable) return;
+      loadingTable = true;
       const q = $('searchInput').value.trim();
       const tbody = $('tableBody');
       try {
         const res = await api('/api/v1/admin/subscriptions?query=' + encodeURIComponent(q));
-        const subs = res.subscriptions || [];
+        const incoming = res.subscriptions || [];
+        const customerRes = await api('/api/v1/admin/customers');
+        const customers = new Map((customerRes.customers || []).map(c => [c.id,c]));
+        for (const sub of incoming) {
+          if (!customers.has(sub.customer_id)) customers.set(sub.customer_id, await getKeyCustomer(sub));
+        }
+        const subs = incoming.filter(sub => !isDeletedKey(sub, customers.get(sub.customer_id)));
+        visibleSubscriptions = subs;
+        for (const id of selectedKeys) if (!subs.some(s => s.id === id)) selectedKeys.delete(id);
 
         // Fetch devices for each subscription
         for (const sub of subs) {
@@ -529,9 +603,10 @@
         }
 
         renderTable(subs);
+        updateSelection();
       } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#ef4444;padding:20px;">Lỗi tải dữ liệu: ' + err.message + '</td></tr>';
-      }
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#ef4444;padding:20px;">Lỗi tải dữ liệu: ' + err.message + '</td></tr>';
+      } finally { loadingTable = false; }
     }
 
     function renderTable(subs) {
@@ -539,7 +614,7 @@
       tbody.innerHTML = '';
 
       if (subs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Chưa có bản quyền nào trong danh sách.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Chưa có bản quyền nào trong danh sách.</td></tr>';
         return;
       }
 
@@ -548,6 +623,13 @@
 
         for (const device of devList) {
           const tr = document.createElement('tr');
+          const tdSelect = document.createElement('td');
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox'; checkbox.dataset.keyId = sub.id;
+          checkbox.setAttribute('aria-label', 'Chọn key ' + (sub.license_key_prefix || '') + ' của ' + (sub.customer_name || ''));
+          checkbox.checked = selectedKeys.has(sub.id);
+          checkbox.onchange = () => { if (checkbox.checked) selectedKeys.add(sub.id); else selectedKeys.delete(sub.id); updateSelection(); };
+          tdSelect.appendChild(checkbox); tr.appendChild(tdSelect);
 
           // CỘT 1: MÃ MÁY / THIẾT BỊ
           const tdDev = document.createElement('td');
@@ -638,8 +720,8 @@
             // NÚT THU HỒI / XÓA KEY (ĐỎ)
             const btnRevoke = document.createElement('button');
             btnRevoke.className = 'action-btn btn-revoke';
-            btnRevoke.innerHTML = '🚫 XÓA KEY';
-            btnRevoke.title = 'Thu hồi key: dừng mọi hoạt động trên máy khách và đẩy văng về màn hình nhập key';
+            btnRevoke.innerHTML = '🚫 THU HỒI';
+            btnRevoke.title = 'Thu hồi quyền; máy khách nhận trạng thái khi kiểm tra lại máy chủ';
             btnRevoke.onclick = () => revokeKey(sub);
             tdAction.appendChild(btnRevoke);
 
@@ -734,6 +816,12 @@
       showToast('Đang làm mới danh sách...');
       loadTable();
     });
+
+    $('selectAllKeys').addEventListener('change', () => {
+      for (const sub of visibleSubscriptions) { if ($('selectAllKeys').checked) selectedKeys.add(sub.id); else selectedKeys.delete(sub.id); }
+      updateSelection();
+    });
+    $('btnDeleteSelected').addEventListener('click', deleteSelectedKeys);
 
     // Machines appear after the customer activates a key.
     setInterval(() => { if (!document.hidden) loadTable(); }, 15000);
