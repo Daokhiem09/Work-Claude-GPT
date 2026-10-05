@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: master-flow-license
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_API_TOKEN
+        sync: false
+      - key: FLASK_SECRET_KEY
+        generateValue: true
