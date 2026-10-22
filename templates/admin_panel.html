@@ -3,327 +3,165 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quản Lý Key Bản Quyền · MASTER FLOW</title>
+  <title>Quản Lý Key Bản Quyền · DOLA & MASTER FLOW</title>
   <style>
     :root {
-      --bg: #0b111e;
-      --panel: #131b2e;
-      --card: #18233c;
-      --card-border: #243456;
-      --fg: #e6edf3;
-      --muted: #8b9bb4;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --success: #10b981;
-      --success-hover: #059669;
-      --danger: #ef4444;
-      --danger-hover: #dc2626;
-      --warning: #f59e0b;
-      --warning-hover: #d97706;
-      --accent: #8b5cf6;
+      --bg:#0b111e; --panel:#131b2e; --card:#18233c; --card-border:#243456;
+      --fg:#e6edf3; --muted:#8b9bb4; --primary:#3b82f6;
+      --success:#10b981; --danger:#ef4444; --warning:#f59e0b;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
     body {
-      background: var(--bg);
-      color: var(--fg);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      padding: 24px;
-      line-height: 1.5;
+      background:var(--bg); color:var(--fg);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      padding:24px; line-height:1.5;
     }
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+    .container { max-width:1400px; margin:0 auto; }
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--card-border);
+      display:flex; justify-content:space-between; align-items:center;
+      margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--card-border);
     }
-    header h1 {
-      font-size: 24px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    header .status-tag {
-      background: #064e3b;
-      color: #34d399;
-      padding: 6px 14px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 600;
-      border: 1px solid #059669;
+    header h1 { font-size:24px; font-weight:700; }
+    .status-tag {
+      background:#064e3b; color:#34d399; padding:6px 14px; border-radius:999px;
+      font-size:13px; font-weight:600; border:1px solid #059669; white-space:nowrap;
     }
     .card {
-      background: var(--panel);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background:var(--panel); border:1px solid var(--card-border);
+      border-radius:14px; padding:24px; margin-bottom:24px;
+      box-shadow:0 10px 30px #0005;
     }
-    .card-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .card-title { font-size:18px; font-weight:700; margin-bottom:16px; }
     label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      display:block; font-size:13px; font-weight:600; color:var(--muted);
+      text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px;
     }
-    input, select, button {
-      font-family: inherit;
-      font-size: 14px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
+    input,button {
+      font-family:inherit; font-size:14px; border-radius:8px;
+      border:1px solid var(--card-border);
     }
     input {
-      background: var(--bg);
-      color: var(--fg);
-      padding: 12px 14px;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.2s;
+      background:var(--bg); color:var(--fg); padding:12px 14px; width:100%; outline:none;
     }
-    input:focus {
-      border-color: var(--primary);
-    }
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .btn-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .plan-btn {
-      background: var(--card);
-      color: var(--fg);
-      padding: 10px 18px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .plan-btn:hover {
-      border-color: var(--primary);
-    }
-    .plan-btn.selected {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(59, 130, 246, 0.5);
-    }
+    input[type="checkbox"] { width:auto; padding:0; }
+    input:focus { border-color:var(--primary); }
+    .form-group { margin-bottom:16px; }
+    .btn-wrap { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px; align-items:center; }
+    button { cursor:pointer; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .plan-btn { background:var(--card); color:var(--fg); padding:10px 18px; font-weight:600; }
+    .plan-btn:hover { border-color:var(--primary); }
+    .plan-btn.selected { background:var(--primary); border-color:var(--primary); color:#fff; }
     .btn-submit {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 700;
-      padding: 14px 28px;
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: opacity 0.2s, transform 0.1s;
+      background:linear-gradient(135deg,#3b82f6,#8b5cf6); color:#fff;
+      font-size:16px; font-weight:700; padding:14px 28px; border:0; border-radius:10px;
     }
-    .btn-submit:hover { opacity: 0.95; }
-    .btn-submit:active { transform: scale(0.99); }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
+    .product-tabs { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-bottom:24px; }
+    .product-tab {
+      position:relative; overflow:hidden; background:var(--panel); color:var(--fg);
+      border:1px solid var(--card-border); border-radius:14px; padding:22px 24px;
+      text-align:left; transition:.2s;
+    }
+    .product-tab::after {
+      content:""; position:absolute; inset:auto 0 0; height:4px;
+      background:var(--tab-accent,var(--primary)); opacity:.35;
+    }
+    .product-tab:hover { transform:translateY(-2px); border-color:var(--tab-accent,var(--primary)); }
+    .product-tab.active {
+      border-color:var(--tab-accent,var(--primary));
+      background:linear-gradient(135deg,color-mix(in srgb,var(--tab-accent,var(--primary)) 14%,var(--panel)),var(--panel));
+    }
+    .product-tab.active::after { opacity:1; }
+    .tab-icon { display:block; font-size:30px; margin-bottom:8px; }
+    .tab-name { display:block; font-size:20px; font-weight:800; }
+    .tab-count {
+      display:inline-block; margin-top:8px; padding:3px 10px; border-radius:999px;
+      color:var(--tab-accent,var(--primary));
+      background:color-mix(in srgb,var(--tab-accent,var(--primary)) 15%,transparent);
+      font-size:13px; font-weight:700;
+    }
+    .tab-description { display:block; color:var(--muted); margin-top:8px; font-size:13px; }
     #keyResultBox {
-      display: none;
-      margin-top: 20px;
-      padding: 20px;
-      background: #0d1e38;
-      border: 2px dashed #3b82f6;
-      border-radius: 12px;
-      text-align: center;
+      display:none; margin-top:20px; padding:20px; background:#0d1e38;
+      border:2px dashed #3b82f6; border-radius:12px; text-align:center;
     }
     #keyResultValue {
-      font-family: "Cascadia Code", Consolas, Monaco, monospace;
-      font-size: 22px;
-      font-weight: 700;
-      color: #fbbf24;
-      background: #091325;
-      padding: 12px 18px;
-      border-radius: 8px;
-      margin: 12px 0;
-      word-break: break-all;
-      letter-spacing: 1px;
+      font:700 22px "Cascadia Code",Consolas,monospace; color:#fbbf24;
+      background:#091325; padding:12px 18px; border-radius:8px; margin:12px 0; word-break:break-all;
     }
-    .btn-copy {
-      background: var(--success);
-      color: #fff;
-      padding: 10px 20px;
-      cursor: pointer;
-      border: none;
-      font-weight: 700;
-      border-radius: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-copy:hover { background: var(--success-hover); }
-
-    .table-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .search-input {
-      width: 320px;
-      padding: 10px 14px;
-    }
-    .btn-refresh {
-      background: var(--card);
-      color: var(--fg);
-      padding: 10px 18px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    .btn-refresh:hover { border-color: var(--primary); }
-
-    .table-wrap {
-      overflow-x: auto;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 950px;
-      text-align: left;
-    }
-    th, td {
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--card-border);
-      vertical-align: middle;
-    }
-    th {
-      background: #0f1626;
-      color: var(--muted);
-      font-size: 12px;
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-    }
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .badge-active { background: #064e3b; color: #34d399; }
-    .badge-revoked { background: #7f1d1d; color: #fca5a5; }
-    .badge-expired { background: #374151; color: #9ca3af; }
-    .badge-warning { background: #78350f; color: #fbbf24; }
-
-    .action-btn {
-      padding: 7px 12px;
-      font-size: 13px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      border: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      margin-right: 6px;
-      transition: opacity 0.2s;
-    }
-    .action-btn:hover { opacity: 0.85; }
-    .btn-revoke { background: var(--danger); color: white; }
-    .btn-extend { background: var(--success); color: white; }
-    .btn-release { background: var(--warning); color: white; }
-    .btn-mini-copy {
-      background: transparent;
-      border: 1px solid var(--card-border);
-      color: var(--muted);
-      padding: 2px 6px;
-      font-size: 11px;
-      cursor: pointer;
-      border-radius: 4px;
-      margin-left: 6px;
-    }
-    .btn-mini-copy:hover { color: var(--fg); border-color: var(--primary); }
-
+    .btn-copy { background:var(--success); color:#fff; padding:10px 20px; border:0; font-weight:700; }
+    .table-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px; }
+    .table-tools { display:flex; gap:10px; }
+    .search-input { width:320px; padding:10px 14px; }
+    .btn-refresh { background:var(--card); color:var(--fg); padding:10px 18px; font-weight:600; }
+    .bulk-tools { display:flex; gap:16px; align-items:center; flex-wrap:wrap; margin:12px 0; }
+    .bulk-tools label { margin:0; text-transform:none; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--card-border); border-radius:10px; }
+    table { width:100%; border-collapse:collapse; min-width:950px; text-align:left; }
+    th,td { padding:14px 16px; border-bottom:1px solid var(--card-border); vertical-align:middle; }
+    th { background:#0f1626; color:var(--muted); font-size:12px; text-transform:uppercase; }
+    tr:hover td { background:#ffffff05; }
+    .badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:600; }
+    .badge-active { background:#064e3b; color:#34d399; }
+    .badge-revoked { background:#7f1d1d; color:#fca5a5; }
+    .badge-expired { background:#374151; color:#9ca3af; }
+    .badge-warning { background:#78350f; color:#fbbf24; }
+    .action-btn { padding:7px 12px; font-size:13px; border-radius:6px; font-weight:600; border:0; margin:0 6px 4px 0; }
+    .btn-revoke { background:var(--danger); color:white; }
+    .btn-extend { background:var(--success); color:white; }
+    .btn-release { background:var(--warning); color:white; }
+    .btn-mini-copy { background:transparent; color:var(--muted); padding:2px 6px; font-size:11px; margin-left:6px; }
+    .muted { color:var(--muted); font-size:12px; }
     #toast {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      padding: 14px 22px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 14px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      display: none;
-      z-index: 10000;
-      animation: fadeIn 0.3s ease;
+      position:fixed; top:20px; right:20px; padding:14px 22px; border-radius:8px;
+      font-weight:600; display:none; z-index:10000; max-width:calc(100vw - 40px);
     }
-    #toast.good { background: #065f46; color: #d1fae5; border: 1px solid #059669; }
-    #toast.bad { background: #991b1b; color: #fee2e2; border: 1px solid #dc2626; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @media (max-width: 640px) {
-      body { padding: 16px; }
-      header { flex-direction: column; align-items: flex-start; gap: 12px; }
-      header h1 { font-size: 20px; flex-wrap: wrap; }
-      header .status-tag { white-space: nowrap; }
-      .card { padding: 16px; }
-      .card-title { font-size: 16px; }
-      .table-header { flex-direction: column; align-items: stretch; gap: 12px; }
-      .table-header > div:last-child { flex-wrap: wrap; }
-      .search-input { width: 100%; min-width: 0; flex: 1 1 180px; }
+    #toast.good { background:#065f46; color:#d1fae5; border:1px solid #059669; }
+    #toast.bad { background:#991b1b; color:#fee2e2; border:1px solid #dc2626; }
+    @media(max-width:700px) {
+      body { padding:16px; }
+      header { flex-direction:column; align-items:flex-start; gap:12px; }
+      header h1 { font-size:20px; }
+      .card { padding:16px; }
+      .product-tabs { grid-template-columns:1fr; }
+      .table-header { flex-direction:column; align-items:stretch; }
+      .table-tools { flex-wrap:wrap; }
+      .search-input { width:100%; min-width:0; }
     }
   </style>
 </head>
 <body>
-  <div id="toast"></div>
-
+  <div id="toast" role="status"></div>
   <div class="container">
     <header>
       <div>
-        <h1>⚡ MASTER FLOW · QUẢN TRỊ BẢN QUYỀN</h1>
-        <div style="color:var(--muted); font-size:14px; margin-top:4px;">Cấp Key cho khách & Thu hồi / Xóa Key thiết bị theo yêu cầu</div>
+        <h1>⚡ QUẢN TRỊ BẢN QUYỀN · DOLA & MASTER FLOW</h1>
+        <div class="muted">Cấp Key cho khách & Thu hồi / Xóa Key thiết bị theo yêu cầu</div>
       </div>
-      <div class="status-tag">🟢 Máy chủ trực tuyến</div>
+      <div class="status-tag">🟢 Quản trị máy chủ</div>
     </header>
 
-    <!-- PHẦN 1: CẤP KEY NHANH CHO KHÁCH -->
+    <div class="product-tabs" role="tablist" aria-label="Chọn sản phẩm">
+      <button type="button" class="product-tab active" data-product="MASTER_FLOW" style="--tab-accent:#3b82f6" role="tab" aria-selected="true">
+        <span class="tab-icon">⚡</span>
+        <span class="tab-name">MASTER FLOW</span>
+        <span class="tab-count" id="masterFlowCount">MASTER FLOW (0)</span>
+        <span class="tab-description">Quản lý & cấp key cho công cụ Master Flow</span>
+      </button>
+      <button type="button" class="product-tab" data-product="DOLA" style="--tab-accent:#8b5cf6" role="tab" aria-selected="false">
+        <span class="tab-icon">🎬</span>
+        <span class="tab-name">DOLA</span>
+        <span class="tab-count" id="dolaCount">DOLA (0)</span>
+        <span class="tab-description">Quản lý & cấp key cho công cụ Dola30s</span>
+      </button>
+    </div>
+
     <div class="card">
-      <div class="card-title">🔑 CẤP KEY MỚI CHO KHÁCH HÀNG (1-Click)</div>
-      
+      <div class="card-title" id="createKeyTitle">🔑 CẤP KEY MỚI — MASTER FLOW (1-Click)</div>
       <div class="form-group">
         <label for="customerName">Tên Khách Hàng / Zalo / SĐT (Để bạn dễ nhớ)</label>
         <input type="text" id="customerName" placeholder="Ví dụ: Anh Tùng - Zalo 0988.xxx.xxx" style="max-width:550px">
       </div>
-
       <div class="form-group">
         <label>Chọn Gói Bản Quyền & Thời Hạn</label>
         <div class="btn-wrap" id="planButtons">
@@ -333,65 +171,75 @@
           <button type="button" class="plan-btn" data-days="180">Gói 180 Ngày (6 Tháng)</button>
           <button type="button" class="plan-btn" data-days="365">Gói 1 Năm (365 Ngày)</button>
           <button type="button" class="plan-btn" data-days="0">Gói Trọn Đời (Vĩnh Viễn)</button>
-          <input type="number" id="customDays" placeholder="Số ngày khác..." style="width:140px; margin-left:6px;" min="1" max="3650">
+          <input type="number" id="customDays" placeholder="Số ngày khác..." style="width:140px" min="1" max="3650">
         </div>
       </div>
-
-      <button id="btnCreateKey" class="btn-submit">
-        <span>🔑 TẠO & LẤY KEY MỚI</span>
-      </button>
-
-      <p style="color:var(--muted);font-size:13px;">Khách nhập key và kích hoạt thành công thì mã máy mới xuất hiện bên dưới. Danh sách tự cập nhật mỗi 15 giây.</p>
-
+      <button id="btnCreateKey" class="btn-submit">🔑 TẠO & LẤY KEY MỚI</button>
+      <p class="muted">Khách nhập key và kích hoạt thành công thì mã máy mới xuất hiện bên dưới. Danh sách tự cập nhật mỗi 15 giây.</p>
       <div id="keyResultBox">
-        <div style="color:#34d399; font-weight:700; font-size:16px;">✅ Tạo Key thành công! Gửi chuỗi Key này cho khách để họ kích hoạt máy:</div>
+        <div style="color:#34d399;font-weight:700">✅ Tạo Key thành công! Gửi chuỗi Key này cho khách để họ kích hoạt máy:</div>
         <div id="keyResultValue"></div>
         <button id="btnCopyKey" class="btn-copy">📋 SAO CHÉP KEY GỬI KHÁCH</button>
       </div>
     </div>
 
-    <!-- PHẦN 2: DANH SÁCH THIẾT BỊ & KEY -->
     <div class="card">
       <div class="table-header">
         <div class="card-title" style="margin:0">💻 DANH SÁCH THIẾT BỊ & KEY ĐANG HOẠT ĐỘNG</div>
-        <div style="display:flex; gap:10px;">
+        <div class="table-tools">
           <input type="text" id="searchInput" class="search-input" placeholder="🔍 Tìm kiếm tên khách, mã máy, key...">
           <button id="btnRefresh" class="btn-refresh">🔄 Làm Mới</button>
         </div>
       </div>
-
-      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0">
+      <div class="bulk-tools">
         <label><input id="selectAllKeys" type="checkbox"> Chọn tất cả key đang hiển thị</label>
         <button id="btnDeleteSelected" class="action-btn btn-revoke" disabled>🗑 Xóa key đã chọn (0)</button>
       </div>
       <div class="table-wrap">
         <table>
-          <thead>
-            <tr>
-              <th>Chọn</th>
-              <th style="width:25%">Mã Máy / Tên Thiết Bị</th>
-              <th style="width:22%">Key Bản Quyền / Khách Hàng</th>
-              <th style="width:18%">Gói Cước & Hiệu Lực</th>
-              <th style="width:13%">Thời Hạn Còn Lại</th>
-              <th style="width:10%">Trạng Thái</th>
-              <th style="width:12%">Thao Tác 1-Click</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <tr><td colspan="7" style="text-align:center; padding:30px; color:var(--muted)">Đang tải danh sách bản quyền...</td></tr>
-          </tbody>
+          <thead><tr><th>Chọn</th><th>Mã Máy / Tên Thiết Bị</th><th>Key Bản Quyền / Khách Hàng</th><th>Gói Cước & Hiệu Lực</th><th>Thời Hạn Còn Lại</th><th>Trạng Thái</th><th>Thao Tác 1-Click</th></tr></thead>
+          <tbody id="tableBody"><tr><td colspan="7" style="text-align:center;padding:30px">Đang tải danh sách bản quyền...</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
   <script>
+    'use strict';
+
     const $ = id => document.getElementById(id);
     let selectedDays = 30;
+    let activeProduct = 'MASTER_FLOW';
     const selectedKeys = new Set();
-    let visibleSubscriptions = [], deletingKeys = false, loadingTable = false;
+    let visibleSubscriptions = [];
+    let allSubscriptions = [];
+    let deletingKeys = false;
+    let loadingTable = false;
+    let reloadRequested = false;
     const deletedMarker = id => '[QKF_DELETED:' + id + ']';
-    const isDeletedKey = (sub, customer) => sub.status === 'revoked' && String(customer?.notes || '').includes(deletedMarker(sub.id));
+    const isDeletedKey = (sub, customer) =>
+      sub.status === 'revoked' && String(customer?.notes || '').includes(deletedMarker(sub.id));
+
+    function isDolaSubscription(sub, customer) {
+      const planCode = String(sub.plan_code || '').toUpperCase();
+      const features = Array.isArray(sub.features) ? sub.features : [];
+      return planCode.startsWith('DOLA_') ||
+        (features.includes('dola30s') && !features.includes('generation')) ||
+        String(sub.notes || '').includes('[PRODUCT:DOLA]') ||
+        String(customer?.notes || '').includes('[PRODUCT:DOLA]');
+    }
+
+    function filterVisibleSubscriptions() {
+      visibleSubscriptions = allSubscriptions.filter(sub =>
+        activeProduct === 'DOLA'
+          ? isDolaSubscription(sub, sub.customer)
+          : !isDolaSubscription(sub, sub.customer)
+      );
+      const visibleIds = new Set(visibleSubscriptions.map(sub => sub.id));
+      for (const id of selectedKeys) {
+        if (!visibleIds.has(id)) selectedKeys.delete(id);
+      }
+    }
 
     async function getKeyCustomer(sub) {
       const res = await api('/api/v1/admin/customers?query=' + encodeURIComponent(sub.customer_name || sub.customer_email || ''));
@@ -403,8 +251,14 @@
     function updateSelection() {
       $('btnDeleteSelected').disabled = deletingKeys || selectedKeys.size === 0;
       $('btnDeleteSelected').textContent = '🗑 Xóa key đã chọn (' + selectedKeys.size + ')';
-      $('selectAllKeys').checked = visibleSubscriptions.length > 0 && visibleSubscriptions.every(s => selectedKeys.has(s.id));
-      document.querySelectorAll('input[data-key-id]').forEach(box => { box.checked = selectedKeys.has(box.dataset.keyId); box.disabled = deletingKeys; });
+      const selectedCount = visibleSubscriptions.filter(sub => selectedKeys.has(sub.id)).length;
+      $('selectAllKeys').checked = visibleSubscriptions.length > 0 && selectedCount === visibleSubscriptions.length;
+      $('selectAllKeys').indeterminate = selectedCount > 0 && selectedCount < visibleSubscriptions.length;
+      $('selectAllKeys').disabled = deletingKeys || visibleSubscriptions.length === 0;
+      document.querySelectorAll('input[data-key-id]').forEach(box => {
+        box.checked = selectedKeys.has(box.dataset.keyId);
+        box.disabled = deletingKeys;
+      });
     }
 
     async function removeKeyFromManager(sub) {
@@ -415,417 +269,417 @@
       if (updatedNotes.length > 2000) throw new Error('Ghi chú khách hàng đã đầy; key chưa bị xóa.');
       if (sub.status !== 'revoked') {
         const result = await api('/api/v1/admin/subscriptions/' + encodeURIComponent(sub.id) + '/actions', {
-          method: 'POST', body: JSON.stringify({action: 'revoke', reason: 'Xóa key khỏi bộ quản lý'})
+          method:'POST',
+          body:JSON.stringify({action:'revoke', reason:'Xóa key khỏi bộ quản lý'})
         });
-        if (result.subscription?.status !== 'revoked') throw new Error('Chưa xác nhận thu hồi key; chưa xóa khỏi danh sách.');
+        if (result.subscription?.status !== 'revoked') {
+          throw new Error('Chưa xác nhận thu hồi key; chưa xóa khỏi danh sách.');
+        }
         sub.status = 'revoked';
       }
       if (!notes.includes(marker)) {
         const result = await api('/api/v1/admin/customers/' + encodeURIComponent(customer.id), {
-          method: 'PATCH', body: JSON.stringify({notes: updatedNotes})
+          method:'PATCH',
+          body:JSON.stringify({notes:updatedNotes})
         });
-        if (!String(result.customer?.notes || '').includes(marker)) throw new Error('Key đã thu hồi nhưng chưa lưu được việc xóa khỏi danh sách.');
+        if (!String(result.customer?.notes || '').includes(marker)) {
+          throw new Error('Key đã thu hồi nhưng chưa lưu được việc xóa khỏi danh sách.');
+        }
       }
     }
 
     async function deleteSelectedKeys() {
       if (deletingKeys) return;
-      const chosen = visibleSubscriptions.filter(s => selectedKeys.has(s.id));
+      const chosen = visibleSubscriptions.filter(sub => selectedKeys.has(sub.id));
       if (!chosen.length) return;
-      const labels = chosen.slice(0,10).map(s => (s.customer_name || '') + ' · ' + s.license_key_prefix).join('\n');
-      if (!confirm('XÓA ' + chosen.length + ' KEY KHỎI BỘ QUẢN LÝ?\n\n' + labels + '\n\nCác key này sẽ bị thu hồi và không còn trong danh sách trên mọi thiết bị. Không thể kích hoạt lại bằng key đã thu hồi.')) return;
-      deletingKeys = true; updateSelection();
-      let done = 0; const failed = [];
+      const labels = chosen.slice(0, 10)
+        .map(sub => (sub.customer_name || '') + ' · ' + sub.license_key_prefix).join('\n');
+      if (!confirm('XÓA ' + chosen.length + ' KEY KHỎI BỘ QUẢN LÝ?\n\n' + labels +
+        '\n\nCác key này sẽ bị thu hồi và không còn trong danh sách trên mọi thiết bị. Không thể kích hoạt lại bằng key đã thu hồi.')) return;
+
+      deletingKeys = true;
+      updateSelection();
+      let done = 0;
+      const failed = [];
       try {
         for (const sub of chosen) {
-          try { await removeKeyFromManager(sub); selectedKeys.delete(sub.id); done++; }
-          catch (error) { failed.push((sub.license_key_prefix || sub.id) + ': ' + error.message); }
+          try {
+            await removeKeyFromManager(sub);
+            selectedKeys.delete(sub.id);
+            done++;
+          } catch (error) {
+            failed.push((sub.license_key_prefix || sub.id) + ': ' + error.message);
+          }
         }
-      } finally { deletingKeys = false; await loadTable(); updateSelection(); }
+      } finally {
+        deletingKeys = false;
+        await loadTable();
+        updateSelection();
+      }
       const summary = 'Đã xóa ' + done + '/' + chosen.length + ' key.';
       showToast(summary, failed.length > 0);
       if (failed.length) alert(summary + '\nCác key chưa xóa vẫn được giữ trong danh sách:\n' + failed.join('\n'));
     }
-
 
     function showToast(msg, isBad = false) {
       const el = $('toast');
       el.textContent = msg;
       el.className = isBad ? 'bad' : 'good';
       el.style.display = 'block';
-      setTimeout(() => { el.style.display = 'none'; }, 4000);
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => { el.style.display = 'none'; }, 4000);
     }
 
     async function api(path, options = {}) {
       const res = await fetch(path, {
         ...options,
-        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+        headers:{'Content-Type':'application/json', ...(options.headers || {})}
       });
-      const data = await res.json().catch(() => ({ ok: false, error: { message: 'Lỗi phản hồi từ máy chủ' } }));
-      if (!res.ok || data.ok === false) {
-        throw new Error(data.error?.message || 'Lỗi HTTP ' + res.status);
-      }
+      const data = await res.json().catch(() => ({ok:false, error:{message:'Lỗi phản hồi từ máy chủ'}}));
+      if (!res.ok || data.ok === false) throw new Error(data.error?.message || 'Lỗi HTTP ' + res.status);
       return data;
     }
 
-    function formatDate(isoStr) {
-      if (!isoStr) return 'Vĩnh viễn';
-      try {
-        const d = new Date(isoStr);
-        return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
-      } catch { return isoStr; }
+    function formatDate(value) {
+      if (!value) return 'Vĩnh viễn';
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? String(value) : date.toLocaleDateString('vi-VN');
     }
 
-    function getRemainingDays(isoStr) {
-      if (!isoStr) return 99999;
-      const diff = new Date(isoStr).getTime() - Date.now();
-      return Math.ceil(diff / (1000 * 3600 * 24));
+    function getRemainingDays(value) {
+      if (!value) return 99999;
+      return Math.ceil((new Date(value).getTime() - Date.now()) / 86400000);
     }
 
-    // Plan Selection
+    function updateProductUI() {
+      $('createKeyTitle').textContent = '🔑 CẤP KEY MỚI — ' +
+        (activeProduct === 'DOLA' ? 'DOLA' : 'MASTER FLOW') + ' (1-Click)';
+      document.querySelectorAll('.product-tab').forEach(tab => {
+        const active = tab.dataset.product === activeProduct;
+        tab.classList.toggle('active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+    }
+
+    document.querySelectorAll('.product-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        activeProduct = tab.dataset.product;
+        updateProductUI();
+        filterVisibleSubscriptions();
+        renderTable(visibleSubscriptions);
+        updateSelection();
+      });
+    });
+
     document.querySelectorAll('.plan-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('selected'));
-        e.target.classList.add('selected');
-        selectedDays = parseInt(e.target.dataset.days);
+      btn.addEventListener('click', event => {
+        document.querySelectorAll('.plan-btn').forEach(button => button.classList.remove('selected'));
+        event.currentTarget.classList.add('selected');
+        selectedDays = Number(event.currentTarget.dataset.days);
         $('customDays').value = '';
       });
     });
 
-    $('customDays').addEventListener('input', (e) => {
-      const val = parseInt(e.target.value);
-      if (!isNaN(val) && val > 0) {
-        document.querySelectorAll('.plan-btn').forEach(b => b.classList.remove('selected'));
-        selectedDays = val;
-      }
+    $('customDays').addEventListener('input', event => {
+      document.querySelectorAll('.plan-btn').forEach(button => button.classList.remove('selected'));
+      const days = Number(event.target.value);
+      selectedDays = event.target.value !== '' && Number.isInteger(days) && days > 0 && days <= 3650
+        ? days : null;
     });
 
-    // Create Key
     $('btnCreateKey').addEventListener('click', async () => {
       const name = $('customerName').value.trim();
       if (!name) return showToast('Vui lòng nhập Tên/Zalo khách hàng để dễ quản lý!', true);
-      
+      if (selectedDays === null || selectedDays === undefined || selectedDays < 0) {
+        return showToast('Số ngày không hợp lệ!', true);
+      }
+      const days = selectedDays;
+      const dola = activeProduct === 'DOLA';
       const btn = $('btnCreateKey');
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ ĐANG KHỞI TẠO KEY...</span>';
-
+      btn.textContent = '⏳ ĐANG KHỞI TẠO KEY...';
       try {
-        // 1. Determine plan
-        let planCode = selectedDays === 0 ? 'FAST_LIFETIME' : ('FAST_' + selectedDays);
-        let planName = selectedDays === 0 ? 'Gói Trọn Đời - Vĩnh Viễn' : ('Gói ' + selectedDays + ' Ngày');
-
-        let plansRes = await api('/api/v1/admin/plans');
-        let plan = (plansRes.plans || []).find(p => p.code === planCode);
-
+        const planCode = days === 0
+          ? (dola ? 'DOLA_LIFETIME' : 'FAST_LIFETIME')
+          : (dola ? 'DOLA_' : 'FAST_') + days;
+        const planName = days === 0
+          ? (dola ? 'Dola30s - Trọn Đời' : 'Master Flow - Trọn Đời')
+          : (dola ? 'Dola30s - Gói ' : 'Gói ') + days + ' Ngày';
+        const features = dola ? ['dola30s'] : ['generation','voice_local','characters','account_manager'];
+        const notes = dola ? 'Khách tạo nhanh [PRODUCT:DOLA]' : 'Khách tạo nhanh [PRODUCT:MASTER_FLOW]';
+        const plansRes = await api('/api/v1/admin/plans');
+        let plan = (plansRes.plans || []).find(item => item.code === planCode);
         if (!plan) {
-          const createPlanRes = await api('/api/v1/admin/plans', {
-            method: 'POST',
-            body: JSON.stringify({
-              code: planCode,
-              name: planName,
-              duration_days: selectedDays,
-              price_vnd: 0,
-              max_devices: 1,
-              offline_grace_hours: 72,
-              refresh_interval_minutes: 5,
-              features: ['generation', 'voice_local', 'characters', 'account_manager']
+          const result = await api('/api/v1/admin/plans', {
+            method:'POST',
+            body:JSON.stringify({
+              code:planCode, name:planName, duration_days:days, price_vnd:0,
+              max_devices:1, offline_grace_hours:72, refresh_interval_minutes:5, features
             })
           });
-          plan = createPlanRes.plan;
+          plan = result.plan;
         }
-
         if (!plan.active) throw new Error('Gói này đang ngừng bán. Vui lòng chọn gói khác.');
-
-        // 2. Create customer
-        const custRes = await api('/api/v1/admin/customers', {
-          method: 'POST',
-          body: JSON.stringify({ name: name, notes: 'Khách tạo nhanh' })
+        const customerRes = await api('/api/v1/admin/customers', {
+          method:'POST', body:JSON.stringify({name, notes})
         });
-
-        // 3. Create subscription -> gives license_key
         const subRes = await api('/api/v1/admin/subscriptions', {
-          method: 'POST',
-          body: JSON.stringify({
-            customer_id: custRes.customer.id,
-            plan_id: plan.id,
-            max_devices: 1,
-            price_paid_vnd: 0
+          method:'POST',
+          body:JSON.stringify({
+            customer_id:customerRes.customer.id, plan_id:plan.id, max_devices:1, price_paid_vnd:0
           })
         });
-
         $('keyResultValue').textContent = subRes.license_key;
         $('keyResultBox').style.display = 'block';
         showToast('Đã tạo thành công Key cho khách: ' + name);
         $('customerName').value = '';
-        loadTable();
-      } catch (err) {
-        showToast('Lỗi tạo key: ' + err.message, true);
+        await loadTable();
+      } catch (error) {
+        showToast('Lỗi tạo key: ' + error.message, true);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>🔑 TẠO & LẤY KEY MỚI</span>';
+        btn.textContent = '🔑 TẠO & LẤY KEY MỚI';
       }
     });
 
-    $('btnCopyKey').addEventListener('click', async () => {
-      const key = $('keyResultValue').textContent;
-      if (key) {
-        await navigator.clipboard.writeText(key);
-        showToast('Đã sao chép Key vào bộ nhớ tạm! Bạn có thể dán (Paste) để gửi cho khách.');
-      }
-    });
+    $('btnCopyKey').addEventListener('click', () =>
+      copyText($('keyResultValue').textContent, 'Đã sao chép Key để gửi cho khách.')
+    );
 
-    // Load table data
     async function loadTable() {
-      if (deletingKeys || loadingTable) return;
+      if (deletingKeys || loadingTable) {
+        reloadRequested = true;
+        return;
+      }
       loadingTable = true;
-      const q = $('searchInput').value.trim();
-      const tbody = $('tableBody');
+      reloadRequested = false;
+      const query = $('searchInput').value.trim();
       try {
-        const res = await api('/api/v1/admin/subscriptions?query=' + encodeURIComponent(q));
+        const res = await api('/api/v1/admin/subscriptions?query=' + encodeURIComponent(query));
         const incoming = res.subscriptions || [];
         const customerRes = await api('/api/v1/admin/customers');
-        const customers = new Map((customerRes.customers || []).map(c => [c.id,c]));
+        const customers = new Map((customerRes.customers || []).map(customer => [customer.id, customer]));
         for (const sub of incoming) {
           if (!customers.has(sub.customer_id)) customers.set(sub.customer_id, await getKeyCustomer(sub));
+          sub.customer = customers.get(sub.customer_id);
         }
-        const subs = incoming.filter(sub => !isDeletedKey(sub, customers.get(sub.customer_id)));
-        visibleSubscriptions = subs;
-        for (const id of selectedKeys) if (!subs.some(s => s.id === id)) selectedKeys.delete(id);
-
-        // Fetch devices for each subscription
-        for (const sub of subs) {
+        const nextSubscriptions = incoming.filter(sub => !isDeletedKey(sub, sub.customer));
+        // Load both products so switching tabs also shows their devices immediately.
+        for (const sub of nextSubscriptions) {
           try {
-            const devRes = await api('/api/v1/admin/subscriptions/' + encodeURIComponent(sub.id) + '/devices');
-            sub.devices = devRes.devices || [];
+            const result = await api('/api/v1/admin/subscriptions/' + encodeURIComponent(sub.id) + '/devices');
+            sub.devices = result.devices || [];
           } catch {
             sub.devices = [];
           }
         }
-
-        renderTable(subs);
+        // A delete may have started while this refresh was in flight.
+        if (deletingKeys) {
+          reloadRequested = true;
+          return;
+        }
+        allSubscriptions = nextSubscriptions;
+        $('masterFlowCount').textContent = 'MASTER FLOW (' +
+          allSubscriptions.filter(sub => !isDolaSubscription(sub, sub.customer)).length + ')';
+        $('dolaCount').textContent = 'DOLA (' +
+          allSubscriptions.filter(sub => isDolaSubscription(sub, sub.customer)).length + ')';
+        filterVisibleSubscriptions();
+        renderTable(visibleSubscriptions);
         updateSelection();
-      } catch (err) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#ef4444;padding:20px;">Lỗi tải dữ liệu: ' + err.message + '</td></tr>';
-      } finally { loadingTable = false; }
+      } catch (error) {
+        if (!deletingKeys) {
+          const row = document.createElement('tr');
+          const cell = document.createElement('td');
+          cell.colSpan = 7;
+          cell.textContent = 'Lỗi tải dữ liệu: ' + error.message;
+          cell.style.color = '#ef4444';
+          row.appendChild(cell);
+          $('tableBody').replaceChildren(row);
+        }
+      } finally {
+        loadingTable = false;
+        if (reloadRequested && !deletingKeys) {
+          reloadRequested = false;
+          void loadTable();
+        }
+      }
+    }
+
+    function appendText(parent, tag, text, className) {
+      const element = document.createElement(tag);
+      element.textContent = text;
+      if (className) element.className = className;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function actionButton(parent, text, className, callback, title) {
+      const button = appendText(parent, 'button', text, 'action-btn ' + className);
+      button.type = 'button';
+      button.title = title || '';
+      button.onclick = callback;
+      return button;
     }
 
     function renderTable(subs) {
       const tbody = $('tableBody');
-      tbody.innerHTML = '';
-
-      if (subs.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Chưa có bản quyền nào trong danh sách.</td></tr>';
+      tbody.replaceChildren();
+      if (!subs.length) {
+        const row = tbody.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 7;
+        cell.textContent = 'Chưa có bản quyền nào trong danh sách.';
+        cell.style.textAlign = 'center';
         return;
       }
-
       for (const sub of subs) {
-        const devList = (sub.devices && sub.devices.length > 0) ? sub.devices : [null];
-
-        for (const device of devList) {
-          const tr = document.createElement('tr');
-          const tdSelect = document.createElement('td');
+        const devices = sub.devices?.length ? sub.devices : [null];
+        for (const device of devices) {
+          const row = tbody.insertRow();
+          const selectCell = row.insertCell();
           const checkbox = document.createElement('input');
-          checkbox.type = 'checkbox'; checkbox.dataset.keyId = sub.id;
-          checkbox.setAttribute('aria-label', 'Chọn key ' + (sub.license_key_prefix || '') + ' của ' + (sub.customer_name || ''));
+          checkbox.type = 'checkbox';
+          checkbox.dataset.keyId = sub.id;
           checkbox.checked = selectedKeys.has(sub.id);
-          checkbox.onchange = () => { if (checkbox.checked) selectedKeys.add(sub.id); else selectedKeys.delete(sub.id); updateSelection(); };
-          tdSelect.appendChild(checkbox); tr.appendChild(tdSelect);
+          checkbox.disabled = deletingKeys;
+          checkbox.setAttribute('aria-label', 'Chọn key ' + (sub.license_key_prefix || '') + ' của ' + (sub.customer_name || ''));
+          checkbox.onchange = () => {
+            if (checkbox.checked) selectedKeys.add(sub.id);
+            else selectedKeys.delete(sub.id);
+            updateSelection();
+          };
+          selectCell.appendChild(checkbox);
 
-          // CỘT 1: MÃ MÁY / THIẾT BỊ
-          const tdDev = document.createElement('td');
+          const deviceCell = row.insertCell();
           if (device) {
-            const devPrefix = (device.device_hash_prefix || '').substring(0, 16);
-            tdDev.innerHTML = `
-              <div style="display:flex; align-items:center;">
-                <b style="font-family:monospace; color:#60a5fa; font-size:14px;">${devPrefix}</b>
-                <button class="btn-mini-copy" onclick="copyText('${devPrefix}', 'Đã copy mã máy')">Copy</button>
-              </div>
-              <div style="font-size:12px; color:var(--muted); margin-top:2px;">
-                💻 ${device.device_label || 'Máy khách'} · <small>${device.platform || ''}</small>
-              </div>
-            `;
+            const prefix = (device.device_hash_prefix || '').substring(0, 16);
+            appendText(deviceCell, 'b', prefix);
+            const copyButton = appendText(deviceCell, 'button', 'Copy', 'btn-mini-copy');
+            copyButton.onclick = () => copyText(prefix, 'Đã copy mã máy');
+            appendText(deviceCell, 'div', '💻 ' + (device.device_label || 'Máy khách') + ' · ' + (device.platform || ''), 'muted');
           } else {
-            tdDev.innerHTML = `
-              <span style="color:var(--muted); font-style:italic;">Chưa kích hoạt máy nào</span>
-              <div style="font-size:12px; color:var(--muted);">Đang chờ khách nhập Key</div>
-            `;
-          }
-          tr.appendChild(tdDev);
-
-          // CỘT 2: KEY BẢN QUYỀN & KHÁCH
-          const tdKey = document.createElement('td');
-          const keyPrefix = sub.license_key_prefix || 'qkf_...';
-          let customerName = sub.customer_name || 'Khách';
-          let displayName = sub.plan_name || 'Gói chuẩn';
-          if (sub.plan_code === 'OWNER_LIFETIME' || displayName.includes('?') || displayName.includes('\uFFFD')) {
-            displayName = 'Chủ sở hữu - Trọn đời';
+            appendText(deviceCell, 'div', 'Chưa kích hoạt máy nào', 'muted');
+            appendText(deviceCell, 'div', 'Đang chờ khách nhập Key', 'muted');
           }
 
-          tdKey.innerHTML = `
-            <b style="font-family:monospace; color:#a78bfa; font-size:14px;">${keyPrefix}...</b>
-            <div style="font-size:13px; font-weight:600; color:var(--fg); margin-top:2px;">
-              👤 ${customerName}
-            </div>
-          `;
-          tr.appendChild(tdKey);
+          const keyCell = row.insertCell();
+          appendText(keyCell, 'b', (sub.license_key_prefix || 'qkf_') + '...');
+          appendText(keyCell, 'div', '👤 ' + (sub.customer_name || 'Khách'));
+          const planCell = row.insertCell();
+          appendText(planCell, 'b', sub.plan_name || 'Gói chuẩn');
+          appendText(planCell, 'div', formatDate(sub.starts_at) + ' → ' + formatDate(sub.expires_at), 'muted');
 
-          // CỘT 3: GÓI CƯỚC & HIỆU LỰC
-          const tdPlan = document.createElement('td');
-          tdPlan.innerHTML = `
-            <b>${displayName}</b>
-            <div style="font-size:12px; color:var(--muted); margin-top:2px;">
-              ${formatDate(sub.starts_at)} → ${formatDate(sub.expires_at)}
-            </div>
-          `;
-          tr.appendChild(tdPlan);
-
-          // CỘT 4: THỜI HẠN CÒN LẠI
-          const tdDays = document.createElement('td');
           const remain = getRemainingDays(sub.expires_at);
+          const timeCell = row.insertCell();
+          let timeText;
+          let badgeClass;
           if (sub.status === 'revoked') {
-            tdDays.innerHTML = `<span class="badge badge-revoked">Đã bị thu hồi</span>`;
+            timeText = 'Đã bị thu hồi'; badgeClass = 'badge-revoked';
           } else if (sub.status === 'suspended') {
-            tdDays.innerHTML = '<span class="badge badge-warning">Tạm khóa</span>';
-          } else if (remain > 5000) {
-            tdDays.innerHTML = `<span class="badge badge-active" style="background:#065f46">✨ Vĩnh viễn</span>`;
+            timeText = 'Tạm khóa'; badgeClass = 'badge-warning';
+          } else if (!sub.expires_at) {
+            timeText = '✨ Vĩnh viễn'; badgeClass = 'badge-active';
           } else if (remain <= 0) {
-            tdDays.innerHTML = `<span class="badge badge-expired">Hết hạn (${remain} ngày)</span>`;
-          } else if (remain <= 3) {
-            tdDays.innerHTML = `<span class="badge badge-warning">⚠️ Còn ${remain} ngày</span>`;
+            timeText = 'Hết hạn (' + remain + ' ngày)'; badgeClass = 'badge-expired';
           } else {
-            tdDays.innerHTML = `<span class="badge badge-active">Còn ${remain} ngày</span>`;
+            timeText = 'Còn ' + remain + ' ngày';
+            badgeClass = remain <= 3 ? 'badge-warning' : 'badge-active';
           }
-          tr.appendChild(tdDays);
+          appendText(timeCell, 'span', timeText, 'badge ' + badgeClass);
 
-          // CỘT 5: TRẠNG THÁI
-          const tdStatus = document.createElement('td');
-          if (sub.status === 'revoked') {
-            tdStatus.innerHTML = `<span style="color:#ef4444; font-weight:700;">🔴 Đã thu hồi</span>`;
-          } else if (remain <= 0) {
-            tdStatus.innerHTML = `<span style="color:#9ca3af; font-weight:600;">⚪ Hết hạn</span>`;
-          } else if (sub.status === 'suspended') {
-            tdStatus.innerHTML = '<span style="color:#fbbf24;font-weight:700">Tạm khóa</span>';
-          } else if (device && device.status === 'active') {
-            tdStatus.innerHTML = `<span style="color:#10b981; font-weight:700;">🟢 Đang chạy</span>`;
-          } else {
-            tdStatus.innerHTML = `<span style="color:#fbbf24; font-weight:600;">🟡 Chờ máy</span>`;
-          }
-          tr.appendChild(tdStatus);
+          const statusCell = row.insertCell();
+          const status = sub.status === 'revoked' ? '🔴 Đã thu hồi'
+            : remain <= 0 ? '⚪ Hết hạn'
+            : sub.status === 'suspended' ? 'Tạm khóa'
+            : device?.status === 'active' ? '🟢 Đang chạy' : '🟡 Chờ máy';
+          appendText(statusCell, 'span', status);
 
-          // CỘT 6: THAO TÁC 1-CLICK
-          const tdAction = document.createElement('td');
-          tdAction.style.whiteSpace = 'nowrap';
-
+          const actions = row.insertCell();
           if (sub.status !== 'revoked') {
-            // NÚT THU HỒI / XÓA KEY (ĐỎ)
-            const btnRevoke = document.createElement('button');
-            btnRevoke.className = 'action-btn btn-revoke';
-            btnRevoke.innerHTML = '🚫 THU HỒI';
-            btnRevoke.title = 'Thu hồi quyền; máy khách nhận trạng thái khi kiểm tra lại máy chủ';
-            btnRevoke.onclick = () => revokeKey(sub);
-            tdAction.appendChild(btnRevoke);
-
-            // NÚT GIA HẠN +30 NGÀY (XANH)
-            const btnExtend = document.createElement('button');
-            btnExtend.className = 'action-btn btn-extend';
-            btnExtend.innerHTML = '⚡ +30N';
-            btnExtend.title = 'Cộng thêm 30 ngày sử dụng cho khách này';
-            btnExtend.onclick = () => extendKey(sub, 30);
-            tdAction.appendChild(btnExtend);
+            actionButton(actions, '🚫 THU HỒI', 'btn-revoke', () => revokeKey(sub),
+              'Thu hồi quyền; máy khách nhận trạng thái khi kiểm tra lại máy chủ');
+            actionButton(actions, '⚡ +30N', 'btn-extend', () => extendKey(sub, 30));
           }
-
-          // NÚT ĐỔI MÁY (VÀNG)
-          if (device && device.status === 'active') {
-            const btnRel = document.createElement('button');
-            btnRel.className = 'action-btn btn-release';
-            btnRel.innerHTML = '🔄 Đổi máy';
-            btnRel.title = 'Giải phóng thiết bị này để khách có thể kích hoạt máy tính mới';
-            btnRel.onclick = () => releaseDevice(device);
-            tdAction.appendChild(btnRel);
+          if (device?.status === 'active') {
+            actionButton(actions, '🔄 Đổi máy', 'btn-release', () => releaseDevice(device));
           }
-
-          tr.appendChild(tdAction);
-          tbody.appendChild(tr);
         }
       }
     }
 
     async function copyText(text, msg) {
       if (!text) return;
-      await navigator.clipboard.writeText(text);
-      showToast(msg || 'Đã sao chép!');
+      try {
+        await navigator.clipboard.writeText(text);
+        showToast(msg || 'Đã sao chép!');
+      } catch (error) {
+        showToast('Không thể sao chép: ' + error.message, true);
+      }
     }
 
-    // Revoke Sub (Thu hồi / Xóa Key)
     async function revokeKey(sub) {
-      const confirmMsg = `BẠN CÓ CHẮC MUỐN THU HỒI / XÓA KEY NÀY KHÔNG?\n\n- Khách hàng: ${sub.customer_name}\n- Key: ${sub.license_key_prefix}...\n\nKhi thu hồi, công cụ trên máy khách sẽ TỰ ĐỘNG DỪNG TẤT CẢ VÀ ĐÁ VĂNG VỀ MÀN HÌNH KHÓA CỨNG!`;
-      if (!confirm(confirmMsg)) return;
-
+      if (!confirm('THU HỒI KEY NÀY?\n\nKhách hàng: ' + (sub.customer_name || '') +
+        '\nKey: ' + sub.license_key_prefix +
+        '...\n\nMáy khách sẽ nhận trạng thái thu hồi khi kiểm tra lại máy chủ.')) return;
       try {
         await api('/api/v1/admin/subscriptions/' + encodeURIComponent(sub.id) + '/actions', {
-          method: 'POST',
-          body: JSON.stringify({ action: 'revoke', reason: 'Chủ sở hữu MASTER FLOW đã thu hồi bản quyền' })
+          method:'POST',
+          body:JSON.stringify({action:'revoke', reason:'Chủ sở hữu đã thu hồi bản quyền'})
         });
-        showToast('✅ Đã thu hồi & Xóa Key thành công! Thiết bị khách sẽ bị ngắt kết nối ngay lập tức.');
-        loadTable();
-      } catch (err) {
-        showToast('Lỗi khi thu hồi: ' + err.message, true);
+        showToast('✅ Đã thu hồi Key thành công.');
+        await loadTable();
+      } catch (error) {
+        showToast('Lỗi khi thu hồi: ' + error.message, true);
       }
     }
 
-    // Extend Key (+30 days)
     async function extendKey(sub, days) {
-      if (!confirm(`Gia hạn thêm ${days} ngày cho khách ${sub.customer_name}?`)) return;
-
+      if (!confirm('Gia hạn thêm ' + days + ' ngày cho khách ' + sub.customer_name + '?')) return;
       try {
         await api('/api/v1/admin/subscriptions/' + encodeURIComponent(sub.id) + '/actions', {
-          method: 'POST',
-          body: JSON.stringify({ action: 'extend', days: days })
+          method:'POST', body:JSON.stringify({action:'extend', days})
         });
-        showToast(`✅ Đã gia hạn thành công thêm ${days} ngày!`);
-        loadTable();
-      } catch (err) {
-        showToast('Lỗi khi gia hạn: ' + err.message, true);
+        showToast('✅ Đã gia hạn thành công thêm ' + days + ' ngày!');
+        await loadTable();
+      } catch (error) {
+        showToast('Lỗi khi gia hạn: ' + error.message, true);
       }
     }
 
-    // Release Device (Đổi máy)
     async function releaseDevice(device) {
-      if (!confirm('Giải phóng thiết bị này để khách có thể dùng Key này kích hoạt trên máy tính mới?')) return;
-
+      if (!confirm('Giải phóng thiết bị này để khách có thể kích hoạt trên máy tính mới?')) return;
       try {
         await api('/api/v1/admin/devices/' + encodeURIComponent(device.id) + '/actions', {
-          method: 'POST',
-          body: JSON.stringify({ action: 'release' })
+          method:'POST', body:JSON.stringify({action:'release'})
         });
         showToast('✅ Đã giải phóng máy! Khách có thể nhập lại key trên máy mới.');
-        loadTable();
-      } catch (err) {
-        showToast('Lỗi giải phóng máy: ' + err.message, true);
+        await loadTable();
+      } catch (error) {
+        showToast('Lỗi giải phóng máy: ' + error.message, true);
       }
     }
 
-    // Search debounce & refresh
     let searchTimer;
     $('searchInput').addEventListener('input', () => {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(loadTable, 400);
     });
-
     $('btnRefresh').addEventListener('click', () => {
       showToast('Đang làm mới danh sách...');
-      loadTable();
+      void loadTable();
     });
-
     $('selectAllKeys').addEventListener('change', () => {
-      for (const sub of visibleSubscriptions) { if ($('selectAllKeys').checked) selectedKeys.add(sub.id); else selectedKeys.delete(sub.id); }
+      if (deletingKeys) return;
+      for (const sub of visibleSubscriptions) {
+        if ($('selectAllKeys').checked) selectedKeys.add(sub.id);
+        else selectedKeys.delete(sub.id);
+      }
       updateSelection();
     });
     $('btnDeleteSelected').addEventListener('click', deleteSelectedKeys);
-
-    // Machines appear after the customer activates a key.
-    setInterval(() => { if (!document.hidden) loadTable(); }, 15000);
-    loadTable();
+    setInterval(() => { if (!document.hidden) void loadTable(); }, 15000);
+    updateProductUI();
+    void loadTable();
   </script>
 </body>
 </html>
