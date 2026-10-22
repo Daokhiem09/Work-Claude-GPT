@@ -36,7 +36,7 @@ def login():
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Đăng Nhập Quản Trị · MASTER FLOW</title>
+  <title>Đăng Nhập Quản Trị · DOLA & MASTER FLOW</title>
   <style>
     body {{ background: #0b111e; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }}
     .card {{ background: #131b2e; border: 1px solid #243456; border-radius: 14px; padding: 32px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }}
@@ -51,7 +51,7 @@ def login():
 </head>
 <body>
   <div class="card">
-    <h1>⚡ MASTER FLOW</h1>
+    <h1>⚡ DOLA & MASTER FLOW</h1>
     <p>Đăng nhập quản lý bản quyền & cấp key</p>
     {"<div class='err'>" + error + "</div>" if error else ""}
     <form method="POST">
